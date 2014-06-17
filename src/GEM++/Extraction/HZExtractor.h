@@ -8,11 +8,11 @@
 #include "Extractor.h"
 #include "../Model/Graph.h"
 
-class DLL_EXPORT HomogeneousZoneExtractor : public Extractor {
+class DLL_EXPORT HomogeneousZoneExtractor : virtual public Extractor {
     public:
         HomogeneousZoneExtractor();
         HomogeneousZoneExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg);
-        ~HomogeneousZoneExtractor();
+        virtual ~HomogeneousZoneExtractor();
 
         QColor color(QRect rect);
 
@@ -25,7 +25,6 @@ class DLL_EXPORT HomogeneousZoneExtractor : public Extractor {
 
     //private:
         //static QSet<int> directionalVisibility(QList<QRectF> rects, QList<int> visibleRects, QRectF rect, double thresh);
-
 };
 
 #endif /*__HZEXTRACTOR_H__*/

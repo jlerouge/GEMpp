@@ -206,7 +206,7 @@ void HomogeneousZoneExtractor::performExtraction() {
 }
 
 QColor HomogeneousZoneExtractor::color(QRect rect) {
-    double r,g,b = 0.0;
+    double r(0), g(0), b(0);
     QColor c;
     for(int x=rect.x(); x < rect.x() + rect.width(); ++x) {
         for(int y=rect.y(); y < rect.y() + rect.height(); ++y) {
