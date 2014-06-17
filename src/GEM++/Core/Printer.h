@@ -1,0 +1,106 @@
+#ifndef __PRINTER_H__
+#define __PRINTER_H__
+
+#define qcout QTextStream(stdout)
+#define qcerr QTextStream(stderr)
+
+#include <QTextStream>
+#include "Constants.h"
+
+/**
+ * @brief The Printer class is a utility that can print an IPrintable object.
+ *
+ * It can store QString text. Indentation is managed
+ * with a fixed number of spaces per indentation level.
+ *
+ * It is possible to show the content of the Printer on standard
+ * output (show()), or to retrieve it for a later use (getContent()).
+ *
+ * @see IPrintable
+ * @see ISaveable
+ * @author J.Lerouge <julien.lerouge@litislab.fr>
+ */
+class DLL_EXPORT Printer {
+    public:
+        /**
+         * @brief Constructs a new Printer object.
+         * @param indentWidth the number of spaces per indentation level
+         */
+        Printer(int indentWidth = 4);
+        /**
+         * @brief Destructs a Printer object.
+         */
+        ~Printer();
+
+        /**
+         * @brief Retrieves the content stored in the Printer.
+         * @return the value of Printer::content_
+         */
+        QString getContent();
+
+        /**
+         * @brief Sets the content of the Printer.
+         * @param content the content to set
+         */
+        void setContent(const QString &content);
+
+        /**
+         * @brief Gets the indentation width (in number of spaces) of the Printer.
+         * @return the value of Printer::indentWidth_
+         */
+        int getIndentWidth();
+
+        /**
+         * @brief Sets the indentation width (in number of spaces) of the Printer.
+         * @param indentWidth the indentation width to set
+         */
+        void setIndentWidth(int indentWidth);
+
+        /**
+         * @brief Shows the content of a Printer on standard output.
+         */
+        void show();
+
+        /**
+         * @brief Stores a QString text in a Printer, appends a new line at the end.
+         */
+        void dump(QString s);
+
+        /**
+         * @brief Adds one indentation level.
+         */
+        void indent();
+
+        /**
+         * @brief Removes one indentation level.
+         */
+        void unindent();
+
+        /**
+         * @brief Appends a new line to the content_.
+         */
+        void newLine();
+
+        /**
+         * @brief Clears the content of a Printer.
+         */
+        void reset();
+
+    private:
+        /**
+         * @brief The content of the Printer.
+         */
+        QString content_;
+
+        /**
+         * @brief The number of spaces used per indentation level.
+         */
+        int indentWidth_;
+
+        /**
+         * @brief The current indentation level of the Printer.
+         */
+        int indentLevel_;
+};
+
+#endif /*__PRINTER_H__*/

@@ -1,0 +1,61 @@
+GEM++ : a Graph Extraction and Matching C++ software
+Version : v2014.06.17
+
+# History :
+* v2014.01.28 :
+    - Début d'implémentation Bipartite Graph Matching (K. Riesen)
+	- Modification de la sortie des solutions (fichiers *.sol),
+	  désormais lisible dans MATLAB avec load('fichier.sol', '-ascii').
+* v2014.01.21 :
+    - Ajout d'un pas et d'une limite pour la génération de colonnes
+	- Suppression du test de planarité
+	- Modification des messages de log (row-gen & col-gen)
+	- Ajout de protections sur les options
+* v2014.01.16 :
+    - Modification du script "compute_distances.sh" pour la prise en compte d'options supplémentaires
+    - Ajout du script "compute_isos.sh" pour la recherche (en batch) d'isomorphisme de sous-graphe
+    - Support des attributs symboliques (calcul d'une distance euclidienne modifiée)
+    - Support (primitif) de MS Windows 
+* v2014.01.06 :
+    - Support du solveur CPLEX
+    - Approximations :
+        * Borne inférieure (sous-ensemble de contraintes)
+        * Borne supérieure (sous-ensemble de variables)
+    - Approche génération de contraintes (CLI & GUI)
+    - Approche génération de colonnes (CLI)
+    - Ajouts de diverses options dans les lignes de commandes
+    - Possibilité d'appeler le calcul parallélisé des distances
+      avec des options de GEM++dist (par exemple -a pour la borne inf.)
+* v2013.12.10 :
+    - Migration de la formulation isomorphisme de sous-graphes dans le nouveau framework
+    - Utilisation de l'approche génération de contraintes dans l'interface graphique
+* v2013.12.03 :
+    - Abandon du script python (appel à Gurobi en C++)
+    - Import des métadonnées au format .xml (position et taille des noeuds sur l'image)
+    - Parallélisation du calcul des distances dans 'compute_distances.sh'
+    - Simplification du programme linéaire de la distance d'édition (suppression des variables u, v, e, f)
+    - Début d'interfaçage graphique du projet
+* v2013.11.19-standalone :
+    - Installation sur la VM sans ré-installer Gurobi 
+* v2013.11.12 :
+    - Ajout de commentaires dans les fichiers .mat (avec caractère '%')
+    - Chargement possible de la sortie dans MATLAB avec la commande load -ascii fichier.mat
+* v2013.10.31 :
+    - Correction d'une erreur dans 'compute_distances.sh'
+    - Prise en charge de coûts de création/suppression affines (avec le mot-clé '_const_')
+* v2013.10.30 :
+    - Abandon de gmlparser et des fichiers .dat (obsolètes)
+    - Import des formats *.gml, *.gxl et *.fw
+    - Export aux formats *.mps et *.lp
+    - Extension de la formulation aux graphes non-orientés
+    - Calcul d'une matrice de distance entre deux ensembles de graphes ('compute_distances.sh')
+* v2013.10.17 :
+    - Approximation de la formulation (mais résolution complète par le solveur),
+      ce qui permet de calculer une distance entre "grands" graphes
+    - Corrections de bugs dans le script d'installation
+* v2013.10.14 :
+    - Première version de l'outil de calcul de distance d'édition entre graphes orientés
+    - Reprise de la formulation de P. Le Bodic, rendue symétrique
+    - Prise en charge des fichiers .dat générés par gmlparser
+    - Calcul d'une distance entre 2 graphes ('single_distance.sh')
+    - Calcul d'une matrice de distance pour tous les graphes d'un dossier ('all_distances.sh')
