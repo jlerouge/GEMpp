@@ -1,9 +1,9 @@
 #include "QEdgeItem.h"
 
-QEdgeItem::QEdgeItem(QVertexItem *f, QVertexItem *t) : QGraphicsLineItem() {
-    setLine(QLine(f->rect().x()+f->rect().width()/2, f->rect().y()+f->rect().height()/2, t->rect().x()+t->rect().width()/2, t->rect().y()+t->rect().height()/2));
-    from = f;
-    to = t;
+QEdgeItem::QEdgeItem(QVertexItem *origin, QVertexItem *target) : QGraphicsLineItem() {
+    setLine(QLine(origin->rect().x()+origin->rect().width()/2, origin->rect().y()+origin->rect().height()/2, target->rect().x()+target->rect().width()/2, target->rect().y()+target->rect().height()/2));
+    origin_ = origin;
+    target_ = target;
     setPen(QPen(QColor(Qt::blue)));
     select(false);
     view(true);
@@ -39,4 +39,12 @@ void QEdgeItem::view(bool visible) {
     c.setAlphaF(visible);
     mypen.setColor(c);
     setPen(mypen);
+}
+
+QVertexItem *QEdgeItem::getOrigin() {
+    return origin_;
+}
+
+QVertexItem *QEdgeItem::getTarget() {
+    return target_;
 }

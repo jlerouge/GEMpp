@@ -8,10 +8,20 @@
 
 class DLL_EXPORT QVertexItem : public QGraphicsRectItem {
     public:
+
+        friend class QGraphWidget;
+
+        enum MatchStatus {
+            UNMATCHED,
+            INCORRECT,
+            CORRECT
+        };
+
         QVertexItem(QRectF rect);
-        QColor getColor();
-        void setColor(QColor color);
-        void invertColor();
+
+        MatchStatus getStatus();
+        void setStatus(MatchStatus status);
+
         void view(bool visible = true);
         void select(bool selected = true);
 
@@ -34,8 +44,15 @@ class DLL_EXPORT QVertexItem : public QGraphicsRectItem {
         qreal bottom() const;
 
         void translate(QPointF t, QSizeF size);
-
         void fit(QSizeF size);
+
+    protected:
+        void setColor(QColor color);
+        QColor getColor();
+        //void invertColor();
+
+    private:
+        MatchStatus status_;
 };
 
 #endif /* __QVERTEXITEM_H__ */

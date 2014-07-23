@@ -2,6 +2,7 @@
 #define __QCONFIGURATIONDIALOG_H__
 
 #include <QtWidgets>
+#include "QScienceSpinBox.h"
 #include "../../Solver/Solver.h"
 #include "../../Formulation/GED.h"
 #include "../../Formulation/SubIso.h"

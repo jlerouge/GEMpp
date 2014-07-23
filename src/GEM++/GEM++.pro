@@ -12,6 +12,7 @@ HEADERS += \
     Application/Widgets/QEdgeItem.h \
     Application/Widgets/QLabelItem.h \
     Application/Widgets/QVertexItem.h \
+    Application/Widgets/QScienceSpinBox.h \
     Core/Constants.h \
     Core/FileStream.h \
     Core/Identified.h \
@@ -77,6 +78,7 @@ SOURCES += \
     Application/Widgets/QEdgeItem.cpp \
     Application/Widgets/QLabelItem.cpp \
     Application/Widgets/QVertexItem.cpp \
+    Application/Widgets/QScienceSpinBox.cpp \
     Core/Constants.cpp \
     Core/Identified.cpp \
     Core/Indexed.cpp \

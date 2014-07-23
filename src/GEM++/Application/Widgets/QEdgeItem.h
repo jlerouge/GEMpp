@@ -7,7 +7,9 @@
 
 class DLL_EXPORT QEdgeItem : public QGraphicsLineItem {
     public:
-        QEdgeItem(QVertexItem *f, QVertexItem *t);
+        QEdgeItem(QVertexItem *origin, QVertexItem *target);
+        QVertexItem *getOrigin();
+        QVertexItem *getTarget();
         QColor getColor();
         void setColor(QColor color);
         int getWidth();
@@ -16,8 +18,8 @@ class DLL_EXPORT QEdgeItem : public QGraphicsLineItem {
         void view(bool visible = true);
 
     private:
-        QVertexItem *from;
-        QVertexItem *to;
+        QVertexItem *origin_;
+        QVertexItem *target_;
 };
 
 #endif /* __QEDGEITEM_H__ */

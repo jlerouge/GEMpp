@@ -26,8 +26,9 @@ cp $here/description-pak .
 rm -rf doc-pak
 mkdir doc-pak
 cp -R ../doc/user/html doc-pak
-cp ../HISTORY doc-pak
-cp ../LICENSE doc-pak
+cp ../NEWS doc-pak
+cp ../LICENSE.fr doc-pak
+cp ../LICENSE.en doc-pak
 cp ../README doc-pak
 cp ../THIRD-PARTY-NOTICES doc-pak
 sudo checkinstall --install=no --backup=no --pkgname=gem++ --maintainer=julien.lerouge@litislab.fr;

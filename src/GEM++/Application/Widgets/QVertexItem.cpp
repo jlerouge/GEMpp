@@ -4,9 +4,28 @@ QVertexItem::QVertexItem(QRectF rect) : QGraphicsRectItem(rect) {
     QPen mypen = pen();
     mypen.setWidth(3);
     setPen(mypen);
-    setColor(QColor(Qt::red));
+    setStatus(UNMATCHED);
     select(false);
     view(true);
+}
+
+QVertexItem::MatchStatus QVertexItem::getStatus() {
+    return status_;
+}
+
+void QVertexItem::setStatus(MatchStatus status) {
+    status_ = status;
+    switch(status_) {
+        case UNMATCHED:
+            setColor(QColor(255,0,0));
+            break;
+        case CORRECT:
+            setColor(QColor(0,255,255));
+            break;
+        case INCORRECT:
+            setColor(QColor(255,175,0));
+            break;
+    }
 }
 
 QColor QVertexItem::getColor() {
@@ -19,13 +38,13 @@ void QVertexItem::setColor(QColor color) {
     setPen(mypen);
 }
 
-void QVertexItem::invertColor() {
-    QPen mypen = pen();
-    QColor c = mypen.color();
-    c.setRgb(255-c.red(), 255-c.green(), 255-c.blue());
-    mypen.setColor(c);
-    setPen(mypen);
-}
+//void QVertexItem::invertColor() {
+//    QPen mypen = pen();
+//    QColor c = mypen.color();
+//    c.setRgb(255-c.red(), 255-c.green(), 255-c.blue());
+//    mypen.setColor(c);
+//    setPen(mypen);
+//}
 
 void QVertexItem::view(bool visible) {
     QPen mypen = pen();

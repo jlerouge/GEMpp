@@ -70,6 +70,7 @@ void RegionAdjacencyGraphExtractor::performExtraction() {
             QList<double> moments = zernike2D(CCs.last(), excfg_->zernikeOrder);
             for(int m=0; m<moments.size(); ++m)
                 v->addNumericAttribute("zm"+QString::number(m).rightJustified(2, '0'), moments[m]);
+            v->addNumericAttribute("area", getArea(CCs.last()));
             graph_->addVertex(v);
 
             // Metadata about the vertex :
@@ -80,7 +81,7 @@ void RegionAdjacencyGraphExtractor::performExtraction() {
             QPoint centroid = getCentroid(CCs.last(), BBs.last().accessTopLeft());
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "centroid_x", centroid.x()-excfg_->tolerance);
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "centroid_y", centroid.y()-excfg_->tolerance);
-            graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "area", getArea(CCs.last()));
+            graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "area", v->getNumericAttribute("area"));
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "x", BBs.last().xTopLeft()-excfg_->tolerance);
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "y", BBs.last().yTopLeft()-excfg_->tolerance);
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "width", BBs.last().width());

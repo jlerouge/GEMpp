@@ -190,10 +190,10 @@ void QConfigurationDialog::initTables() {
             subsTable->item(row, 1)->setFlags(subsTable->item(row, 1)->flags() & ~Qt::ItemIsEditable);
             subsTable->item(row, 1)->setToolTip("Numeric attribute");
 
-            QDoubleSpinBox *weight = new QDoubleSpinBox(this);
+            QScienceSpinBox *weight = new QScienceSpinBox(this);
             weight->setMinimum(0);
             weight->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX));
-            weight->setSingleStep(0.5);
+            weight->setDecimals(6);
             subsTable->setCellWidget(row, 2, weight);
 
             // Creation
@@ -204,9 +204,9 @@ void QConfigurationDialog::initTables() {
             creaTable->item(row, 1)->setFlags(creaTable->item(row, 1)->flags() & ~Qt::ItemIsEditable);
             creaTable->item(row, 1)->setToolTip("Numeric attribute");
 
-            weight = new QDoubleSpinBox(weight);
+            weight = new QScienceSpinBox(weight);
             weight->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::VERTEX));
-            weight->setSingleStep(0.5);
+            weight->setDecimals(6);
             creaTable->setCellWidget(row, 2, weight);
             ++row;
         }
@@ -250,10 +250,10 @@ void QConfigurationDialog::initTables() {
             subsTable->item(row, 1)->setFlags(subsTable->item(row, 1)->flags() & ~Qt::ItemIsEditable);
             subsTable->item(row, 1)->setToolTip("Numeric attribute");
 
-            QDoubleSpinBox *weight = new QDoubleSpinBox(this);
+            QScienceSpinBox *weight = new QScienceSpinBox(this);
             weight->setMinimum(0);
             weight->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE));
-            weight->setSingleStep(0.5);
+            weight->setDecimals(6);
             subsTable->setCellWidget(row, 2, weight);
 
             // Creation
@@ -264,9 +264,9 @@ void QConfigurationDialog::initTables() {
             creaTable->item(row, 1)->setFlags(creaTable->item(row, 1)->flags() & ~Qt::ItemIsEditable);
             creaTable->item(row, 1)->setToolTip("Numeric attribute");
 
-            weight = new QDoubleSpinBox(weight);
+            weight = new QScienceSpinBox(weight);
             weight->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::EDGE));
-            weight->setSingleStep(0.5);
+            weight->setDecimals(6);
             creaTable->setCellWidget(row, 2, weight);
             ++row;
         }
@@ -312,8 +312,8 @@ void QConfigurationDialog::updateTables() {
         QList<QString> vNumAttr = v->getNumericAttributes().keys();
         vNumAttr.insert(0, CONST_LABEL);
         for(auto att : vNumAttr) {
-            ((QDoubleSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX));
-            ((QDoubleSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::VERTEX));
+            ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX));
+            ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::VERTEX));
             ++row;
         }
         for(auto att : v->getSymbolicAttributes()) {
@@ -326,8 +326,8 @@ void QConfigurationDialog::updateTables() {
         QList<QString> eNumAttr = e->getNumericAttributes().keys();
         eNumAttr.insert(0, CONST_LABEL);
         for(auto att : eNumAttr) {
-            ((QDoubleSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE));
-            ((QDoubleSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::EDGE));
+            ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE));
+            ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::EDGE));
             ++row;
         }
         for(auto att : e->getSymbolicAttributes()) {
@@ -350,8 +350,8 @@ void QConfigurationDialog::updateWeights() {
         QList<QString> vNumAttr = v->getNumericAttributes().keys();
         vNumAttr.insert(0, CONST_LABEL);
         for(auto att : vNumAttr) {
-            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX, ((QDoubleSpinBox *)subsTable->cellWidget(row, 2))->value());
-            weights->setWeight(att, Weights::CREATION, GraphElement::VERTEX, ((QDoubleSpinBox *)creaTable->cellWidget(row, 2))->value());
+            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX, ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->value());
+            weights->setWeight(att, Weights::CREATION, GraphElement::VERTEX, ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->value());
             ++row;
         }
         for(auto att : v->getSymbolicAttributes()) {
@@ -364,8 +364,8 @@ void QConfigurationDialog::updateWeights() {
         QList<QString> eNumAttr = e->getNumericAttributes().keys();
         eNumAttr.insert(0, CONST_LABEL);
         for(auto att : eNumAttr) {
-            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE, ((QDoubleSpinBox *)subsTable->cellWidget(row, 2))->value());
-            weights->setWeight(att, Weights::CREATION, GraphElement::EDGE, ((QDoubleSpinBox *)creaTable->cellWidget(row, 2))->value());
+            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE, ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->value());
+            weights->setWeight(att, Weights::CREATION, GraphElement::EDGE, ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->value());
             ++row;
         }
         for(auto att : e->getSymbolicAttributes()) {
@@ -453,9 +453,9 @@ void QConfigurationDialog::cancel() {
 }
 
 QSize QConfigurationDialog::sizeHint() const {
-    return QSize(470,470);
+    return QSize(640,480);
 }
 
 QSize QConfigurationDialog::minimumSizeHint() const {
-    return QSize(310,190);
+    return QSize(320,240);
 }
