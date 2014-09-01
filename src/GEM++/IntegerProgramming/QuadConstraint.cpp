@@ -1,7 +1,7 @@
 #include "QuadConstraint.h"
 
-QuadConstraint::QuadConstraint(QuadExpression *exp, Relation relation, double rhs, QString uid) :
-    Constraint(static_cast<Expression *>(exp), relation, rhs, "Q"+uid) {}
+QuadConstraint::QuadConstraint(QuadExpression *exp, Relation relation, double rhs) :
+    Constraint(static_cast<Expression *>(exp), relation, rhs) {}
 
 QuadConstraint::~QuadConstraint() {
     delete exp_;

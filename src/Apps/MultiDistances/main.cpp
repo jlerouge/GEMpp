@@ -26,6 +26,5 @@ int main(int argc, char **argv)
     app.addPositionalArgument("dir1", "Directory containing graphs", "dir1");
     app.addPositionalArgument("dir2", "Directory containing other graphs", "dir2");
     return app.match();
-    // FIXME : option pour régler le nombre de threads par instance et le nombre d'instances simultanées
 }
 

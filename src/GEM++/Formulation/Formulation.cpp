@@ -18,7 +18,7 @@ QString Formulation::toName(CutMethod method) {
     return cutMethodName[(int)method];
 }
 
-Formulation::Formulation() : pb_(0), p_(0), lp_(0), qp_(0), cuts_(0), low_(false), induced_(false) {}
+Formulation::Formulation() : pb_(0), p_(0), lp_(0), qp_(0), low_(false), induced_(false) {}
 
 Formulation::Formulation(Problem *pb, bool low, bool induced) : Formulation() {
     pb_ = pb;
@@ -60,7 +60,6 @@ void Formulation::init(double up) {
     initVariables();
     initCosts();
     restrictProblem(up);
-    cuid_ = 0;
     initConstraints();
     initObjective();
     if(lp_ != 0)
@@ -69,10 +68,4 @@ void Formulation::init(double up) {
         p_ = (Program *) qp_;
     else
         GEM_exception("The program has not been created during formulation initialization");
-}
-
-void Formulation::updateUpperBound(double up) {
-    restrictProblem(up);
-    cuid_ = 0;
-    initConstraints();
 }

@@ -1,11 +1,11 @@
 #include "RAGExtractor.h"
 
-RegionAdjacencyGraphExtractor::RegionAdjacencyGraphExtractor() : Extractor() {
+RegionAdjacencyGraphExtractor::RegionAdjacencyGraphExtractor() : SingleExtractor() {
     ct = 0;
     graph_ = 0;
 }
 
-RegionAdjacencyGraphExtractor::RegionAdjacencyGraphExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg) : Extractor(input, output, metadata, excfg) {
+RegionAdjacencyGraphExtractor::RegionAdjacencyGraphExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg) : SingleExtractor(input, output, metadata, excfg) {
     ct = 0;
     graph_ = 0;
 }
@@ -23,7 +23,7 @@ void RegionAdjacencyGraphExtractor::performExtraction() {
 
     if(excfg_->verbose)
         qcout << "Loading binary image..." << endl;
-    BinaryImage sourceImg = BinaryPNG::read(input_, excfg_->tolerance);
+    BinaryImage sourceImg = BinaryPNG::read(getInput(), excfg_->tolerance);
     CleanedBinaryImage cleanedImg(sourceImg);
 
     if(excfg_->verbose)
@@ -121,11 +121,11 @@ void RegionAdjacencyGraphExtractor::performExtraction() {
         }
     }
 
-    graph_->save(output_);
-    QDir dir = QFileInfo(metadata_).absoluteDir();
-    graph_->getMetadata()->setGraphAttribute("graphfile", dir.relativeFilePath(QFileInfo(output_).absoluteFilePath()));
-    graph_->getMetadata()->setGraphAttribute("imagefile", dir.relativeFilePath(QFileInfo(input_).absoluteFilePath()));
-    graph_->getMetadata()->save(metadata_);
+    graph_->save(getOutput());
+    QDir dir = QFileInfo(getMetadata()).absoluteDir();
+    graph_->getMetadata()->setGraphAttribute("graphfile", dir.relativeFilePath(QFileInfo(getOutput()).absoluteFilePath()));
+    graph_->getMetadata()->setGraphAttribute("imagefile", dir.relativeFilePath(QFileInfo(getInput()).absoluteFilePath()));
+    graph_->getMetadata()->save(getMetadata());
 }
 
 void RegionAdjacencyGraphExtractor::invert(BinaryImage &img) {

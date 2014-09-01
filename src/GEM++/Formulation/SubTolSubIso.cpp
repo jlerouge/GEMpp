@@ -9,12 +9,6 @@ SubstitutionTolerantSubgraphIsomorphism::~SubstitutionTolerantSubgraphIsomorphis
     delete lp_;
 }
 
-QPair<int,int> SubstitutionTolerantSubgraphIsomorphism::updateLowerBound(Solution *sol) {
-    Q_UNUSED(sol); // FIXME
-    GEM_exception("SubTolSubIso does not implement row-generation yet.");
-    return qMakePair(0, 0); // FIXME
-}
-
 void SubstitutionTolerantSubgraphIsomorphism::restrictProblem(double up) {
     if(up < 1) {
         for(auto row : x_variables)
@@ -66,14 +60,14 @@ void SubstitutionTolerantSubgraphIsomorphism::restrictProblem(double up) {
 void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
     Q_UNUSED(low_); // FIXME
 
-    for(i=0; i < nVP; ++i, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::EQUAL, 1.0, QString::number(cuid_));
+    for(i=0; i < nVP; ++i)
+        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::EQUAL, 1.0);
 
-    for(k=0; k < nVT; ++k, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(k=0; k < nVT; ++k)
+        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(ij=0; ij < nEP; ++ij, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getRow(ij)), LinearConstraint::EQUAL, 1.0, QString::number(cuid_));
+    for(ij=0; ij < nEP; ++ij)
+        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getRow(ij)), LinearConstraint::EQUAL, 1.0);
 
     // (F1)
     //    for(ij=0; ij < nEP; ++ij) {
@@ -85,21 +79,19 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
     //                l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
     //                if(isDirected) {
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) - *(y_variables.getElement(ij, kl)),
-    //                                    LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-    //                                    LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-    //                                    LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_)); ++cuid_;
+    //                                    LinearConstraint::LESS_EQ, 1.0);
     //                } else {
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)),
-    //                                    LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) + *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)),
-    //                                    LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) + *(x_variables.getElement(i, l)) +
-    //                                    *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_)); ++cuid_;
+    //                                    *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0);
     //                }
-    //            } else {
-    //                cuid_ += 3;
     //            }
     //        }
     //    }
@@ -130,8 +122,8 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
                 e1->addTerm(*(x_variables.getElement(j, k))*(-1));
                 e2->addTerm(*(x_variables.getElement(i, k))*(-1));
             }
-            *lp_ += new LinearConstraint(e1, LinearConstraint::EQUAL, 0.0, QString::number(cuid_)); ++cuid_;
-            *lp_ += new LinearConstraint(e2, LinearConstraint::EQUAL, 0.0, QString::number(cuid_)); ++cuid_;
+            *lp_ += new LinearConstraint(e1, LinearConstraint::EQUAL, 0.0);
+            *lp_ += new LinearConstraint(e2, LinearConstraint::EQUAL, 0.0);
         }
     }
 
@@ -148,7 +140,7 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
                 e->addTerm(*v);
             for(auto v : y_variables.getCol(kl))
                 e->addTerm((*v)*-1);
-            *lp_+= new LinearConstraint(e, LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_)); ++cuid_;
+            *lp_+= new LinearConstraint(e, LinearConstraint::LESS_EQ, 1.0);
         }
     }
 }

@@ -1,7 +1,7 @@
 #include "Zernike.h"
 QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
     QList<double> zvalues;
-    int N, D;
+    int N; //, D;
 
     // N is the minimum of im.width() and im.height()
     N = im.width() < im.height() ? im.width() : im.height();
@@ -9,7 +9,7 @@ QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
         GEM_exception(QString("Zernike polynomial order (=%1) must be less than %2").arg(L).arg(MAX_ORDER-1));
     if (rad <= 0.0)
         rad = N;
-    D = (int)(rad * 2);
+    //D = (int)(rad * 2);
 
     static double H1[MAX_ORDER][MAX_ORDER];
     static double H2[MAX_ORDER][MAX_ORDER];
@@ -19,7 +19,7 @@ QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
     double COST[MAX_ORDER], SINT[MAX_ORDER], R[MAX_ORDER];
     double Rn, Rnm, Rnm2, Rnnm2, Rnmp2, Rnmp4;
 
-    double a,b,x, y, area, r, r2, f, const_t;
+    double a,b,x, y, r, r2, f, const_t; // area
     int n,m,i,j;
 
     double AR[MAX_ORDER][MAX_ORDER], AI[MAX_ORDER][MAX_ORDER];
@@ -64,7 +64,7 @@ QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
         }
     }
 
-    area = PI * rad * rad;
+    //area = PI * rad * rad;
     for (i = 0; i < cols; i++) {
     // In the paper, the center of the unit circle was the center of the image
     //	x = (double)(2*i+1-N)/(double)D;

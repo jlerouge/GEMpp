@@ -17,240 +17,260 @@ QString Weights::toName(Operation op) {
     return operationName[op];
 }
 
-Weights::Weights() : saveMode_(SUBSTITUTION) {
-    weights_ = QHash<QString, double>();
-    weights_.insert(getPrefix(SUBSTITUTION,GraphElement::VERTEX)+CONST_LABEL, DEFAULT_S_V_CONST_);
-    weights_.insert(getPrefix(SUBSTITUTION,GraphElement::EDGE)+CONST_LABEL, DEFAULT_S_E_CONST_);
-    weights_.insert(getPrefix(CREATION,GraphElement::VERTEX)+CONST_LABEL, DEFAULT_C_V_CONST_);
-    weights_.insert(getPrefix(CREATION,GraphElement::EDGE)+CONST_LABEL, DEFAULT_C_E_CONST_);
+Weights::Weights(const QString &substitution, const QString &creation) : IXmlSerializable() {
+    currentOperation_ = SUBSTITUTION;
+    for(Operation op = (Operation)0; op < COUNT; op = (Operation)((int)op + 1))
+        for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1))
+            weights_.insert(qMakePair(op,t), new WeightHash());
+
+    fromFile(substitution, SUBSTITUTION);
+    fromFile(creation, CREATION);
+
+    for(Operation op = (Operation)0; op < COUNT; op = (Operation)((int)op + 1))
+        for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1))
+            if(!containsWeight(op, t, CONST_LABEL))
+                addWeight(op, t, CONST_LABEL, Weight::CONSTANT, 1, (op == SUBSTITUTION)? DEFAULT_S_CONST : DEFAULT_C_CONST);
 }
 
-Weights::Weights(const QString &substitution, const QString &creation) : Weights() {
-    // Loads the configuration for substitution costs
-    if(!substitution.isEmpty())
-        fromFw(substitution, SUBSTITUTION);
-
-    // Loads the configuration for creation costs
-    if(!creation.isEmpty())
-        fromFw(creation, CREATION);
+Weights::~Weights() {
+    clean();
+    for(auto wh : weights_)
+        delete wh;
 }
 
-Weights::Weights(Weights &other) : Weights() {
-    for(auto it = other.getWeights().begin(); it != other.getWeights().end(); ++it)
-        weights_.insert(it.key(), it.value());
+bool Weights::containsWeight(Operation op, GraphElement::Type t, QString attribute) const {
+    return getWeights(op,t)->contains(attribute);
 }
 
-Weights::~Weights() {}
+Weight *Weights::getWeight(Operation op, GraphElement::Type t, QString attribute) const {
+    if(!containsWeight(op, t, attribute))
+        GEM_exception(QString("Weights object doesn't contain any %1 weight for %2 attribute \"%3\".").arg(toName(op), GraphElement::toName(t), attribute));
+    return getWeights(op,t)->value(attribute);
+}
 
-void Weights::fromFw(const QString &filename, Operation op) {
-    if(!filename.endsWith(".fw", Qt::CaseInsensitive))
-        GEM_exception(QString("%1 is not a *.fw file.").arg(filename));
+void Weights::addWeight(Operation op, GraphElement::Type t, QString attribute, Weight::Type type, uint power, double value) {
+    if(containsWeight(op, t, attribute))
+        GEM_exception(QString("Weights object already contains a %1 weight for %2 attribute \"%3\".").arg(toName(op), GraphElement::toName(t), attribute));
 
-    QString buffer = FileStream::loadFile(filename);
-    QRegExp vertices("nodes\\_features\\_weights");
-    QRegExp edges("edges\\_features\\_weights");
+    Weight *w = new Weight(type, power, value);
+    getWeights(op,t)->insert(attribute, w);
+}
+
+double Weights::getDefaultWeight(Operation op) const {
+    return (op == SUBSTITUTION) ? DEFAULT_S_ATTR : DEFAULT_C_ATTR;
+}
+
+uint Weights::getDefaultPower(Operation op) const {
+    return (op == SUBSTITUTION) ? DEFAULT_S_POWER : DEFAULT_C_POWER;
+}
+
+WeightHash *Weights::getWeights(Operation op, GraphElement::Type t) const {
+    return weights_[qMakePair(op, t)];
+}
+
+void Weights::fromFile(const QString &filename, Operation op) {
+    if(!filename.isEmpty()) {
+        if(!filename.endsWith(".fw", Qt::CaseInsensitive))
+            GEM_exception(QString("%1 is not a *.fw file.").arg(filename));
+        // Loads the weights configuration file
+        fromXML(filename, op);
+    }
+}
+
+void Weights::fromXML(const QString &filename, Operation op) {
+    setCurrentOperation(op);
+    fromXML(filename);
+}
+
+void Weights::fromXML(const QString &filename) {
+    clean();
+    QFile file(filename);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+        GEM_exception(QString("Error while loading %1 : %2").arg(filename, file.errorString()));
 
     /* Begin parsing */
-    int ibegin = vertices.indexIn(buffer);
-    ibegin += vertices.matchedLength();
-    int iend = edges.indexIn(buffer);
-    QStringList sl = buffer.mid(ibegin,iend-ibegin).simplified().split(" ");
+    doc_ = new QDomDocument();
+    doc_->setContent(&file, false);
+    QDomElement attributes, attribute;
+    QString name = "";
+    Weight::Type type;
+    uint power;
+    double value = getDefaultWeight(currentOperation_);
 
-    // Vertices
-    if(sl.size() > 1) {
-        for(auto it = sl.begin(); it != sl.end(); it += 2) {
-            if(it == sl.end()) break;
-            weights_.insert(getPrefix(op, GraphElement::VERTEX)+(*it), (it+1)->toDouble());
-        }
-    }
-
-    ibegin = iend + edges.matchedLength();
-    sl = buffer.right(buffer.length()-ibegin).simplified().split(" ");
-
-    // Edges
-    if(sl.size() > 1) {
-        for(auto it = sl.begin(); it != sl.end(); it += 2) {
-            if(it == sl.end()) break;
-            weights_.insert(getPrefix(op, GraphElement::EDGE)+(*it), (it+1)->toDouble());
+    for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1)) {
+        attributes = doc_->documentElement().firstChildElement((t == GraphElement::VERTEX)? "nodes" : "edges");
+        if(attributes.hasAttribute("mode"))
+            getWeights(currentOperation_, t)->setMode(WeightHash::fromName(attributes.attribute("mode")));
+        if(attributes.hasAttribute("root"))
+            getWeights(currentOperation_, t)->setRoot(attributes.attribute("root").toUInt());
+        attribute = attributes.firstChildElement("attribute");
+        while(!attribute.isNull()) {
+            name = (attribute.hasAttribute("name"))? attribute.attribute("name") : "";
+            type = Weight::fromName(attribute.attribute("type"));
+            if(type == Weight::CONSTANT)
+                name = CONST_LABEL;
+            if(attribute.hasAttribute("power"))
+                power = attribute.attribute("power").toUInt();
+            else
+                power = getDefaultPower(currentOperation_);
+            value = attribute.text().toDouble();
+            addWeight(currentOperation_, t, name, type, power, value);
+            attribute = attribute.nextSiblingElement("attribute");
         }
     }
     /* End parsing */
+
+    file.close();
 }
 
-double Weights::getWeight(QString attribute, Operation op, GraphElement::Type t) const {
-    if(weights_.contains(getPrefix(op, t)+attribute))
-        return weights_[getPrefix(op, t)+attribute];
-    else {
-        /* The const weight is already defined by the constructor
-           so we return the default non-const value */
-        switch (op) {
-            case SUBSTITUTION:
-                switch(t) {
-                    case GraphElement::VERTEX:
-                        return DEFAULT_S_V;
-                    case GraphElement::EDGE:
-                        return DEFAULT_S_E;
-                    default:
-                        return 0;
-                }
-            case CREATION:
-                switch(t) {
-                    case GraphElement::VERTEX:
-                        return DEFAULT_C_V;
-                    case GraphElement::EDGE:
-                        return DEFAULT_C_E;
-                    default:
-                        return 0;
-                }
-            default:
-                break;
+void Weights::toXML(Operation op) {
+    setCurrentOperation(op);
+    toXML();
+}
+
+void Weights::toXML() {
+    clean();
+    doc_ = new QDomDocument();
+    QDomElement weights, attributes, attribute;
+    QDomText valText;
+    Weight *w;
+    weights = doc_->createElement("weights");
+    for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1)) {
+        attributes = doc_->createElement((t == GraphElement::VERTEX)? "nodes" : "edges");
+        for(auto key : getWeights(currentOperation_,t)->keys()) {
+            w = getWeights(currentOperation_,t)->value(key);
+            attribute = doc_->createElement("attribute");
+            attribute.setAttribute("name", key);
+            attribute.setAttribute("power", w->getPower());
+            attribute.setAttribute("type", Weight::toName(w->getType()));
+            valText = doc_->createTextNode(QString::number(w->getValue()));
+            attribute.appendChild(valText);
+            attributes.appendChild(attribute);
         }
+        weights.appendChild(attributes);
     }
-
-    // This should never happen.
-    return 0;
-}
-
-double Weights::getWeight(QString prefixedAttr) const {
-    if(weights_.contains(prefixedAttr))
-        return weights_[prefixedAttr];
-
-    GEM_exception(QString("Weights object doesn't contain any %2 weight.").arg(prefixedAttr));
-
-    // This should never happen.
-    return 0;
-}
-
-void Weights::setWeight(QString attribute, Operation op, GraphElement::Type t, double value) {
-    setWeight(getPrefix(op, t)+attribute, value);
-}
-
-void Weights::setWeight(QString prefixedAttr, double value) {
-    weights_.insert(prefixedAttr, value);
-    //if(weights_.contains(prefixedAttr))
-    //    weights_[prefixedAttr] = value;
-    //else
-    //    GEM_exception(QString("Weights object does not contain any %1 weight.").arg(prefixedAttr));
-}
-
-const QHash<QString, double> &Weights::getWeights() const {
-    return weights_;
-}
-
-void Weights::print(Printer *p) {
-    print(p, saveMode_);
+    doc_->appendChild(weights);
 }
 
 void Weights::print(Printer *p, Operation op) {
-    p->dump("nodes_features_weights");
-    p->indent();
-    QString prefix = getPrefix(op, GraphElement::VERTEX);
-    QString attrName;
-    for(auto att : weights_.keys()) {
-        if(att.startsWith(prefix)) {
-            attrName = att;
-            attrName.replace(prefix, "");
-            p->dump(QString("%1\t%2").arg(attrName).arg(weights_[att]));
-        }
-    }
-    p->unindent();
-    p->newLine();
-    p->dump("edges_features_weights");
-    p->indent();
-    prefix = getPrefix(op, GraphElement::EDGE);
-    for(auto att : weights_.keys()) {
-        if(att.startsWith(prefix)) {
-            attrName = att;
-            attrName.replace(prefix, "");
-            p->dump(QString("%1\t%2").arg(attrName).arg(weights_[att]));
-        }
-    }
-    p->unindent();
-    p->newLine();
-}
-
-void Weights::save(const QString &filename) {
-    if(!filename.endsWith(".fw", Qt::CaseInsensitive))
-        GEM_exception(QString("%1 is not a .fw file").arg(filename));
-    FileStream::saveFile(this, filename);
+    setCurrentOperation(op);
+    IXmlSerializable::print(p);
 }
 
 void Weights::save(const QString &filename, Operation op) {
-    setSaveMode(op);
-    save(filename);
+    setCurrentOperation(op);
+    IXmlSerializable::save(filename);
 }
 
-Weights::Operation Weights::getSaveMode() const {
-    return saveMode_;
+Weights::Operation Weights::getCurrentOperation() const {
+    return currentOperation_;
 }
 
-void Weights::setSaveMode(Operation op) {
-    saveMode_ = op;
+void Weights::setCurrentOperation(Operation op) {
+    currentOperation_ = op;
 }
 
-QString Weights::getPrefix(Operation op, GraphElement::Type t) const {
-    QString prefix;
-    switch(op) {
-        case SUBSTITUTION:
-            prefix = "S_";
-            break;
-        case CREATION:
-            prefix = "C_";
-            break;
-        default:
-            break;
-    }
-    switch(t) {
-        case GraphElement::VERTEX:
-            prefix += "V_";
-            break;
-        case GraphElement::EDGE:
-            prefix += "E_";
-            break;
-        default:
-            break;
-    }
-    return prefix;
+double Weights::creationCost(GraphElement *e) const {
+    return weightedCost(e);
 }
 
-double Weights::creationCost(GraphElement *e) {
-    double cost = getWeight(CONST_LABEL, CREATION, e->getType());
-    for(auto key : e->getNumericAttributes().keys())
-        cost += getWeight(key, CREATION, e->getType())*e->getNumericAttribute(key);
-    return cost;
-}
-
-double Weights::substitutionCost(GraphElement *e1, GraphElement *e2) {
+double Weights::substitutionCost(GraphElement *e1, GraphElement *e2) const {
     if(e1->getType() != e2->getType())
         GEM_exception(QString("There are no possible substitutions between elements of different types"));
 
     // Test if all symbolic attributes of e1 and e2 are the same
     for(auto key : e1->getSymbolicAttributes().keys()) {
         // Compare only symbolic attributes that have non-zero weight
-        if(getWeight(key, SUBSTITUTION, e1->getType()) && (e1->getSymbolicAttribute(key).compare(e2->getSymbolicAttribute(key), Qt::CaseInsensitive) != 0))
+        if((getWeight(SUBSTITUTION, e1->getType(), key) != 0) && (e1->getSymbolicAttribute(key).compare(e2->getSymbolicAttribute(key), Qt::CaseInsensitive) != 0))
             // e1 and e2 are of different types
             return e1->getCost()+e2->getCost();
     }
 
     // e1 and e2 are of the same type
-    return weightedEuclideanDistance(e1, e2);
+    return weightedCost(e1, e2);
 }
 
-double Weights::weightedEuclideanDistance(GraphElement *e1, GraphElement *e2) {
-    double d, res = getWeight(CONST_LABEL, SUBSTITUTION, e1->getType());
-    for(auto key : e1->getNumericAttributes().keys()) {
-        d = (e1->getNumericAttribute(key) - e2->getNumericAttribute(key))*getWeight(key, SUBSTITUTION, e1->getType());
-        res += d*d;
+double Weights::weightedCost(GraphElement *e1, GraphElement *e2) const {
+    Operation op = (e2 == 0)? CREATION : SUBSTITUTION;
+    GraphElement::Type type = e1->getType();
+    Weight *w = getWeight(op, type, CONST_LABEL);
+    double total_cost = pow(w->getValue(), w->getPower());
+    double weight, cost;
+    uint power;
+    QList<QString> keys = e1->getNumericAttributes().keys();
+    keys.append(e1->getStringAttributes().keys());
+
+    for(auto key : keys) {
+        try {
+            w = getWeight(op, type, key);
+            weight = w->getValue();
+            power = w->getPower();
+        } catch (std::exception &e) {
+            weight = getDefaultWeight(op);
+            power = getDefaultPower(op);
+        }
+        switch(op) {
+            case SUBSTITUTION:
+                if(e1->getNumericAttributes().contains(key)) {
+                    cost = e1->getNumericAttribute(key) - e2->getNumericAttribute(key);
+                } else {
+                    cost = levenshtein(e1->getStringAttribute(key), e2->getStringAttribute(key));
+                }
+                break;
+            case CREATION:
+                if(e1->getNumericAttributes().contains(key)) {
+                    cost = e1->getNumericAttribute(key);
+                } else {
+                    cost = e1->getStringAttribute(key).size();
+                }
+                break;
+            default:
+                break;
+        }
+        cost = pow(fabs(weight*cost), power);
+        switch(getWeights(op, type)->getMode()) {
+            case WeightHash::ADD:
+                total_cost += cost;
+                break;
+            case WeightHash::MULTIPLY:
+                total_cost *= cost;
+                break;
+            default:
+                break;
+        }
     }
-    return qSqrt(res);
+
+    uint root = getWeights(op, type)->getRoot();
+    if(root > 1)
+        total_cost = pow(total_cost, 1.0/root);
+    return total_cost;
 }
 
 void operator*=(Weights &w, double d) {
-    for(auto it = w.getWeights().begin(); it != w.getWeights().end(); ++it)
-        w.setWeight(it.key(), it.value()*d);
+    for(Weights::Operation op = (Weights::Operation)0; op < Weights::COUNT; op = (Weights::Operation)((int)op + 1))
+        for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1))
+            for(auto it = w.getWeights(op, t)->begin(); it != w.getWeights(op,t)->end(); ++it)
+                w.getWeight(op, t, it.key())->value() *= d;
 }
 
 void operator+=(Weights &w1, Weights w2) {
-    for(auto it = w1.getWeights().begin(); it != w1.getWeights().end(); ++it)
-        w1.setWeight(it.key(), it.value()+w2.getWeight(it.key()));
+    for(Weights::Operation op = (Weights::Operation)0; op < Weights::COUNT; op = (Weights::Operation)((int)op + 1))
+        for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1))
+            for(auto it = w1.getWeights(op, t)->begin(); it != w1.getWeights(op, t)->end(); ++it)
+                w1.getWeight(op, t, it.key())->value() += w2.getWeight(op, t, it.key())->getValue();
+}
+
+uint levenshtein(QString s1, QString s2) {
+    const int len1 = s1.size(), len2 = s2.size();
+    QVector<uint> col(len2+1), prevCol(len2+1);
+    for (int i = 0; i < prevCol.size(); i++)
+        prevCol[i] = i;
+    for (int i = 0; i < len1; i++) {
+        col[0] = i+1;
+        for (int j = 0; j < len2; j++)
+            col[j+1] = qMin(qMin(prevCol[1 + j] + 1, col[j] + 1),
+                    prevCol[j] + (s1[i]==s2[j] ? 0 : 1));
+        col.swap(prevCol);
+    }
+    return prevCol[len2];
 }

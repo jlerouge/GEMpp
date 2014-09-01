@@ -9,8 +9,6 @@ class DLL_EXPORT BipartiteEdges: public Formulation {
     public:
         BipartiteEdges(Problem *pb, int i, int k);
         virtual ~BipartiteEdges();
-
-        QPair<int, int> updateLowerBound(Solution *sol);
         virtual void cut(Solution *sol, CutMethod cm);
 
     private:

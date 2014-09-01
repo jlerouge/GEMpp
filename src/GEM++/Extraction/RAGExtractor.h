@@ -2,7 +2,7 @@
 #define __RAGEXTRACTOR_H__
 
 #include <QPoint>
-#include "Extractor.h"
+#include "SingleExtractor.h"
 #include "Zernike.h"
 #include "BinaryPNG.h"
 #include "../Model/Graph.h"
@@ -18,7 +18,7 @@
 
 using namespace qgar;
 
-class DLL_EXPORT RegionAdjacencyGraphExtractor : public Extractor {
+class DLL_EXPORT RegionAdjacencyGraphExtractor : public SingleExtractor {
     public:
         RegionAdjacencyGraphExtractor();
         RegionAdjacencyGraphExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg);

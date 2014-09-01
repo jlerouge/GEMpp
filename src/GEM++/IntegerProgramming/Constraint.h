@@ -39,7 +39,7 @@ class DLL_EXPORT Constraint : virtual public IPrintable, public Identified {
          * @param relation the Constraint::Relation
          * @param rhs the right hand side value
          */
-        Constraint(Expression *exp, Relation relation, double rhs, QString uid);
+        Constraint(Expression *exp, Relation relation, double rhs);
 
         /**
          * @brief Destructs a Constraint object.
@@ -98,6 +98,9 @@ class DLL_EXPORT Constraint : virtual public IPrintable, public Identified {
          * @brief The right hand side value of the Constraint.
          */
         double rhs_;
+
+    private:
+        static uint count_;
 };
 
 #endif /*__CONSTRAINT_H__*/

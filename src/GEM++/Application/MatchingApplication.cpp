@@ -179,9 +179,7 @@ void MatchingApplication::addOptions() {
             break;
     }
     addAggregationOption();
-    addRowGenOption();
     addExplorationOption();
-    addColGenOption();
     addSolverOption();
     addVerboseOption();
     addVersionOption();
@@ -249,16 +247,9 @@ void MatchingApplication::initConfiguration() {
             break;
     }
 
-    cfg_->rowgen = isOptionSet("row-gen");
-    cfg_->lowerbound = isOptionSet("aggregate") || cfg_->rowgen;
-
-    cfg_->upperbound = isOptionSet("explore");
-    if(cfg_->upperbound)
-        cfg_->limit = optionValue("explore").toDouble()/100;
-
-    cfg_->colgen = isOptionSet("col-gen");
-    if(cfg_->colgen)
-        cfg_->step = optionValue("col-gen").toDouble()/100;
+    cfg_->lowerbound = isOptionSet("aggregate");
+    if(isOptionSet("explore"))
+        cfg_->upperbound = optionValue("explore").toDouble()/100;
 
     if(isOptionSet("solver"))
         cfg_->solver = optionValue("solver");
@@ -341,16 +332,8 @@ void MatchingApplication::addAggregationOption() {
     addOption("a", "aggregate", "Lower bound approx (rows aggregation).");
 }
 
-void MatchingApplication::addRowGenOption() {
-    addOption("r", "row-gen", "Uses row generation (forces '-a').");
-}
-
 void MatchingApplication::addExplorationOption() {
     addOption("e", "explore", "Upper bound approx (cols selection).", "0 - 100%");
-}
-
-void MatchingApplication::addColGenOption() {
-    addOption("k", "col-gen", "Uses column generation with a step.", "0 - 100%");
 }
 
 void MatchingApplication::addSolverOption() {

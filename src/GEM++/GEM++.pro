@@ -23,11 +23,15 @@ HEADERS += \
     Core/Matrix.h \
     Core/Printer.h \
     Core/Random.h \
+    Core/IXmlSerializable.h \
     Extraction/BinaryPNG.h \
     Extraction/ExtractionConfiguration.h \
-    Extraction/Extractor.h \
+    Extraction/GenericExtractor.h \
     Extraction/HZExtractor.h \
+    Extraction/PairExtractor.h \
     Extraction/RAGExtractor.h \
+    Extraction/SingleExtractor.h \
+    Extraction/TextKNNExtractor.h \
     Extraction/Vectorizer.h \
     Extraction/Zernike.h \
     Model/Problem.h \
@@ -37,6 +41,8 @@ HEADERS += \
     Model/Metadata.h \
     Model/Vertex.h \
     Model/Edge.h \
+    Model/Weight.h \
+    Model/WeightHash.h \
     Model/Weights.h \
     Layout/LayoutGraph.h \
     Layout/FDLayout.h \
@@ -87,9 +93,12 @@ SOURCES += \
     Core/Random.cpp \
     Extraction/BinaryPNG.cpp \
     Extraction/ExtractionConfiguration.cpp \
-    Extraction/Extractor.cpp \
+    Extraction/GenericExtractor.cpp \
     Extraction/HZExtractor.cpp \
+    Extraction/PairExtractor.cpp \
     Extraction/RAGExtractor.cpp \
+    Extraction/SingleExtractor.cpp \
+    Extraction/TextKNNExtractor.cpp \
     Extraction/Vectorizer.cpp \
     Extraction/Zernike.cpp \
     Model/Problem.cpp \
@@ -99,6 +108,8 @@ SOURCES += \
     Model/Metadata.cpp \
     Model/Vertex.cpp \
     Model/Edge.cpp \
+    Model/Weight.cpp \
+    Model/WeightHash.cpp \
     Model/Weights.cpp \
     Layout/LayoutGraph.cpp \
     Layout/FDLayout.cpp \

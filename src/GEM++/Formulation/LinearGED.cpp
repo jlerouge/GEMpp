@@ -62,17 +62,17 @@ void LinearGraphEditDistance::restrictProblem(double up) {
 }
 
 void LinearGraphEditDistance::initConstraints() {
-    for(i=0; i < nVP; ++i, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(i=0; i < nVP; ++i)
+        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(k=0; k < nVT; ++k, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(k=0; k < nVT; ++k)
+        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(ij=0; ij < nEP; ++ij, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getRow(ij)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(ij=0; ij < nEP; ++ij)
+        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getRow(ij)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(kl=0; kl < nET; ++kl, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getCol(kl)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(kl=0; kl < nET; ++kl)
+        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getCol(kl)), LinearConstraint::LESS_EQ, 1.0);
 
     if(!low_) {
         for(ij=0; ij < nEP; ++ij) {
@@ -85,21 +85,19 @@ void LinearGraphEditDistance::initConstraints() {
                     l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
                     if(isDirected) {
                         *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+                                        LinearConstraint::GREATER_EQ, 0.0);
                         *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+                                        LinearConstraint::GREATER_EQ, 0.0);
                         *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_)); ++cuid_;
+                                        LinearConstraint::LESS_EQ, 1.0);
                     } else {
                         *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+                                        LinearConstraint::GREATER_EQ, 0.0);
                         *lp_ += new LinearConstraint(*(x_variables.getElement(j, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0, QString::number(cuid_)); ++cuid_;
+                                        LinearConstraint::GREATER_EQ, 0.0);
                         *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) + *(x_variables.getElement(i, l)) +
-                                        *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_)); ++cuid_;
+                                        *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0);
                     }
-                } else {
-                    cuid_ += 3;
                 }
             }
         }
@@ -132,9 +130,9 @@ void LinearGraphEditDistance::initConstraints() {
                     e3->addTerm(*(y_variables.getElement(ij, kl))*(-1));
                 }
             }
-            *lp_ += new LinearConstraint(e1, LinearConstraint::GREATER_EQ, 0.0, QString("A%1").arg(cuid_)); ++cuid_;
-            *lp_ += new LinearConstraint(e2, LinearConstraint::GREATER_EQ, 0.0, QString("A%1").arg(cuid_)); ++cuid_;
-            *lp_ += new LinearConstraint(e3, LinearConstraint::LESS_EQ, nET, QString("A%1").arg(cuid_)); ++cuid_;
+            *lp_ += new LinearConstraint(e1, LinearConstraint::GREATER_EQ, 0.0);
+            *lp_ += new LinearConstraint(e2, LinearConstraint::GREATER_EQ, 0.0);
+            *lp_ += new LinearConstraint(e3, LinearConstraint::LESS_EQ, nET);
         }
         for(kl=0; kl < nET; ++kl) {
             k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
@@ -164,9 +162,9 @@ void LinearGraphEditDistance::initConstraints() {
                     e3->addTerm(*(y_variables.getElement(ij, kl))*(-1));
                 }
             }
-            *lp_ += new LinearConstraint(e1, LinearConstraint::GREATER_EQ, 0.0, QString("A%1").arg(cuid_)); ++cuid_;
-            *lp_ += new LinearConstraint(e2, LinearConstraint::GREATER_EQ, 0.0, QString("A%1").arg(cuid_)); ++cuid_;
-            *lp_ += new LinearConstraint(e3, LinearConstraint::LESS_EQ, nEP, QString("A%1").arg(cuid_)); ++cuid_;
+            *lp_ += new LinearConstraint(e1, LinearConstraint::GREATER_EQ, 0.0);
+            *lp_ += new LinearConstraint(e2, LinearConstraint::GREATER_EQ, 0.0);
+            *lp_ += new LinearConstraint(e3, LinearConstraint::LESS_EQ, nEP);
         }
     }
 }
@@ -195,62 +193,4 @@ void LinearGraphEditDistance::initObjective() {
 
     *exp += c;
     lp_->setObjective(exp);
-}
-
-QPair<int,int> LinearGraphEditDistance::updateLowerBound(Solution *sol){
-    Q_UNUSED(sol);
-    return qMakePair(0, 0);
-    // FIXME
-    // FIXME : cuid_
-
-    //    LinearConstraint *c1 = 0, *c2 = 0, *c3 = 0;
-    //    int nbErrors = 0;
-
-    //    for(auto vec : x_variables)
-    //        for(auto var : vec)
-    //            var->setValue(sol->getValue(var->getID()));
-
-    //    for(auto vec : y_variables)
-    //        for(auto var : vec)
-    //            var->setValue(sol->getValue(var->getID()));
-
-    //    for(ij=0; ij < nEP; ++ij) {
-    //        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-    //        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
-    //        for(kl=0; kl < nET; ++kl) {
-    //            k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
-    //            l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
-    //            switch(pb_->getPattern()->getType()) {
-    //                case Graph::DIRECTED:
-    //                    c1 = new LinearConstraint(*(x_variables.getElement(i, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::GREATER_EQ, 0.0);
-    //                    c2 = new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)), LinearConstraint::GREATER_EQ, 0.0);
-    //                    c3 = new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0);
-    //                    break;
-    //                case Graph::UNDIRECTED:
-    //                    c1 = new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)), LinearConstraint::GREATER_EQ, 0.0);
-    //                    c2 = new LinearConstraint(*(x_variables.getElement(j, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)), LinearConstraint::GREATER_EQ, 0.0);
-    //                    c3 = new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) + *(x_variables.getElement(i, l)) + *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0);
-    //                    break;
-    //            }
-    //            if(!c1->eval()) {
-    //                ++nbErrors;
-    //                *lp_ += c1;
-    //            } else {
-    //                delete c1;
-    //            }
-    //            if(!c2->eval()) {
-    //                ++nbErrors;
-    //                *lp_ += c2;
-    //            } else {
-    //                delete c2;
-    //            }
-    //            if(!c3->eval()) {
-    //                ++nbErrors;
-    //                *lp_ += c3;
-    //            } else {
-    //                delete c3;
-    //            }
-    //        }
-    //    }
-    //    return QPair<int,int>(nbErrors, 2*nEP*nET+nEP+nET+nVP+nVT);
 }

@@ -24,8 +24,6 @@ class DLL_EXPORT Formulation {
         virtual ~Formulation() {}
 
         void init(double up = 1.0);
-        void updateUpperBound(double up);
-        virtual QPair<int,int> updateLowerBound(Solution *sol) = 0;
         virtual void cut(Solution *sol, CutMethod cm) = 0;
 
         void setProblem(Problem *pb);
@@ -39,8 +37,6 @@ class DLL_EXPORT Formulation {
         Program *p_;
         LinearProgram *lp_;
         QuadProgram *qp_;
-        int cuts_;
-        int cuid_;
         bool low_;
         bool induced_;
 

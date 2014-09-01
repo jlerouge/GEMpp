@@ -1,9 +1,12 @@
 #include "Constraint.h"
 
-Constraint::Constraint(Expression *exp, Relation relation, double rhs, QString uid) : Identified("_C"+uid) {
+uint Constraint::count_ = 0;
+
+Constraint::Constraint(Expression *exp, Relation relation, double rhs) : Identified() {
     exp_ = exp;
     relation_ = relation;
     rhs_ = rhs;
+    setID(QString("_C%1").arg(count_++));
 }
 
 Constraint::~Constraint() {}

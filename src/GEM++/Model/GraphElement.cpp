@@ -26,6 +26,7 @@ GraphElement::GraphElement(const GraphElement &other) : Identified(other), Index
     cost_ = other.getCost();
     type_ = other.getType();
     numericAttributes_ = other.getNumericAttributes();
+    stringAttributes_ = other.getStringAttributes();
     symbolicAttributes_ = other.getSymbolicAttributes();
 }
 
@@ -51,6 +52,14 @@ double GraphElement::getNumericAttribute(QString attribute) const {
     return numericAttributes_[attribute];
 }
 
+void GraphElement::addStringAttribute(const QString &attribute, const QString &value) {
+    stringAttributes_.insert(attribute, value);
+}
+
+QString GraphElement::getStringAttribute(const QString &attribute) const {
+    return stringAttributes_[attribute];
+}
+
 void GraphElement::addSymbolicAttribute(const QString &attribute, const QString &value) {
     symbolicAttributes_.insert(attribute, value);
 }
@@ -61,6 +70,10 @@ QString GraphElement::getSymbolicAttribute(const QString &attribute) const {
 
 const QMap<QString, double>& GraphElement::getNumericAttributes() const {
     return numericAttributes_;
+}
+
+const QMap<QString, QString>& GraphElement::getStringAttributes() const {
+    return stringAttributes_;
 }
 
 const QMap<QString, QString>& GraphElement::getSymbolicAttributes() const {

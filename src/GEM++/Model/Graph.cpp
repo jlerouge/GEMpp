@@ -418,6 +418,7 @@ void Graph::fromXML(const QString &filename) {
 }
 
 void Graph::print(Printer *p) {
+    // FIXME : gxl ?
     p->dump("graph [");
     p->indent();
     p->dump(QString("directed %1").arg(type_ == DIRECTED));
@@ -429,8 +430,10 @@ void Graph::print(Printer *p) {
         p->dump(QString("label \"%1\"").arg(v->getID()));
         for(auto att : v->getNumericAttributes().keys())
             p->dump(QString("%1 %2").arg(att).arg(v->getNumericAttribute(att)));
+        for(auto att : v->getStringAttributes().keys())
+            p->dump(QString("%1 \"%2\"").arg(att).arg(v->getStringAttribute(att)));
         for(auto att : v->getSymbolicAttributes().keys())
-            p->dump(QString("%1 \"%2\"").arg(att).arg(v->getNumericAttribute(att)));
+            p->dump(QString("%1 \"%2\"").arg(att).arg(v->getSymbolicAttribute(att)));
         p->unindent();
         p->dump("]");
     }
@@ -442,8 +445,10 @@ void Graph::print(Printer *p) {
         p->dump(QString("target %1").arg(e->getTarget()->getIndex()));
         for(auto att : e->getNumericAttributes().keys())
             p->dump(QString("%1 %2").arg(att).arg(e->getNumericAttribute(att)));
+        for(auto att : e->getStringAttributes().keys())
+            p->dump(QString("%1 \"%2\"").arg(att).arg(e->getStringAttribute(att)));
         for(auto att : e->getSymbolicAttributes().keys())
-            p->dump(QString("%1 \"%2\"").arg(att).arg(e->getNumericAttribute(att)));
+            p->dump(QString("%1 \"%2\"").arg(att).arg(e->getSymbolicAttribute(att)));
         p->unindent();
         p->dump("]");
     }

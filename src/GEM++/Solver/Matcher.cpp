@@ -1,6 +1,6 @@
 #include "Matcher.h"
 
-Matcher::Matcher() : QObject(), QRunnable(), ICleanable() {
+Matcher::Matcher() : QRunnable(), ICleanable(), QObject() {
     pb_ = 0;
     cfg_ = 0;
     s_ = 0;
@@ -72,21 +72,18 @@ void Matcher::run() {
     Formulation *f = 0;
     SolutionList *sl = 0;
 
-    // percentage for variable selection
-    double limitInit = (cfg_->colgen ? cfg_->step : (cfg_->upperbound ? cfg_->limit : 1.0));
-
     switch(pb_->getType()) {
         case Problem::GED:
             switch(cfg_->gedMethod) {
                 case GraphEditDistance::LINEAR:
-                    ged = new LinearGraphEditDistance(pb_, cfg_->lowerbound, limitInit);
+                    ged = new LinearGraphEditDistance(pb_, cfg_->lowerbound, cfg_->upperbound);
                     break;
                 case GraphEditDistance::QUADRATIC:
-                    ged = new QuadGraphEditDistance(pb_, limitInit);
+                    ged = new QuadGraphEditDistance(pb_, cfg_->upperbound);
                     break;
                 case GraphEditDistance::BIPARTITE:
                     initBipartiteCosts();
-                    ged = new BipartiteGED(pb_, limitInit);
+                    ged = new BipartiteGED(pb_, cfg_->upperbound);
                     break;
                 default:
                     break;
@@ -99,10 +96,10 @@ void Matcher::run() {
                     subiso = new ExactSubgraphIsomorphism(pb_, cfg_->lowerbound, cfg_->induced);
                     break;
                 case SubgraphIsomorphism::LABEL:
-                    subiso = new SubstitutionTolerantSubgraphIsomorphism(pb_, cfg_->lowerbound, limitInit, cfg_->induced);
+                    subiso = new SubstitutionTolerantSubgraphIsomorphism(pb_, cfg_->lowerbound, cfg_->upperbound, cfg_->induced);
                     break;
                 case SubgraphIsomorphism::TOPOLOGY:
-                    subiso = new ErrorTolerantSubgraphIsomorphism(pb_, cfg_->lowerbound, limitInit, cfg_->induced);
+                    subiso = new ErrorTolerantSubgraphIsomorphism(pb_, cfg_->lowerbound, cfg_->upperbound, cfg_->induced);
                     break;
                 default:
                     break;
@@ -127,41 +124,12 @@ void Matcher::run() {
 
         sl = slout_ ? slout_ : new SolutionList();
         sl->setFormulation(f);
-        bool storeSolution = (cfg_->number > 1 || !cfg_->solution.isEmpty() || cfg_->rowgen || slout_);
+        bool storeSolution = (cfg_->number > 1 || !cfg_->solution.isEmpty() || slout_);
 
         do {
             if(storeSolution)
                 sl->newSolution();
-
-            int iteration = 0;
-            if(cfg_->rowgen) {
-                // Handle row generation for compatible models
-                GEM_exception("Row-generation is broken."); // FIXME
-                QPair<int, int> nb;
-                do {
-                    s_->update();
-                    obj_ = s_->solve(sl->lastSolution());
-                    nb = ged->updateLowerBound(sl->lastSolution());
-                    outputRowGenIteration(++iteration, ged->getLinearProgram()->getConstraints().size(), nb);
-                } while (nb.first > 0);
-
-            } else if(cfg_->colgen) {
-                double limit = limitInit;
-                // Handle column generation
-                while (true) {
-                    f->updateUpperBound(limit);
-                    s_->update(true);
-                    obj_ = s_->solve(sl->lastSolution());
-                    outputColGenIteration(++iteration, limit);
-                    if((cfg_->limit - limit) <= precision)
-                        break;
-                    limit += cfg_->step;
-                    limit = (limit >= cfg_->limit) ? cfg_->limit : limit;
-                }
-            } else {
-                // Normal solve
-                obj_ = s_->solve(sl->lastSolution());
-            }
+            obj_ = s_->solve(sl->lastSolution());
 
             // Cut the found solution
             if(cfg_->number > 1) {
@@ -197,7 +165,7 @@ void Matcher::run() {
         // Round the objective according to the precision
         obj_ = roundAtPrecision(obj_);
 
-        //// If no output file is given, write to stdout
+        // If no output file is given, write to stdout
         //if(cfg_->matrix.isEmpty())
         //    qcout << obj_ << endl;
 
@@ -231,7 +199,7 @@ void Matcher::initBipartiteCosts() {
     for(i=0; i < nVP; ++i) {
         for(k=0; k < nVT; ++k) {
             bipe = new BipartiteEdges(pb_, i, k);
-            s_->init(bipe->getLinearProgram(), false);
+            s_->init(bipe->getLinearProgram());
             pb_->addCost(i, k, s_->solve(), GraphElement::VERTEX);
             delete bipe;
         }
@@ -246,21 +214,5 @@ void Matcher::initBipartiteCosts() {
         v = pb_->getTarget()->getVertex(k);
         for(auto e : v->getEdges(Vertex::EDGE_IN_OUT))
             v->setCost(v->getCost()+e->getCost());
-    }
-}
-
-void Matcher::outputColGenIteration(int iteration, double limit) {
-    if(cfg_->verbose) {
-        qcout << "--------^--------^--------^--------^--------^--------" << endl;
-        qcout << QString("Column-generation (end of iteration n°%1)\nExplored %2 % of possible matchings (limited to %3 %)").arg(iteration).arg(limit*100).arg(cfg_->limit*100) << endl;
-        qcout << "-----------------------------------------------------" << endl;
-    }
-}
-
-void Matcher::outputRowGenIteration(int iteration, int generated, QPair<int,int> nb) {
-    if(cfg_->verbose) {
-        qcout << "--------^--------^--------^--------^--------^--------" << endl;
-        qcout << QString("Row-generation (end of iteration n°%1)\nViolations : %2\nGenerated %3 constraints (out of %4)").arg(iteration).arg(nb.first).arg(generated).arg(nb.second) << endl;
-        qcout << "-----------------------------------------------------" << endl;
     }
 }

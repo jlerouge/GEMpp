@@ -8,7 +8,7 @@ Edge::Edge(Vertex *origin, Vertex *target) : GraphElement() {
     target_ = target;
 }
 
-Edge::Edge(const Edge &other) : GraphElement(other) {
+Edge::Edge(const Edge &other) : Identified(other), Indexed(other), GraphElement(other) {
     origin_ = other.getOrigin();
     target_ = other.getTarget();
 }

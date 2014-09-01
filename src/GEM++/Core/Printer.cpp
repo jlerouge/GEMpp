@@ -1,6 +1,6 @@
 #include "Printer.h"
 
-Printer::Printer(int indentWidth) : indentLevel_(0), indentWidth_(indentWidth), content_("") {}
+Printer::Printer(int indentWidth) : content_(""), indentLevel_(0), indentWidth_(indentWidth) {}
 
 Printer::~Printer() {}
 

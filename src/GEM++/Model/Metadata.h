@@ -4,11 +4,11 @@
 #include <QtXml/QtXml>
 #include <QMap>
 #include <QList>
-#include "Weights.h"
-#include "../Core/FileStream.h"
-#include "../Core/ISaveable.h"
+//#include "Weights.h"
+#include "GraphElement.h"
+#include "../Core/IXmlSerializable.h"
 
-class DLL_EXPORT Metadata : virtual public IPrintable, virtual public ISaveable {
+class DLL_EXPORT Metadata : virtual public IXmlSerializable {
         friend class Graph;
     public:
         Metadata();
@@ -23,16 +23,11 @@ class DLL_EXPORT Metadata : virtual public IPrintable, virtual public ISaveable 
         void setAttribute(GraphElement::Type type, uint index, QString name, QVariant value);
         const QMap<QString, QString> getAttributes(GraphElement::Type type, uint index) const;
 
-        void print(Printer *p);
-        void save(const QString &filename);
-
     protected:
-        void fromXML(const QString &filename);
-        void toXML();
+        virtual void fromXML(const QString &filename);
+        virtual void toXML();
 
     private:
-        void clean();
-        QDomDocument *doc_;
         QMap<QString, QString> graphAttributes_;
         QMap<int, QMap<QString, QString> > verticesAttributes_;
         QMap<int, QMap<QString, QString> > edgesAttributes_;

@@ -8,8 +8,6 @@ class DLL_EXPORT BipartiteGED: virtual public GraphEditDistance {
         BipartiteGED(Problem *pb, double up = 1);
         virtual ~BipartiteGED();
 
-        QPair<int, int> updateLowerBound(Solution *sol);
-
     protected:
         virtual void initConstraints();
         virtual void initObjective();

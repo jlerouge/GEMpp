@@ -9,12 +9,6 @@ QuadGraphEditDistance::~QuadGraphEditDistance() {
     delete qp_;
 }
 
-QPair<int,int> QuadGraphEditDistance::updateLowerBound(Solution *sol) {
-    Q_UNUSED(sol);
-    GEM_exception("Quadratic graph edit distance does not handle row-generation.");
-    return qMakePair(0, 0);
-}
-
 void QuadGraphEditDistance::initVariables() {
     GraphEditDistance::initVariables();
     y1_variables = Matrix<Quad>(nEP, nET);
@@ -44,24 +38,24 @@ void QuadGraphEditDistance::initCosts() {
 void QuadGraphEditDistance::initConstraints() {
     QList<Quad> ql;
 
-    for(i=0; i < nVP; ++i, ++cuid_)
-        *qp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(i=0; i < nVP; ++i)
+        *qp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(k=0; k < nVT; ++k, ++cuid_)
-        *qp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(k=0; k < nVT; ++k)
+        *qp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(ij=0; ij < nEP; ++ij, ++cuid_) {
+    for(ij=0; ij < nEP; ++ij) {
         ql = y1_variables.getRow(ij);
         if(!isDirected)
             ql.append(y2_variables.getRow(ij));
-        *qp_ += new QuadConstraint(QuadExpression::sum(ql), QuadConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+        *qp_ += new QuadConstraint(QuadExpression::sum(ql), QuadConstraint::LESS_EQ, 1.0);
     }
 
-    for(kl=0; kl < nET; ++kl, ++cuid_) {
+    for(kl=0; kl < nET; ++kl) {
         ql = y1_variables.getCol(kl);
         if(!isDirected)
             ql.append(y2_variables.getCol(kl));
-        *qp_ += new QuadConstraint(QuadExpression::sum(ql), QuadConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+        *qp_ += new QuadConstraint(QuadExpression::sum(ql), QuadConstraint::LESS_EQ, 1.0);
     }
 }
 

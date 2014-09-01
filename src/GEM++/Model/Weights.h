@@ -1,14 +1,21 @@
 #ifndef __WEIGHTS_H__
 #define __WEIGHTS_H__
 
-#include <QHash>
 #include <QStringList>
 #include <qmath.h>
 #include "GraphElement.h"
-#include "../Core/FileStream.h"
-#include "../Core/ISaveable.h"
+#include "WeightHash.h"
+#include "../Core/IXmlSerializable.h"
 
-class DLL_EXPORT Weights : virtual public IPrintable, virtual public ISaveable {
+#define DEFAULT_S_CONST 0.0
+#define DEFAULT_S_ATTR 1.0
+#define DEFAULT_S_POWER 2
+
+#define DEFAULT_C_CONST 1.0
+#define DEFAULT_C_ATTR 0.0
+#define DEFAULT_C_POWER 1
+
+class DLL_EXPORT Weights : virtual public IXmlSerializable {
         friend class QConfigurationDialog;
     public:
         enum Operation{
@@ -21,39 +28,43 @@ class DLL_EXPORT Weights : virtual public IPrintable, virtual public ISaveable {
         static Operation fromName(QString opName);
         static QString toName(Operation op);
 
-        Weights();
-        Weights(const QString &substitution, const QString &creation);
-        Weights(Weights &other);
+        Weights(const QString &substitution = "", const QString &creation = "");
         virtual ~Weights();
 
-        double getWeight(QString attribute, Operation op, GraphElement::Type t) const;
-        double getWeight(QString prefixedAttr) const;
-        void setWeight(QString attribute, Operation op, GraphElement::Type t, double value);
-        void setWeight(QString prefixedAttr, double value);
-        const QHash<QString, double> &getWeights() const;
-        Operation getSaveMode() const;
-        void setSaveMode(Operation op);
+        bool containsWeight(Operation op, GraphElement::Type t, QString attribute) const;
+        Weight* getWeight(Operation op, GraphElement::Type t, QString attribute) const;
+        void addWeight(Operation op, GraphElement::Type t, QString attribute, Weight::Type type, uint power, double value);
 
-        void print(Printer *p);
+        double getDefaultWeight(Operation op) const;
+        uint getDefaultPower(Operation op) const;
+
+        Operation getCurrentOperation() const;
+        void setCurrentOperation(Operation op);
+
         void print(Printer *p, Operation op);
-        void save(const QString &filename);
         void save(const QString &filename, Operation op);
 
+        double creationCost(GraphElement *e) const;
+        double substitutionCost(GraphElement *e1, GraphElement *e2) const;
 
-        double creationCost(GraphElement *e);
-        double substitutionCost(GraphElement *e1, GraphElement *e2);
+        WeightHash *getWeights(Operation op, GraphElement::Type t) const;
 
     protected:
-        void fromFw(const QString &filename, Operation op);
+        void fromFile(const QString &filename, Operation op);
+        void fromXML(const QString &filename, Operation op);
+        virtual void fromXML(const QString &filename);
+        void toXML(Operation op);
+        virtual void toXML();
 
     private:
-        QString getPrefix(Operation op, GraphElement::Type t) const;
-        double weightedEuclideanDistance(GraphElement *e1, GraphElement *e2);
+        double weightedCost(GraphElement *e1, GraphElement *e2 = 0) const;
 
-        QHash<QString, double> weights_;
-        Operation saveMode_;
+        QHash<QPair<Operation, GraphElement::Type>, WeightHash *> weights_;
+        Operation currentOperation_;
 };
+
 void operator*=(Weights &w, double d);
 void operator+=(Weights &w1, Weights w2);
+uint levenshtein(QString s1, QString s2);
 
 #endif /*__WEIGHTS_H__*/

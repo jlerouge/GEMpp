@@ -12,8 +12,10 @@ class DLL_EXPORT ExtractionConfiguration : virtual public IPrintable {
         //bool check();
         void print(Printer *p);
 
+        // Generic options
         bool verbose;
 
+        // RAG
         int pruningSize;
         int tolerance;
         int zernikeOrder;

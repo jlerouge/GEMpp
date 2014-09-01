@@ -14,12 +14,6 @@ BipartiteEdges::~BipartiteEdges() {
             delete it;
 }
 
-QPair<int,int> BipartiteEdges::updateLowerBound(Solution *sol) {
-    Q_UNUSED(sol);
-    GEM_exception("Bipartite edges-subproblem does not handle row-generation.");
-    return qMakePair(0, 0);
-}
-
 void BipartiteEdges::initVariables() {
     int nEi, nEk;
     nEi = vi_->getEdges(Vertex::EDGE_IN_OUT).size();
@@ -46,11 +40,11 @@ void BipartiteEdges::initConstraints() {
     nEi = vi_->getEdges(Vertex::EDGE_IN_OUT).size();
     nEk = vk_->getEdges(Vertex::EDGE_IN_OUT).size();
 
-    for(ij=0; ij < nEi; ++ij, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getRow(ij)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(ij=0; ij < nEi; ++ij)
+        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getRow(ij)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(kl=0; kl < nEk; ++kl, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getCol(kl)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(kl=0; kl < nEk; ++kl)
+        *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getCol(kl)), LinearConstraint::LESS_EQ, 1.0);
 }
 
 void BipartiteEdges::initObjective() {

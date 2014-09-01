@@ -1,6 +1,6 @@
 #include "Metadata.h"
 
-Metadata::Metadata() : doc_(0) {
+Metadata::Metadata() {
     graphAttributes_ = QMap<QString, QString>();
     verticesAttributes_ = QMap<int, QMap<QString, QString> >();
     edgesAttributes_ = QMap<int, QMap<QString, QString> >();
@@ -9,10 +9,9 @@ Metadata::Metadata() : doc_(0) {
 }
 
 Metadata::Metadata(const QString &filename) : Metadata() {
-    if(filename.endsWith(".xml", Qt::CaseInsensitive))
-        fromXML(filename);
-    else
+    if(!filename.endsWith(".xml", Qt::CaseInsensitive))
         GEM_exception(QString("%1 is not a *.xml file.").arg(filename));
+    fromXML(filename);
 }
 
 Metadata::~Metadata() {
@@ -53,16 +52,6 @@ const QMap<QString, QString> Metadata::getAttributes(GraphElement::Type type, ui
     if(!attributes[type]->contains(index))
         GEM_exception(QString("%1 at index %2 does not have metadata").arg(GraphElement::toName(type)).arg(index));
     return attributes[type]->value(index);
-}
-
-void Metadata::print(Printer *p) {
-    toXML();
-    p->dump("<?xml version=\"1.0\"?>");
-    p->dump(doc_->toString(p->getIndentWidth()));
-}
-
-void Metadata::save(const QString &filename) {
-    FileStream::saveFile(this, filename);
 }
 
 void Metadata::fromXML(const QString &filename) {
@@ -120,10 +109,4 @@ void Metadata::toXML() {
         graph.appendChild(edge);
     }
     doc_->appendChild(graph);
-}
-
-void Metadata::clean() {
-    if(doc_)
-        delete doc_;
-    doc_ = 0;
 }

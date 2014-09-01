@@ -9,18 +9,12 @@ BipartiteGED::~BipartiteGED() {
     delete lp_;
 }
 
-QPair<int,int> BipartiteGED::updateLowerBound(Solution *sol) {
-    Q_UNUSED(sol);
-    GEM_exception("Bipartite graph matching does not handle row-generation.");
-    return qMakePair(0, 0);
-}
-
 void BipartiteGED::initConstraints() {
-    for(i=0; i < nVP; ++i, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(i=0; i < nVP; ++i)
+        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0);
 
-    for(k=0; k < nVT; ++k, ++cuid_)
-        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0, QString::number(cuid_));
+    for(k=0; k < nVT; ++k)
+        *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0);
 }
 
 void BipartiteGED::initObjective() {

@@ -76,10 +76,10 @@ void SubgraphIsomorphism::cut(Solution *sol, CutMethod cm) {
     QList<Variable *> vars = sol->getVariables().keys();
     switch(cm) {
         case SOLUTION:
-            c = new LinearConstraint(LinearExpression::sum(vars), Constraint::LESS_EQ, vars.size() - 1, QString("solcut_%1").arg(cuts_++));
+            c = new LinearConstraint(LinearExpression::sum(vars), Constraint::LESS_EQ, vars.size() - 1);
             break;
         case MATCHINGS:
-            c = new LinearConstraint(LinearExpression::sum(vars), Constraint::EQUAL, 0, QString("matcut_%1").arg(cuts_++));
+            c = new LinearConstraint(LinearExpression::sum(vars), Constraint::EQUAL, 0);
             break;
         case ELEMENTS: {
             QStringList sl;
@@ -92,7 +92,7 @@ void SubgraphIsomorphism::cut(Solution *sol, CutMethod cm) {
                     }
                 }
             }
-            c = new LinearConstraint(LinearExpression::sum(vset.toList()), Constraint::EQUAL, 0, QString("elemcut_%1").arg(cuts_++));
+            c = new LinearConstraint(LinearExpression::sum(vset.toList()), Constraint::EQUAL, 0);
             break;
         }
         default:

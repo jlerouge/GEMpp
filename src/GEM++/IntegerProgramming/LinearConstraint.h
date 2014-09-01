@@ -23,7 +23,7 @@ class DLL_EXPORT LinearConstraint : virtual public Constraint {
          * @param relation the Constraint::Relation
          * @param rhs the right hand side value
          */
-        LinearConstraint(LinearExpression *exp, Relation relation, double rhs, QString uid);
+        LinearConstraint(LinearExpression *exp, Relation relation, double rhs);
 
         /**
          * @brief Destructs a LinearConstraint.

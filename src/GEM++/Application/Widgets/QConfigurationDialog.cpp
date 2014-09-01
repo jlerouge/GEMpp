@@ -9,9 +9,9 @@ QConfigurationDialog::QConfigurationDialog(Problem *p, QString title) : isMore(f
     if(settings->contains("configuration_size"))
         resize(settings->value("configuration_size").toSize());
     if(settings->contains(QString("%1_fw").arg(Weights::toName(Weights::CREATION).toLower())))
-        weights->fromFw(settings->value(QString("%1_fw").arg(Weights::toName(Weights::CREATION).toLower())).toString(), Weights::CREATION);
+        weights->fromXML(settings->value(QString("%1_fw").arg(Weights::toName(Weights::CREATION).toLower())).toString(), Weights::CREATION);
     if(settings->contains(QString("%1_fw").arg(Weights::toName(Weights::SUBSTITUTION).toLower())))
-        weights->fromFw(settings->value(QString("%1_fw").arg(Weights::toName(Weights::SUBSTITUTION).toLower())).toString(), Weights::SUBSTITUTION);
+        weights->fromXML(settings->value(QString("%1_fw").arg(Weights::toName(Weights::SUBSTITUTION).toLower())).toString(), Weights::SUBSTITUTION);
     updateTables();
     resize(minimumSizeHint());
 }
@@ -192,7 +192,7 @@ void QConfigurationDialog::initTables() {
 
             QScienceSpinBox *weight = new QScienceSpinBox(this);
             weight->setMinimum(0);
-            weight->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX));
+            weight->setValue(weights->getWeight(Weights::SUBSTITUTION, GraphElement::VERTEX, att)->getValue());
             weight->setDecimals(6);
             subsTable->setCellWidget(row, 2, weight);
 
@@ -205,7 +205,7 @@ void QConfigurationDialog::initTables() {
             creaTable->item(row, 1)->setToolTip("Numeric attribute");
 
             weight = new QScienceSpinBox(weight);
-            weight->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::VERTEX));
+            weight->setValue(weights->getWeight(Weights::CREATION, GraphElement::VERTEX, att)->getValue());
             weight->setDecimals(6);
             creaTable->setCellWidget(row, 2, weight);
             ++row;
@@ -220,7 +220,7 @@ void QConfigurationDialog::initTables() {
             subsTable->item(row, 1)->setToolTip("Symbolic attribute");
 
             QCheckBox *active = new QCheckBox("Active ?", this);
-            active->setChecked(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX) > 0);
+            active->setChecked(weights->getWeight(Weights::SUBSTITUTION, GraphElement::VERTEX, att)->getValue() > 0);
             subsTable->setCellWidget(row, 2, active);
 
             // Creation
@@ -232,7 +232,7 @@ void QConfigurationDialog::initTables() {
             creaTable->item(row, 1)->setToolTip("Symbolic attribute");
 
             active = new QCheckBox(active);
-            active->setChecked(weights->getWeight(att, Weights::CREATION, GraphElement::VERTEX) > 0);
+            active->setChecked(weights->getWeight(Weights::CREATION, GraphElement::VERTEX, att)->getValue() > 0);
             creaTable->setCellWidget(row, 2, active);
             ++row;
         }
@@ -252,7 +252,7 @@ void QConfigurationDialog::initTables() {
 
             QScienceSpinBox *weight = new QScienceSpinBox(this);
             weight->setMinimum(0);
-            weight->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE));
+            weight->setValue(weights->getWeight(Weights::SUBSTITUTION, GraphElement::EDGE, att)->getValue());
             weight->setDecimals(6);
             subsTable->setCellWidget(row, 2, weight);
 
@@ -265,7 +265,7 @@ void QConfigurationDialog::initTables() {
             creaTable->item(row, 1)->setToolTip("Numeric attribute");
 
             weight = new QScienceSpinBox(weight);
-            weight->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::EDGE));
+            weight->setValue(weights->getWeight(Weights::CREATION, GraphElement::EDGE, att)->getValue());
             weight->setDecimals(6);
             creaTable->setCellWidget(row, 2, weight);
             ++row;
@@ -280,7 +280,7 @@ void QConfigurationDialog::initTables() {
             subsTable->item(row, 1)->setToolTip("Symbolic attribute");
 
             QCheckBox *active = new QCheckBox("Active ?", this);
-            active->setChecked(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE) > 0);
+            active->setChecked(weights->getWeight(Weights::SUBSTITUTION, GraphElement::EDGE, att)->getValue() > 0);
             subsTable->setCellWidget(row, 2, active);
 
             // Creation
@@ -292,7 +292,7 @@ void QConfigurationDialog::initTables() {
             creaTable->item(row, 1)->setToolTip("Symbolic attribute");
 
             active = new QCheckBox(active);
-            active->setChecked(weights->getWeight(att, Weights::CREATION, GraphElement::EDGE) > 0);
+            active->setChecked(weights->getWeight(Weights::CREATION, GraphElement::EDGE, att)->getValue() > 0);
             creaTable->setCellWidget(row, 2, active);
             ++row;
         }
@@ -312,13 +312,13 @@ void QConfigurationDialog::updateTables() {
         QList<QString> vNumAttr = v->getNumericAttributes().keys();
         vNumAttr.insert(0, CONST_LABEL);
         for(auto att : vNumAttr) {
-            ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX));
-            ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::VERTEX));
+            ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(Weights::SUBSTITUTION, GraphElement::VERTEX, att)->getValue());
+            ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(Weights::CREATION, GraphElement::VERTEX, att)->getValue());
             ++row;
         }
         for(auto att : v->getSymbolicAttributes()) {
-            ((QCheckBox *)subsTable->cellWidget(row, 2))->setChecked(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX) > 0);
-            ((QCheckBox *)creaTable->cellWidget(row, 2))->setChecked(weights->getWeight(att, Weights::CREATION, GraphElement::VERTEX) > 0);
+            ((QCheckBox *)subsTable->cellWidget(row, 2))->setChecked(weights->getWeight(Weights::SUBSTITUTION, GraphElement::VERTEX, att)->getValue() > 0);
+            ((QCheckBox *)creaTable->cellWidget(row, 2))->setChecked(weights->getWeight(Weights::CREATION, GraphElement::VERTEX, att)->getValue() > 0);
             ++row;
         }
     }
@@ -326,13 +326,13 @@ void QConfigurationDialog::updateTables() {
         QList<QString> eNumAttr = e->getNumericAttributes().keys();
         eNumAttr.insert(0, CONST_LABEL);
         for(auto att : eNumAttr) {
-            ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE));
-            ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(att, Weights::CREATION, GraphElement::EDGE));
+            ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->setValue(weights->getWeight(Weights::SUBSTITUTION, GraphElement::EDGE, att)->getValue());
+            ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->setValue(weights->getWeight(Weights::CREATION, GraphElement::EDGE, att)->getValue());
             ++row;
         }
         for(auto att : e->getSymbolicAttributes()) {
-            ((QCheckBox *)subsTable->cellWidget(row, 2))->setChecked(weights->getWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE) > 0);
-            ((QCheckBox *)creaTable->cellWidget(row, 2))->setChecked(weights->getWeight(att, Weights::CREATION, GraphElement::EDGE) > 0);
+            ((QCheckBox *)subsTable->cellWidget(row, 2))->setChecked(weights->getWeight(Weights::SUBSTITUTION, GraphElement::EDGE, att)->getValue() > 0);
+            ((QCheckBox *)creaTable->cellWidget(row, 2))->setChecked(weights->getWeight(Weights::CREATION, GraphElement::EDGE, att)->getValue() > 0);
             ++row;
         }
     }
@@ -350,13 +350,13 @@ void QConfigurationDialog::updateWeights() {
         QList<QString> vNumAttr = v->getNumericAttributes().keys();
         vNumAttr.insert(0, CONST_LABEL);
         for(auto att : vNumAttr) {
-            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX, ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->value());
-            weights->setWeight(att, Weights::CREATION, GraphElement::VERTEX, ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->value());
+            weights->getWeight(Weights::SUBSTITUTION, GraphElement::VERTEX, att)->setValue(((QScienceSpinBox *)subsTable->cellWidget(row, 2))->value());
+            weights->getWeight(Weights::CREATION, GraphElement::VERTEX, att)->setValue(((QScienceSpinBox *)creaTable->cellWidget(row, 2))->value());
             ++row;
         }
         for(auto att : v->getSymbolicAttributes()) {
-            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::VERTEX, ((QCheckBox *)subsTable->cellWidget(row, 2))->isChecked());
-            weights->setWeight(att, Weights::CREATION, GraphElement::VERTEX, ((QCheckBox *)creaTable->cellWidget(row, 2))->isChecked());
+            weights->getWeight(Weights::SUBSTITUTION, GraphElement::VERTEX, att)->setValue(((QCheckBox *)subsTable->cellWidget(row, 2))->isChecked());
+            weights->getWeight(Weights::CREATION, GraphElement::VERTEX, att)->setValue(((QCheckBox *)creaTable->cellWidget(row, 2))->isChecked());
             ++row;
         }
     }
@@ -364,13 +364,13 @@ void QConfigurationDialog::updateWeights() {
         QList<QString> eNumAttr = e->getNumericAttributes().keys();
         eNumAttr.insert(0, CONST_LABEL);
         for(auto att : eNumAttr) {
-            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE, ((QScienceSpinBox *)subsTable->cellWidget(row, 2))->value());
-            weights->setWeight(att, Weights::CREATION, GraphElement::EDGE, ((QScienceSpinBox *)creaTable->cellWidget(row, 2))->value());
+            weights->getWeight(Weights::SUBSTITUTION, GraphElement::EDGE, att)->setValue(((QScienceSpinBox *)subsTable->cellWidget(row, 2))->value());
+            weights->getWeight(Weights::CREATION, GraphElement::EDGE, att)->setValue(((QScienceSpinBox *)creaTable->cellWidget(row, 2))->value());
             ++row;
         }
         for(auto att : e->getSymbolicAttributes()) {
-            weights->setWeight(att, Weights::SUBSTITUTION, GraphElement::EDGE, ((QCheckBox *)subsTable->cellWidget(row, 2))->isChecked());
-            weights->setWeight(att, Weights::CREATION, GraphElement::EDGE, ((QCheckBox *)creaTable->cellWidget(row, 2))->isChecked());
+            weights->getWeight(Weights::SUBSTITUTION, GraphElement::EDGE, att)->setValue(((QCheckBox *)subsTable->cellWidget(row, 2))->isChecked());
+            weights->getWeight(Weights::CREATION, GraphElement::EDGE, att)->setValue(((QCheckBox *)creaTable->cellWidget(row, 2))->isChecked());
             ++row;
         }
     }
@@ -389,7 +389,7 @@ void QConfigurationDialog::loadWeights(Weights::Operation op) {
     QString fw = settings->value(att, "/home/foo.bar").toString();
     QString fileName = QFileDialog::getOpenFileName(this, QString("Import %1 feature weights").arg(Weights::toName(op).toLower()), QFileInfo(fw).path(), "Feature weights (*.fw)");
     if(!fileName.isEmpty()) {
-        weights->fromFw(fileName, op);
+        weights->fromXML(fileName, op);
         settings->setValue(att, fileName);
         updateTables();
     }
@@ -410,8 +410,7 @@ void QConfigurationDialog::saveWeights(Weights::Operation op) {
     try {
         QString fileName = QFileDialog::getSaveFileName(this, QString("Export %1 feature weights").arg(Weights::toName(op).toLower()), QFileInfo(fw).path(), "Feature weights (*.fw)");
         if(!fileName.isEmpty()) {
-            weights->setSaveMode(op);
-            weights->save(fileName);
+            weights->save(fileName, op);
             settings->setValue(att, fileName);
         }
     } catch (std::logic_error e) {

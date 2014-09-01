@@ -7,17 +7,6 @@
 
 #define VERSION "1.0.0-beta"
 
-// Weights
-#define DEFAULT_C_V_CONST_ 1.0
-#define DEFAULT_C_E_CONST_ 1.0
-#define DEFAULT_S_V_CONST_ 0.0
-#define DEFAULT_S_E_CONST_ 0.0
-
-#define DEFAULT_C_V 0.0
-#define DEFAULT_C_E 0.0
-#define DEFAULT_S_V 1.0
-#define DEFAULT_S_E 1.0
-
 #define CONST_LABEL "_const_"
 
 // Automatic configuration

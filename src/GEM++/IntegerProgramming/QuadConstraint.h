@@ -23,7 +23,7 @@ class DLL_EXPORT QuadConstraint : virtual public Constraint {
          * @param relation the Constraint::Relation
          * @param rhs the right hand side value
          */
-        QuadConstraint(QuadExpression *exp, Relation relation, double rhs, QString uid);
+        QuadConstraint(QuadExpression *exp, Relation relation, double rhs);
 
         /**
          * @brief Destructs a QuadConstraint.

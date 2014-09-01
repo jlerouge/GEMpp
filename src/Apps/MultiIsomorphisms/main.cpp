@@ -27,6 +27,5 @@ int main(int argc, char **argv)
     app.addPositionalArgument("queries", "Directory containing query graphs", "queries");
     app.addPositionalArgument("targets", "Directory containing target graphs", "targets");
     return app.match();
-    // FIXME : option pour régler le nombre de threads par instance et le nombre d'instances simultanées
 }
 

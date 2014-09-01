@@ -54,9 +54,7 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
 
         // Approximations
         void addAggregationOption();
-        void addRowGenOption();
         void addExplorationOption();
-        void addColGenOption();
 
         // Solver
         void addSolverOption();

@@ -27,11 +27,17 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
         double getCost() const;
         void setCost(double d);
         Type getType() const;
+
         void addNumericAttribute(const QString &attribute, double value);
         double getNumericAttribute(QString attribute) const;
+        const QMap<QString, double> &getNumericAttributes() const;
+
+        void addStringAttribute(const QString &attribute, const QString &value);
+        QString getStringAttribute(const QString &attribute) const;
+        const QMap<QString, QString> &getStringAttributes() const;
+
         void addSymbolicAttribute(const QString &attribute, const QString &value);
         QString getSymbolicAttribute(const QString &attribute) const;
-        const QMap<QString, double> &getNumericAttributes() const;
         const QMap<QString, QString> &getSymbolicAttributes() const;
 
         void print(Printer *p);
@@ -42,6 +48,7 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
     private:
         double cost_;
         QMap<QString, double> numericAttributes_;
+        QMap<QString, QString> stringAttributes_;
         QMap<QString, QString> symbolicAttributes_;
 };
 

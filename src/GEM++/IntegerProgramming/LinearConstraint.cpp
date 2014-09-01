@@ -1,7 +1,7 @@
 #include "LinearConstraint.h"
 
-LinearConstraint::LinearConstraint(LinearExpression *exp, Relation relation, double rhs, QString uid) :
-    Constraint(static_cast<Expression *>(exp), relation, rhs, "L"+uid) {}
+LinearConstraint::LinearConstraint(LinearExpression *exp, Relation relation, double rhs) :
+    Constraint(static_cast<Expression *>(exp), relation, rhs) {}
 
 LinearConstraint::~LinearConstraint() {
     delete exp_;

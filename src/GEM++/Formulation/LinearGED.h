@@ -8,8 +8,6 @@ class DLL_EXPORT LinearGraphEditDistance : public GraphEditDistance {
         LinearGraphEditDistance(Problem *pb, bool low, double up);
         virtual ~LinearGraphEditDistance();
 
-        QPair<int,int> updateLowerBound(Solution *sol);
-
     private:
         Matrix<Variable*> y_variables;
         Matrix<double> y_costs;

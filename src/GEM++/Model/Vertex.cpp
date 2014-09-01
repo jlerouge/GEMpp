@@ -14,7 +14,7 @@ Vertex::Vertex() : GraphElement() {
     parentIndex_ = -1;
 }
 
-Vertex::Vertex(const Vertex &other) : GraphElement(other) {
+Vertex::Vertex(const Vertex &other) : Identified(other), Indexed(other), GraphElement(other) {
     outEdges_ = other.getEdges(EDGE_OUT);
     inEdges_ = other.getEdges(EDGE_IN);
     parentIndex_ = other.getIndex();

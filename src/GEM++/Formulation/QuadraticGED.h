@@ -8,8 +8,6 @@ class DLL_EXPORT QuadGraphEditDistance : virtual public GraphEditDistance {
         QuadGraphEditDistance(Problem *pb, double up);
         virtual ~QuadGraphEditDistance();
 
-        QPair<int,int> updateLowerBound(Solution *sol);
-
     private:
         Matrix<Quad> y1_variables;
         Matrix<Quad> y2_variables;
