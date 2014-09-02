@@ -29,7 +29,6 @@ void GraphEditDistance::initVariables() {
     x_variables = Matrix<Variable*>(nVP, nVT);
     for(i=0; i < nVP; ++i) {
         for(k=0; k < nVT; ++k) {
-            //id = QString("x_%1,%2").arg(pb_->getPattern()->getVertex(i)->getIndex()).arg(pb_->getTarget()->getVertex(k)->getIndex());
             id = QString("x_%1,%2").arg(i).arg(k);
             x_variables.setElement(i, k, new Variable(id));
         }
