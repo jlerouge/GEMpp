@@ -1,5 +1,5 @@
 Droit d'auteur
-	GEM++ est la propriété du laboratoire LITIS EA 4108 (www.litislab.eu)
+	GEM++ est la propriété du laboratoire LITIS (www.litislab.fr)
 	(c) 2013-2014 LITIS
 Contact
 	gem-contact@litislab.eu

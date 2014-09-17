@@ -8,7 +8,7 @@
 #include "Extractor.h"
 #include "../Model/Graph.h"
 
-class DLL_EXPORT HomogeneousZoneExtractor : virtual public Extractor {
+class DLL_EXPORT HomogeneousZoneExtractor : virtual public SingleExtractor {
     public:
         HomogeneousZoneExtractor();
         HomogeneousZoneExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg);

@@ -28,7 +28,7 @@ class DLL_EXPORT Expression : virtual public IPrintable {
         /**
          * @brief Destructs an Expression object.
          */
-        virtual ~Expression() {} // Expression is polymorphic
+        virtual ~Expression() {}
 
         /**
          * @brief Returns the constant part of the Expression.
@@ -75,7 +75,18 @@ class DLL_EXPORT Expression : virtual public IPrintable {
         double const_;
 };
 
+/**
+ * @brief Adds a constant term to an Expression.
+ * @param e The Expression
+ * @param d The constant
+ */
 void operator+=(Expression &e, double d);
+
+/**
+ * @brief Substracts a constant term from an Expression.
+ * @param e The Expression
+ * @param d The constant
+ */
 void operator-=(Expression &e, double d);
 
 #endif /*__EXPRESSION_H__*/

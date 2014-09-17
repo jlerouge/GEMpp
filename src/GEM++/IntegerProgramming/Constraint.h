@@ -100,6 +100,9 @@ class DLL_EXPORT Constraint : virtual public IPrintable, public Identified {
         double rhs_;
 
     private:
+        /**
+         * @brief A static counter to maintain unique IDs for all Constraint objects.
+         */
         static uint count_;
 };
 

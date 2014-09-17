@@ -1,11 +1,11 @@
 #include "HZExtractor.h"
 
-HomogeneousZoneExtractor::HomogeneousZoneExtractor() : Extractor() {
+HomogeneousZoneExtractor::HomogeneousZoneExtractor() : SingleExtractor() {
     graph_ = 0;
     img_ = 0;
 }
 
-HomogeneousZoneExtractor::HomogeneousZoneExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg) : Extractor(input, output, metadata, excfg) {
+HomogeneousZoneExtractor::HomogeneousZoneExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg) : SingleExtractor(input, output, metadata, excfg) {
     graph_ = 0;
     img_ = new QImage(input_);
 }

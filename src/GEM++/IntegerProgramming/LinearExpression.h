@@ -45,8 +45,9 @@ class DLL_EXPORT LinearExpression : virtual public Expression {
         void multiplyBy(double d);
 
         /**
-         * @brief Adds a linear term to the LinearExpression. If the Variable concerned by the ::Term
+         * @brief Adds a linear Term to the LinearExpression. If the Variable concerned by the ::Term
          * is already present in the LinearExpression, its coefficient is updated.
+         * @param t The Term to add
          */
         void addTerm(Term t);
 
@@ -90,6 +91,12 @@ class DLL_EXPORT LinearExpression : virtual public Expression {
         QHash<Variable*, double> terms_;
 };
 
+/**
+ * @brief Adds a linear term to a LinearExpression.
+ * @param e The Expression
+ * @param d The linear term
+ * @see LinearExpression::addTerm()
+ */
 void operator+=(LinearExpression &e, Term t);
 void operator-=(LinearExpression &e, Term t);
 

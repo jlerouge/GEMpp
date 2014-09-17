@@ -5,7 +5,7 @@
 #include <iostream>
 #include <list>
 #include <QPoint>
-#include "Extractor.h"
+#include "SingleExtractor.h"
 #include "BinaryPNG.h"
 #include "qgarlib/CleanedBinaryImage.h"
 #include "qgarlib/Dist34BlackCCImage.h"
@@ -17,7 +17,7 @@
 
 using namespace qgar;
 
-class DLL_EXPORT Vectorizer : public Extractor {
+class DLL_EXPORT Vectorizer : public SingleExtractor {
     public:
         Vectorizer();
         Vectorizer(const QString &input, const QString &output, ExtractionConfiguration *excfg);

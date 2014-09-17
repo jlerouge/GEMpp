@@ -1,10 +1,10 @@
 #include "Vectorizer.h"
 
-Vectorizer::Vectorizer() : Extractor() {
+Vectorizer::Vectorizer() : SingleExtractor() {
     background_ = "";
 }
 
-Vectorizer::Vectorizer(const QString &input, const QString &output, ExtractionConfiguration *excfg) : Extractor(input, output, "", excfg) {
+Vectorizer::Vectorizer(const QString &input, const QString &output, ExtractionConfiguration *excfg) : SingleExtractor(input, output, "", excfg) {
     background_ = "";
 }
 

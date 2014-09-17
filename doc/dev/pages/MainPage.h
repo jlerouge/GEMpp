@@ -3,10 +3,10 @@
         <tr><td style="background-image: url('tab_b.png'); background-size: 1% 100%; border-right: none;"><img src="../../common/GEM++logo2.png" alt="GEM++ logo"/></td>
         <td style="background-image: url('tab_b.png'); background-size: 1% 100%; border-left: none;">
             - **Name** : GEM++
-            - **Version** : 0.2.0-beta (build: 2014-01-31)
+            - **Version** : 1.0.0-beta (build: 2014-09-02)
             - **Description** : A Graph Extraction and Matching C++ software
             - **Developers** : Julien Lerouge, Pierre Héroux, Sébastien Adam
-            - **Contact** : qui.donc@univ-rouen.fr
+            - **Contact** : gem-contact@litislab.eu
         </td></tr>
     </table>
 
@@ -40,14 +40,14 @@
         - Supports the following integer programming solvers :
             - IBM [CPLEX Optimizer](http://www-01.ibm.com/software/commerce/optimization/cplex-optimizer/ "CPLEX homepage")
             - [Gurobi Optimizer](http://www.gurobi.com/ "Gurobi homepage")
-            - [GLPK](http://www.gnu.org/software/glpk/ "GLPK homepage") (*in progress*)
+            - [GLPK](http://www.gnu.org/software/glpk/ "GLPK homepage")
 
     @section reference Reference
     GEM++ is a software developed by Julien Lerouge, Pierre Héroux and Sébastien Adam.<br />
     Please cite the following paper in any published work which uses this sofware.<br />
         - Julien Lerouge, Pierre Héroux, and Sébastien Adam. GEM++ : a tool for solving substitution-tolerant subgraph isomorphism. In Proceedings of the IAPR Joint International Workshops on Structural and Syntactic Pattern Recognition (SSPR 2014), 2014. \cite sspr2014
 
-    See also our @ref citelist, upon which parts of this software are based. \cite acompleter
+    See also our @ref citelist.
 
     @section contact Contact
 
@@ -70,5 +70,3 @@
     @date 2014-01-31
     @author J.Lerouge <julien.lerouge@litislab.fr>
 */
-
-//- [TinyXML](http://www.grinninglizard.com/tinyxml/ "TinyXML homepage"), a C++ XML parser developed by [Lee Thomason](http://www.grinninglizard.com "Lee's homepage") and released under the zlib/libpng license (see @ref tptinyxml).
