@@ -5,7 +5,7 @@
 #include <QList>
 #include <QImage>
 #include <QColor>
-#include "Extractor.h"
+#include "SingleExtractor.h"
 #include "../Model/Graph.h"
 
 class DLL_EXPORT HomogeneousZoneExtractor : virtual public SingleExtractor {
