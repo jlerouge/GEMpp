@@ -33,6 +33,7 @@ class DLL_EXPORT Weights : virtual public IXmlSerializable {
 
         bool containsWeight(Operation op, GraphElement::Type t, QString attribute) const;
         Weight* getWeight(Operation op, GraphElement::Type t, QString attribute) const;
+        Weight* getWeightOrDefault(Operation op, GraphElement::Type t, QString attribute);
         void addWeight(Operation op, GraphElement::Type t, QString attribute, Weight::Type type, uint power, double value);
 
         double getDefaultWeight(Operation op) const;

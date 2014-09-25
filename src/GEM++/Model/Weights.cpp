@@ -48,6 +48,12 @@ Weight *Weights::getWeight(Operation op, GraphElement::Type t, QString attribute
     return getWeights(op,t)->value(attribute);
 }
 
+Weight *Weights::getWeightOrDefault(Operation op, GraphElement::Type t, QString attribute) {
+    if(!containsWeight(op, t, attribute))
+        addWeight(op, t, attribute, Weight::NUMERIC, 1 + (int) op, getDefaultWeight(op));
+    return getWeight(op, t, attribute);
+}
+
 void Weights::addWeight(Operation op, GraphElement::Type t, QString attribute, Weight::Type type, uint power, double value) {
     if(containsWeight(op, t, attribute))
         GEM_exception(QString("Weights object already contains a %1 weight for %2 attribute \"%3\".").arg(toName(op), GraphElement::toName(t), attribute));
@@ -57,11 +63,11 @@ void Weights::addWeight(Operation op, GraphElement::Type t, QString attribute, W
 }
 
 double Weights::getDefaultWeight(Operation op) const {
-    return (op == SUBSTITUTION) ? DEFAULT_S_ATTR : DEFAULT_C_ATTR;
+    return (op == SUBSTITUTION)? DEFAULT_S_ATTR : DEFAULT_C_ATTR;
 }
 
 uint Weights::getDefaultPower(Operation op) const {
-    return (op == SUBSTITUTION) ? DEFAULT_S_POWER : DEFAULT_C_POWER;
+    return (op == SUBSTITUTION)? DEFAULT_S_POWER : DEFAULT_C_POWER;
 }
 
 WeightHash *Weights::getWeights(Operation op, GraphElement::Type t) const {

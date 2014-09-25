@@ -7,7 +7,7 @@ HomogeneousZoneExtractor::HomogeneousZoneExtractor() : SingleExtractor() {
 
 HomogeneousZoneExtractor::HomogeneousZoneExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg) : SingleExtractor(input, output, metadata, excfg) {
     graph_ = 0;
-    img_ = new QImage(input_);
+    img_ = new QImage(input_.toString());
 }
 
 HomogeneousZoneExtractor::~HomogeneousZoneExtractor() {

@@ -21,7 +21,7 @@ QString Vectorizer::getBackground() {
 void Vectorizer::performExtraction() {
     if(excfg_->verbose)
         cout << "Loading source image..." << endl;
-    BinaryImage sourceImg = BinaryPNG::read(input_);
+    BinaryImage sourceImg = BinaryPNG::read(input_.toString());
 
     if(excfg_->verbose)
         cout << "Cleaning source image..." << endl;
@@ -44,7 +44,7 @@ void Vectorizer::performExtraction() {
     LinkedChainList::iterator itChain = chainsList.begin();
 
     //DxfFile segResFile(output_.toStdString().c_str());
-    SvgFile segResFile(output_.toStdString().c_str());
+    SvgFile segResFile(output_.toString().toStdString().c_str());
     segResFile.openWONLY();
     segResFile.writeHeader(sourceImg.width(), sourceImg.height());
     if(!background_.isEmpty())
