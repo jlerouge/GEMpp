@@ -5,7 +5,7 @@
 
 class DLL_EXPORT ExactSubgraphIsomorphism : virtual public SubstitutionTolerantSubgraphIsomorphism{
     public:
-        ExactSubgraphIsomorphism(Problem *pb, bool low, bool induced);
+        ExactSubgraphIsomorphism(Problem *pb, bool induced);
         virtual ~ExactSubgraphIsomorphism() {}
 
     protected:

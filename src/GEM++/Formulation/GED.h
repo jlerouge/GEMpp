@@ -12,7 +12,6 @@ class DLL_EXPORT GraphEditDistance : virtual public Formulation {
          */
         enum Method{
             LINEAR = 0, /**< linear graph edit distance, with x and y variables */
-            QUADRATIC, /**< quadratic graph edit distance, with only x variables */
             BIPARTITE, /**< bipartite graph matching (inexact method) */
             COUNT /**< used to iterate on GraphEditDistance::Method enum */
         };

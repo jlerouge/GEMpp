@@ -10,7 +10,6 @@ int main(int argc, char **argv)
                                   "finds the optimal edit path that matches a graph to another graph.\n"
                                   "There are three available formulations (option -f) :\n"
                                   "  * l(inear)    -> exact GED using binary linear programming;\n"
-                                  "  * q(uadratic) -> exact GED using binary quadratic programming;\n"
                                   "  * b(ipartite) -> approximate GED using bipartite graph matching.\n"
                                   "If multiple solutions are searched ('-n' option), one of the two\n"
                                   "available cut strategies must be chosen with the '--cut' option:\n"

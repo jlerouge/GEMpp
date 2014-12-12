@@ -76,10 +76,7 @@ void Matcher::run() {
         case Problem::GED:
             switch(cfg_->gedMethod) {
                 case GraphEditDistance::LINEAR:
-                    ged = new LinearGraphEditDistance(pb_, cfg_->lowerbound, cfg_->upperbound);
-                    break;
-                case GraphEditDistance::QUADRATIC:
-                    ged = new QuadGraphEditDistance(pb_, cfg_->upperbound);
+                    ged = new LinearGraphEditDistance(pb_, cfg_->upperbound);
                     break;
                 case GraphEditDistance::BIPARTITE:
                     initBipartiteCosts();
@@ -93,13 +90,13 @@ void Matcher::run() {
         case Problem::SUBGRAPH:
             switch(cfg_->subMethod) {
                 case SubgraphIsomorphism::EXACT:
-                    subiso = new ExactSubgraphIsomorphism(pb_, cfg_->lowerbound, cfg_->induced);
+                    subiso = new ExactSubgraphIsomorphism(pb_, cfg_->induced);
                     break;
                 case SubgraphIsomorphism::LABEL:
-                    subiso = new SubstitutionTolerantSubgraphIsomorphism(pb_, cfg_->lowerbound, cfg_->upperbound, cfg_->induced);
+                    subiso = new SubstitutionTolerantSubgraphIsomorphism(pb_, cfg_->upperbound, cfg_->induced);
                     break;
                 case SubgraphIsomorphism::TOPOLOGY:
-                    subiso = new ErrorTolerantSubgraphIsomorphism(pb_, cfg_->lowerbound, cfg_->upperbound, cfg_->induced);
+                    subiso = new ErrorTolerantSubgraphIsomorphism(pb_, cfg_->upperbound, cfg_->induced);
                     break;
                 default:
                     break;

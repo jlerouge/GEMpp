@@ -5,7 +5,7 @@
 
 class DLL_EXPORT ErrorTolerantSubgraphIsomorphism : virtual public SubstitutionTolerantSubgraphIsomorphism{
     public:
-        ErrorTolerantSubgraphIsomorphism(Problem *pb, bool low, double up, bool induced);
+        ErrorTolerantSubgraphIsomorphism(Problem *pb, double up, bool induced);
         virtual ~ErrorTolerantSubgraphIsomorphism() {}
 
     protected:

@@ -18,11 +18,10 @@ QString Formulation::toName(CutMethod method) {
     return cutMethodName[(int)method];
 }
 
-Formulation::Formulation() : pb_(0), p_(0), lp_(0), qp_(0), low_(false), induced_(false) {}
+Formulation::Formulation() : pb_(0), p_(0), lp_(0), qp_(0), induced_(false) {}
 
-Formulation::Formulation(Problem *pb, bool low, bool induced) : Formulation() {
+Formulation::Formulation(Problem *pb, bool induced) : Formulation() {
     pb_ = pb;
-    low_ = low;
     induced_ = induced;
 }
 

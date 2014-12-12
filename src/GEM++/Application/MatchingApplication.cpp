@@ -178,7 +178,6 @@ void MatchingApplication::addOptions() {
         default:
             break;
     }
-    addAggregationOption();
     addExplorationOption();
     addSolverOption();
     addVerboseOption();
@@ -247,7 +246,6 @@ void MatchingApplication::initConfiguration() {
             break;
     }
 
-    cfg_->lowerbound = isOptionSet("aggregate");
     if(isOptionSet("explore"))
         cfg_->upperbound = optionValue("explore").toDouble()/100;
 
@@ -326,10 +324,6 @@ void MatchingApplication::addToleranceOption() {
 
 void MatchingApplication::addInducedOption() {
     addOption("i", "induced", "Performs induced subgraph matching.");
-}
-
-void MatchingApplication::addAggregationOption() {
-    addOption("a", "aggregate", "Lower bound approx (rows aggregation).");
 }
 
 void MatchingApplication::addExplorationOption() {

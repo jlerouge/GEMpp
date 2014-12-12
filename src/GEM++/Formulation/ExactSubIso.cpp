@@ -1,6 +1,6 @@
 #include "ExactSubIso.h"
 
-ExactSubgraphIsomorphism::ExactSubgraphIsomorphism(Problem *pb, bool low, bool induced) : Formulation(pb, low, induced) {
+ExactSubgraphIsomorphism::ExactSubgraphIsomorphism(Problem *pb, bool induced) : Formulation(pb, induced) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init();
 }

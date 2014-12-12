@@ -1,6 +1,6 @@
 #include "LinearGED.h"
 
-LinearGraphEditDistance::LinearGraphEditDistance(Problem *pb, bool low, double up) : Formulation(pb, low) {
+LinearGraphEditDistance::LinearGraphEditDistance(Problem *pb, double up) : Formulation(pb) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init(up);
 }
@@ -74,97 +74,52 @@ void LinearGraphEditDistance::initConstraints() {
     for(kl=0; kl < nET; ++kl)
         *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getCol(kl)), LinearConstraint::LESS_EQ, 1.0);
 
-    if(!low_) {
-        for(ij=0; ij < nEP; ++ij) {
-            i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-            j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
-            for(kl=0; kl < nET; ++kl) {
-                // Adding a constraint is useless if y_ij,kl is inactive
-                if(y_variables.getElement(ij, kl)->isActive()) {
-                    k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
-                    l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
-                    if(isDirected) {
-                        *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0);
-                        *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0);
-                        *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::LESS_EQ, 1.0);
-                    } else {
-                        *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0);
-                        *lp_ += new LinearConstraint(*(x_variables.getElement(j, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                        LinearConstraint::GREATER_EQ, 0.0);
-                        *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) + *(x_variables.getElement(i, l)) +
-                                        *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0);
-                    }
-                }
+    // (F1)
+    //    for(ij=0; ij < nEP; ++ij) {
+    //        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
+    //        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+    //        for(kl=0; kl < nET; ++kl) {
+    //            // Adding a constraint is useless if y_ij,kl is inactive
+    //            if(y_variables.getElement(ij, kl)->isActive()) {
+    //                k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
+    //                l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
+    //                if(isDirected) {
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) - *(y_variables.getElement(ij, kl)),
+    //                                                 LinearConstraint::GREATER_EQ, 0.0);
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
+    //                                                 LinearConstraint::GREATER_EQ, 0.0);
+    //                } else {
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)),
+    //                                                 LinearConstraint::GREATER_EQ, 0.0);
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
+    //                                                 LinearConstraint::GREATER_EQ, 0.0);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    // (F2)
+    LinearExpression *e1, *e2;
+    for(ij=0; ij < nEP; ++ij) {
+        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
+        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+        for(k=0; k < nVT; ++k) {
+            e1 = new LinearExpression();
+            e2 = new LinearExpression();
+            QSet<Edge *> edges = pb_->getTarget()->getVertex(k)->getEdges(Vertex::EDGE_OUT);
+            for(auto it = edges.begin(); it != edges.end(); ++it)
+                e1->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
+            edges = pb_->getTarget()->getVertex(k)->getEdges(Vertex::EDGE_IN);
+            for(auto it = edges.begin(); it != edges.end(); ++it)
+                e2->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
+            e1->addTerm(*(x_variables.getElement(i, k))*(-1));
+            e2->addTerm(*(x_variables.getElement(j, k))*(-1));
+            if(!isDirected) {
+                e1->addTerm(*(x_variables.getElement(j, k))*(-1));
+                e2->addTerm(*(x_variables.getElement(i, k))*(-1));
             }
-        }
-    } else {
-        for(ij=0; ij < nEP; ++ij) {
-            i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-            j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
-            LinearExpression *e1 = new LinearExpression();
-            LinearExpression *e2 = new LinearExpression();
-            LinearExpression *e3 = new LinearExpression();
-            for(kl=0; kl < nET; ++kl) {
-                // Adding terms is useless if y_ij,kl is inactive
-                if(y_variables.getElement(ij, kl)->isActive()) {
-                    k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
-                    l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
-                    e1->addTerm(*(x_variables.getElement(i, k)));
-                    e3->addTerm(*(x_variables.getElement(i, k)));
-                    if(!isDirected) {
-                        e1->addTerm(*(x_variables.getElement(i, l)));
-                        e3->addTerm(*(x_variables.getElement(i, l)));
-                    }
-                    e2->addTerm(*(x_variables.getElement(j, l)));
-                    e3->addTerm(*(x_variables.getElement(j, l)));
-                    if(!isDirected) {
-                        e2->addTerm(*(x_variables.getElement(j, k)));
-                        e3->addTerm(*(x_variables.getElement(j, k)));
-                    }
-                    e1->addTerm(*(y_variables.getElement(ij, kl))*(-1));
-                    e2->addTerm(*(y_variables.getElement(ij, kl))*(-1));
-                    e3->addTerm(*(y_variables.getElement(ij, kl))*(-1));
-                }
-            }
-            *lp_ += new LinearConstraint(e1, LinearConstraint::GREATER_EQ, 0.0);
-            *lp_ += new LinearConstraint(e2, LinearConstraint::GREATER_EQ, 0.0);
-            *lp_ += new LinearConstraint(e3, LinearConstraint::LESS_EQ, nET);
-        }
-        for(kl=0; kl < nET; ++kl) {
-            k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
-            l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
-            LinearExpression *e1 = new LinearExpression();
-            LinearExpression *e2 = new LinearExpression();
-            LinearExpression *e3 = new LinearExpression();
-            for(ij=0; ij < nEP; ++ij) {
-                // Adding terms is useless if y_ij,kl is inactive
-                if(y_variables.getElement(ij, kl)->isActive()) {
-                    i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-                    j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
-                    e1->addTerm(*(x_variables.getElement(i, k)));
-                    e3->addTerm(*(x_variables.getElement(i, k)));
-                    if(!isDirected) {
-                        e1->addTerm(*(x_variables.getElement(i, l)));
-                        e3->addTerm(*(x_variables.getElement(i, l)));
-                    }
-                    e2->addTerm(*(x_variables.getElement(j, l)));
-                    e3->addTerm(*(x_variables.getElement(j, l)));
-                    if(!isDirected) {
-                        e2->addTerm(*(x_variables.getElement(j, k)));
-                        e3->addTerm(*(x_variables.getElement(j, k)));
-                    }
-                    e1->addTerm(*(y_variables.getElement(ij, kl))*(-1));
-                    e2->addTerm(*(y_variables.getElement(ij, kl))*(-1));
-                    e3->addTerm(*(y_variables.getElement(ij, kl))*(-1));
-                }
-            }
-            *lp_ += new LinearConstraint(e1, LinearConstraint::GREATER_EQ, 0.0);
-            *lp_ += new LinearConstraint(e2, LinearConstraint::GREATER_EQ, 0.0);
-            *lp_ += new LinearConstraint(e3, LinearConstraint::LESS_EQ, nEP);
+            *lp_ += new LinearConstraint(e1, LinearConstraint::LESS_EQ, 0.0);
+            *lp_ += new LinearConstraint(e2, LinearConstraint::LESS_EQ, 0.0);
         }
     }
 }

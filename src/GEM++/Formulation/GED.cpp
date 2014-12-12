@@ -2,7 +2,6 @@
 
 const char* GraphEditDistance::methodName[GraphEditDistance::COUNT] = {
     "Linear",
-    "Quadratic",
     "Bipartite"
 };
 

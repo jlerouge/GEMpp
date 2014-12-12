@@ -5,7 +5,7 @@
 
 class DLL_EXPORT LinearGraphEditDistance : public GraphEditDistance {
     public:
-        LinearGraphEditDistance(Problem *pb, bool low, double up);
+        LinearGraphEditDistance(Problem *pb, double up);
         virtual ~LinearGraphEditDistance();
 
     private:

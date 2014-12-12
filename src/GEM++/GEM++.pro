@@ -64,7 +64,6 @@ HEADERS += \
     Formulation/Formulation.h \
     Formulation/GED.h \
     Formulation/LinearGED.h \
-    Formulation/QuadraticGED.h \
     Formulation/SubIso.h \
     Formulation/ExactSubIso.h \
     Formulation/ErrorTolSubIso.h \
@@ -131,7 +130,6 @@ SOURCES += \
     Formulation/Formulation.cpp \
     Formulation/GED.cpp \
     Formulation/LinearGED.cpp \
-    Formulation/QuadraticGED.cpp \
     Formulation/SubIso.cpp \
     Formulation/ExactSubIso.cpp \
     Formulation/ErrorTolSubIso.cpp \

@@ -52,8 +52,7 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
         void addToleranceOption();
         void addInducedOption();
 
-        // Approximations
-        void addAggregationOption();
+        // Approximation
         void addExplorationOption();
 
         // Solver

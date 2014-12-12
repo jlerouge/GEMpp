@@ -33,7 +33,6 @@ class DLL_EXPORT Configuration : virtual public IPrintable, virtual public IClea
         bool induced;
         GraphEditDistance::Method gedMethod;
 
-        bool lowerbound;
         double upperbound;
 
         int threadsPerInstance;

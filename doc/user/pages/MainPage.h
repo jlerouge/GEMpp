@@ -27,12 +27,8 @@
         - Provides different matching algorithms, solved by [Integer Programming](http://en.wikipedia.org/wiki/Integer_programming "Wikipedia article on Integer Programming"),
           especially Binary Linear Programming (BLP) :
             - Graph edit distance (GED), that can be used in its exact form or with following approximations :
-                - Lower-bound, aggregating the linear program constraints,
-                - Row-generation approach, beginning with the lower bound and iteratively adding violated constraints,
                 - Upper-bound, reducing the number of possible matchings by forbidding some substitutions,
-                - Column-generation approach, beginning with the upper-bound and iteratively re-allowing some substitutions,
                 - Bipartite graph matching \cite riesen2009approximate;
-            - Quadratic GED, that is a Binary Quadratic Programming implementation of the GED;
             - Subgraph isomorphism, that comes with different levels of tolerance :
                 - Exact subgraph isomorphism,
                 - Substitution-tolerant subgraph isomorphism\cite le2012integer \cite le2009symbol,

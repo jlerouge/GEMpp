@@ -7,7 +7,6 @@
 #include "PluginLoader.h"
 #include "../Core/ICleanable.h"
 #include "../Formulation/LinearGED.h"
-#include "../Formulation/QuadraticGED.h"
 #include "../Formulation/BipartiteGED.h"
 #include "../Formulation/BipartiteEdges.h"
 #include "../Formulation/ErrorTolSubIso.h"

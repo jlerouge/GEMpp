@@ -25,7 +25,6 @@ void Configuration::clean() {
     induced = false;
     gedMethod = GraphEditDistance::LINEAR;
 
-    lowerbound = false;
     upperbound = 1.0;
 
     threadsPerInstance = qMax(QThread::idealThreadCount(), 1);
@@ -64,20 +63,14 @@ void Configuration::print(Printer *p) {
             break;
     }
 
-    p->dump(QString("lowerbound : %1").arg(lowerbound));
     p->dump(QString("upperbound : %1").arg(upperbound));
     p->unindent();
     p->dump("}");
 }
 
 bool Configuration::check() {
-    if((matchingType == Problem::GED) && lowerbound && (gedMethod == GraphEditDistance::QUADRATIC || gedMethod == GraphEditDistance::BIPARTITE))
-        GEM_exception(QString("GEM++ forbids lower-bound approximation with %1 form.\n"
-                                       "Please use linear form instead, or switch to upper-bound approximation.")
-                               .arg(GraphEditDistance::methodName[gedMethod]));
-    else
-        if((matchingType == Problem::SUBGRAPH) && (upperbound < 1.0) && (subMethod == SubgraphIsomorphism::EXACT))
-            GEM_exception("GEM++ forbids upper-bound approximation with exact subgraph isomorphism.\n"
-                                   "Please use substitution or error tolerant form instead, or switch to lower-bound approximation.");
+    if((matchingType == Problem::SUBGRAPH) && (upperbound < 1.0) && (subMethod == SubgraphIsomorphism::EXACT))
+        GEM_exception("GEM++ forbids upper-bound approximation with exact subgraph isomorphism.\n"
+                               "Please use substitution or error tolerant form instead.");
     return true;
 }

@@ -20,7 +20,7 @@ class DLL_EXPORT Formulation {
         static QString toName(CutMethod method);
 
         Formulation();
-        Formulation(Problem *pb, bool low = false, bool induced = false);
+        Formulation(Problem *pb, bool induced = false);
         virtual ~Formulation() {}
 
         void init(double up = 1.0);
@@ -37,7 +37,6 @@ class DLL_EXPORT Formulation {
         Program *p_;
         LinearProgram *lp_;
         QuadProgram *qp_;
-        bool low_;
         bool induced_;
 
         // Convenient variables that

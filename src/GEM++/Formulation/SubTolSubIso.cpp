@@ -1,6 +1,6 @@
 #include "SubTolSubIso.h"
 
-SubstitutionTolerantSubgraphIsomorphism::SubstitutionTolerantSubgraphIsomorphism(Problem *pb, bool low, double up, bool induced) : Formulation(pb, low, induced) {
+SubstitutionTolerantSubgraphIsomorphism::SubstitutionTolerantSubgraphIsomorphism(Problem *pb, double up, bool induced) : Formulation(pb, induced) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init(up);
 }
@@ -58,8 +58,6 @@ void SubstitutionTolerantSubgraphIsomorphism::restrictProblem(double up) {
 }
 
 void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
-    Q_UNUSED(low_); // FIXME
-
     for(i=0; i < nVP; ++i)
         *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::EQUAL, 1.0);
 
@@ -82,15 +80,11 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
     //                                    LinearConstraint::GREATER_EQ, 0.0);
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
     //                                    LinearConstraint::GREATER_EQ, 0.0);
-    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-    //                                    LinearConstraint::LESS_EQ, 1.0);
     //                } else {
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)),
     //                                    LinearConstraint::GREATER_EQ, 0.0);
     //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) + *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)),
     //                                    LinearConstraint::GREATER_EQ, 0.0);
-    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) + *(x_variables.getElement(i, l)) +
-    //                                    *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0);
     //                }
     //            }
     //        }
@@ -107,14 +101,14 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
             QSet<Edge *> edges = pb_->getTarget()->getVertex(k)->getEdges(Vertex::EDGE_OUT);
             for(auto it = edges.begin(); it != edges.end(); ++it) {
                 e1->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
-                if(!isDirected)
-                    e2->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
+                //if(!isDirected)
+                    //e2->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
             }
             edges = pb_->getTarget()->getVertex(k)->getEdges(Vertex::EDGE_IN);
             for(auto it = edges.begin(); it != edges.end(); ++it) {
                 e2->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
-                if(!isDirected)
-                    e1->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
+                //if(!isDirected)
+                    //e1->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
             }
             e1->addTerm(*(x_variables.getElement(i, k))*(-1));
             e2->addTerm(*(x_variables.getElement(j, k))*(-1));
@@ -122,8 +116,10 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
                 e1->addTerm(*(x_variables.getElement(j, k))*(-1));
                 e2->addTerm(*(x_variables.getElement(i, k))*(-1));
             }
-            *lp_ += new LinearConstraint(e1, LinearConstraint::EQUAL, 0.0);
-            *lp_ += new LinearConstraint(e2, LinearConstraint::EQUAL, 0.0);
+            //            *lp_ += new LinearConstraint(e1, LinearConstraint::EQUAL, 0.0);
+            //            *lp_ += new LinearConstraint(e2, LinearConstraint::EQUAL, 0.0);
+            *lp_ += new LinearConstraint(e1, LinearConstraint::LESS_EQ, 0.0);
+            *lp_ += new LinearConstraint(e2, LinearConstraint::LESS_EQ, 0.0);
         }
     }
 

@@ -1,6 +1,6 @@
 #include "ErrorTolSubIso.h"
 
-ErrorTolerantSubgraphIsomorphism::ErrorTolerantSubgraphIsomorphism(Problem *pb, bool low, double up, bool induced) : Formulation(pb, low, induced) {
+ErrorTolerantSubgraphIsomorphism::ErrorTolerantSubgraphIsomorphism(Problem *pb, double up, bool induced) : Formulation(pb, induced) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init(up);
 }
@@ -16,8 +16,6 @@ void ErrorTolerantSubgraphIsomorphism::initCosts() {
 }
 
 void ErrorTolerantSubgraphIsomorphism::initConstraints() {
-    Q_UNUSED(low_); // FIXME
-
     for(i=0; i < nVP; ++i)
         *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0);
 
@@ -28,33 +26,54 @@ void ErrorTolerantSubgraphIsomorphism::initConstraints() {
         *lp_ += new LinearConstraint(LinearExpression::sum(y_variables.getRow(ij)), LinearConstraint::LESS_EQ, 1.0);
 
     // (F1a)
+    //    for(ij=0; ij < nEP; ++ij) {
+    //        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
+    //        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+    //        for(kl=0; kl < nET; ++kl) {
+    //            if(y_variables.getElement(ij, kl)->isActive()) {
+    //                k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
+    //                l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
+    //                if(isDirected) {
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) - *(y_variables.getElement(ij, kl)),
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
+    //                } else {
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)),
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
+    //                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) + *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)),
+    //                                    LinearConstraint::GREATER_EQ, 0.0);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    // (F2a)
+    LinearExpression *e1, *e2;
     for(ij=0; ij < nEP; ++ij) {
         i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
         j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
-        for(kl=0; kl < nET; ++kl) {
-            if(y_variables.getElement(ij, kl)->isActive()) {
-                k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
-                l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
-                if(isDirected) {
-                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) - *(y_variables.getElement(ij, kl)),
-                                    LinearConstraint::GREATER_EQ, 0.0);
-                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                    LinearConstraint::GREATER_EQ, 0.0);
-                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) - *(y_variables.getElement(ij, kl)),
-                                    LinearConstraint::LESS_EQ, 1.0);
-                } else {
-                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(i, l)) - *(y_variables.getElement(ij, kl)),
-                                    LinearConstraint::GREATER_EQ, 0.0);
-                    *lp_ += new LinearConstraint(*(x_variables.getElement(j, l)) + *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)),
-                                    LinearConstraint::GREATER_EQ, 0.0);
-                    *lp_ += new LinearConstraint(*(x_variables.getElement(i, k)) + *(x_variables.getElement(j, l)) + *(x_variables.getElement(i, l)) +
-                                    *(x_variables.getElement(j, k)) - *(y_variables.getElement(ij, kl)), LinearConstraint::LESS_EQ, 1.0);
-                }
+        for(k=0; k < nVT; ++k) {
+            e1 = new LinearExpression();
+            e2 = new LinearExpression();
+            QSet<Edge *> edges = pb_->getTarget()->getVertex(k)->getEdges(Vertex::EDGE_OUT);
+            for(auto it = edges.begin(); it != edges.end(); ++it)
+                e1->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
+            edges = pb_->getTarget()->getVertex(k)->getEdges(Vertex::EDGE_IN);
+            for(auto it = edges.begin(); it != edges.end(); ++it)
+                e2->addTerm(*(y_variables.getElement(ij,(*it)->getIndex())));
+            e1->addTerm(*(x_variables.getElement(i, k))*(-1));
+            e2->addTerm(*(x_variables.getElement(j, k))*(-1));
+            if(!isDirected) {
+                e1->addTerm(*(x_variables.getElement(j, k))*(-1));
+                e2->addTerm(*(x_variables.getElement(i, k))*(-1));
             }
+            *lp_ += new LinearConstraint(e1, LinearConstraint::LESS_EQ, 0.0);
+            *lp_ += new LinearConstraint(e2, LinearConstraint::LESS_EQ, 0.0);
         }
     }
 
-    // (F2a)
+    // (F2a) WTF
     //    LinearExpression *e1init, *e3init, *e1, *e2, *e3, *e4;
     //    for(ij=0; ij < nEP; ++ij) {
     //        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
