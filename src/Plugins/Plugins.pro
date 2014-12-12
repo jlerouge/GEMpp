@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = Gurobi GLPK Cplex
+SUBDIRS = Gurobi GLPK Cplex #LocalSolver

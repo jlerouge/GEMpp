@@ -24,4 +24,9 @@ DLL_EXPORT long roundToNearestInt(double number);
 // Error handling
 DLL_EXPORT void GEM_exception(const QString &errorString);
 
+// XML
+#define XSI_NS "http://www.w3.org/2001/XMLSchema-instance"
+#define GEM_WEIGHTS_NS "http://julien.lerouge.me/GEM++/weights"
+#define GEM_WEIGHTS_NS_LOC "http://julien.lerouge.me/GEM++/weights.xsd"
+
 #endif /* __CONSTANTS_H__ */

@@ -6,6 +6,7 @@
 #include "../../Solver/Solver.h"
 #include "../../Formulation/GED.h"
 #include "../../Formulation/SubIso.h"
+#include "../../Model/WeightHash.h"
 
 class DLL_EXPORT QConfigurationDialog : public QDialog {
         Q_OBJECT

@@ -96,7 +96,7 @@ void Weights::fromXML(const QString &filename) {
 
     /* Begin parsing */
     doc_ = new QDomDocument();
-    doc_->setContent(&file, false);
+    doc_->setContent(&file, true);
     QDomElement attributes, attribute;
     QString name = "";
     Weight::Type type;
@@ -140,12 +140,13 @@ void Weights::toXML() {
     QDomElement weights, attributes, attribute;
     QDomText valText;
     Weight *w;
-    weights = doc_->createElement("weights");
+    weights = doc_->createElementNS(GEM_WEIGHTS_NS, "w:weights");
+    weights.setAttributeNS(XSI_NS, "xsi:schemaLocation", QString("%1 %2").arg(GEM_WEIGHTS_NS, GEM_WEIGHTS_NS_LOC));
     for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1)) {
-        attributes = doc_->createElement((t == GraphElement::VERTEX)? "nodes" : "edges");
+        attributes = doc_->createElement((t == GraphElement::VERTEX)? "p:nodes" : "p:edges");
         for(auto key : getWeights(currentOperation_,t)->keys()) {
             w = getWeights(currentOperation_,t)->value(key);
-            attribute = doc_->createElement("attribute");
+            attribute = doc_->createElement("p:attribute");
             attribute.setAttribute("name", key);
             attribute.setAttribute("power", w->getPower());
             attribute.setAttribute("type", Weight::toName(w->getType()));

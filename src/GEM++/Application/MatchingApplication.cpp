@@ -117,18 +117,18 @@ int MatchingApplication::match() {
 }
 
 void MatchingApplication::populate() {
+    // FIXME ! UTILISER UN MUTEX ET NE REMPLIR QUE SON PROPRE THREAD !!
     if(!isPopulating_) {
         isPopulating_ = true;
         QThreadPool *tp = QThreadPool::globalInstance();
         QPair<Graph*, Graph*> pair;
-        int current = tp->activeThreadCount(), max = tp->maxThreadCount();
-        while(current < max && !queue_.isEmpty()) {
+        int max = tp->maxThreadCount();
+        for(int current = tp->activeThreadCount(); (current < max) && !(queue_.isEmpty()); ++current) {
             pair = queue_.dequeue();
             Matcher *matcher = new Matcher(new Problem(matchingType_, pair.first, pair.second, w_), cfg_);
             matcher->setAutoDelete(true);
             connect(matcher, SIGNAL(finished(Problem*,double)), this, SLOT(finished(Problem*,double)));
             tp->start(matcher);
-            ++current;
         }
         isPopulating_ = false;
     }
