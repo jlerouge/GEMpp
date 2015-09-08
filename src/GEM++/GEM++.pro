@@ -1,7 +1,7 @@
 ROOT = ..
 include($$ROOT/lib.pri)
 #VERSION = $$GEMVERSION
-QT += core xml gui widgets
+QT += core xml gui widgets opengl
 LIBS += -L$$OUTLIB -lQgar$$LIBMODE
 INCLUDEPATH += $$ROOT/Libraries/QGar/
 HEADERS += \

@@ -6,11 +6,13 @@ GEMVERSION = $$GEMMAJOR.$$GEMMINOR.$$GEMPATCH
 linux: {
     contains(QMAKE_HOST.arch, x86_64) { ARCH=64 } else { ARCH=32 }
     OS = linux
+    DLL_FILE_EXT=so
     DEFINES += LINUX
 }
 win32 {
     contains(QMAKE_TARGET.arch, x86_64) { ARCH=64 } else { ARCH=32 }
     OS = win
+    DLL_FILE_EXT=dll
 }
 
 CONFIG(release,debug|release) {

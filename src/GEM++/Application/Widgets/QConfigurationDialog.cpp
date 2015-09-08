@@ -423,7 +423,8 @@ void QConfigurationDialog::confirm() {
     Configuration *cfg = new Configuration();
     cfg->solver = solver->currentText();
     cfg->number = number->value();
-    cfg->cutMethod = Formulation::MATCHINGS;
+    //cfg->cutMethod = (Formulation::CutMethod)cutMethod->getCurrentIndex()Formulation::MATCHINGS;
+    cfg->cutMethod = (Formulation::CutMethod)cutMethod->currentData().toInt();
 
     switch(pb->getType()) {
         case Problem::GED:
