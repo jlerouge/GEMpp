@@ -1,11 +1,10 @@
 #!/bin/bash
 # GEM++ Installation Script
-if [ -d $HOME/bin/GEM++ ]; then
-    echo "> $HOME/bin/GEM++ already exists, the old install will be overwritten.";
-	read -p "> Do you really want to continue ? [y/N] : " -r
+if [ -f $HOME/bin/GEM++dist ]; then
+    echo "> GEM++ is already installed.";
+	read -p "> Do you really want to overwrite it ? [y/N] : " -r
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-		echo "Removing the old install..."
-        rm -rf $HOME/bin/GEM++;
+        echo "The previous installation will be overwritten." 
 	else
 		echo "Installation aborted."
 		exit 1;
@@ -15,16 +14,19 @@ echo "GEM++ installation in progress..."
 if [ ! -d $HOME/bin ]; then
 	mkdir $HOME/bin;
 fi;
+if [ ! -d $HOME/lib ]; then
+	mkdir $HOME/lib;
+fi;
 mkdir $HOME/bin/GEM++
-cp -R bin/ $HOME/bin/GEM++
-cp -R lib/ $HOME/bin/GEM++
+cp -R bin/ $HOME/bin/
+cp -R lib/ $HOME/lib/
 
 echo " ###########################"
 echo " # End of the installation #"
 echo " ###########################"
-echo " In order to complete the installation, please export these"
+echo " In order to complete the installation, please export this"
 echo " environment variables (if not already done previously), e.g."
-echo " in your .bashrc startup script."
+echo " in your .bashrc profile script."
 
 dist=`uname -s | awk '{print tolower($0)}'`
 if [[ `uname -m` == x86_64 ]]; then # 64bits
@@ -32,5 +34,5 @@ if [[ `uname -m` == x86_64 ]]; then # 64bits
 else # x86 = 32 bits
 	dist=${dist}32
 fi;
-echo " export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/gurobi560/$dist/lib"
-echo " export PATH=\$PATH:\$HOME/bin/GEM++/bin"
+echo " export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/gurobi563/$dist/lib"
+

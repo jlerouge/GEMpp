@@ -55,11 +55,17 @@ Weight *Weights::getWeightOrDefault(Operation op, GraphElement::Type t, QString 
 }
 
 void Weights::addWeight(Operation op, GraphElement::Type t, QString attribute, Weight::Type type, uint power, double value) {
-    if(containsWeight(op, t, attribute))
-        GEM_exception(QString("Weights object already contains a %1 weight for %2 attribute \"%3\".").arg(toName(op), GraphElement::toName(t), attribute));
-
-    Weight *w = new Weight(type, power, value);
-    getWeights(op,t)->insert(attribute, w);
+    Weight *w;
+    //GEM_exception(QString("Weights object already contains a %1 weight for %2 attribute \"%3\".").arg(toName(op), GraphElement::toName(t), attribute));
+    if(containsWeight(op, t, attribute)) {
+        w = getWeight(op, t, attribute);
+        w->setType(type);
+        w->setPower(power);
+        w->setValue(value);
+    } else {
+        Weight *w = new Weight(type, power, value);
+        getWeights(op,t)->insert(attribute, w);
+    }
 }
 
 double Weights::getDefaultWeight(Operation op) const {
