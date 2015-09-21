@@ -17,6 +17,7 @@ class DLL_EXPORT HomogeneousZoneExtractor : virtual public SingleExtractor {
         QColor color(QRect rect);
 
         static QSet<int> visibility(QList<QRectF> rectangles, QRectF rect, double thresh);
+        static QSet<int> inclusion(QList<QRectF> rectangles, QRectF rect, double thresh = 1.0);
 
     protected:
         Graph *graph_;

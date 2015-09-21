@@ -115,23 +115,6 @@ void Graph::setType(Type type) {
 }
 
 Graph *Graph::neighborhoodSubgraph(int iSeed, int nbhdSize) {
-//    QSet<Vertex *> vertices = QSet<Vertex *>();
-//    QList<Vertex *> temp = QList<Vertex *>();
-
-//    vertices.insert(getVertex(vIndex));
-//    for(int k=0; k < nbhdSize; ++k) {
-//        for(auto v: vertices) {
-//            for(auto e: v->getEdges(Vertex::EDGE_OUT))
-//                temp.push_back(e->getTarget());
-//            //if (type_ == UNDIRECTED)
-//            for(auto e: v->getEdges(Vertex::EDGE_IN))
-//                temp.push_back(e->getOrigin());
-//        }
-//        for(auto v: temp)
-//            vertices.insert(v);
-//        temp.clear();
-//    }
-//    return generateInducedSubgraph(vertices);
     QSet<Vertex *> seeds;
     seeds.insert(getVertex(iSeed));
     return neighborhoodSubgraphRec(seeds, nbhdSize);
