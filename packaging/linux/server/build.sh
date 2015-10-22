@@ -1,5 +1,7 @@
 #!/bin/bash
 
+QT_VERSION="5.4.1"
+
 # Changes to GEM++ root directory
 here=$PWD/`dirname "$0"`
 cd $here
@@ -33,8 +35,11 @@ rm -rf lib
 mkdir GEM++
 cp -R $root/build/$dist/release/bin GEM++
 cp -R $root/build/$dist/release/lib GEM++
-cp $root/src/Libraries/Qt/$dist/* GEM++/lib
+cp $root/src/Libraries/Qt/$dist/$QT_VERSION/*.so* GEM++/lib
+cp $root/src/Libraries/Qt/$dist/$QT_VERSION/imageformats GEM++/bin
+cp $root/src/Libraries/Qt/$dist/$QT_VERSION/platforms GEM++/bin
 cp install.sh GEM++
+
 makeself GEM++/ gem++_${today}_${dist}.run "GEM++ : Graph Extraction and Matching C++ toolkit" ./install.sh
 rm -rf GEM++
 
