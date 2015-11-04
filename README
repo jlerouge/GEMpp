@@ -1,127 +1,35 @@
-		  _____ ______ __  __             
-		 / ____|  ____|  \/  |  _     _   
-		| |  __| |__  | \  / |_| |_ _| |_ 
-		| | |_ |  __| | |\/| |_   _|_   _|
-		| |__| | |____| |  | | |_|   |_|  
-		 \_____|______|_|  |_|            
-
-GEM++ :	a Graph Extraction and Matching C++ software
+﻿GEM++ :	a Graph Extraction and Matching C++ software
 
 Description
-	GEM++ is a framework designed to implement a mixed integer 
-	linear programming approach of the graph edit distance and subgraph
-	isomorphism, on directed or undirected attributed graphs. GEM++ enables
-	attributes weighting for nodes and edges, and it
-	provides both exact and approximated formulations for the resolution.
+	GEM++ is a framework designed to implement a binary linear programming
+	approach of the graph edit distance and subgraph isomorphism, on directed
+	or undirected attributed graphs. GEM++ enables attributes weighting for
+	nodes and edges, and it provides both exact and approximated formulations
+	for the resolution.
 
 Authors
-	Julien Lerouge \  University of Rouen
-	Sébastien Adam  〉  LITIS laboratory 
-	Pierre Héroux  /   (www.litislab.eu)
+	Julien Lerouge
+	Maroua Hammami
+	Pierre Héroux
+	Sébastien Adam
 
 Contributors
-	                  Georgia Institute of Technology
-	Pierre Le Bodic 〉Industrial & Systems Engineering
-	                       (www.isye.gatech.edu)
+	Pierre Le Bodic
+
+References
+	J. Lerouge, P. Le Bodic, P. HÃ©roux and S. Adam, "GEM++: A Tool for Solving
+		Substitution-Tolerant Subgraph Isomorphism" , Proceedings of GbRPR 2015
+		10th IAPR-TC-15 International Workshop. LNCS Vol. 9069. Springer, 2015.
+
+Copyright
+	GEM++ is the property of LITIS lab (c) 2013-2015 LITIS.
+
+License
+	GEM++ is a free software, distributed under the terms of
+	the CeCILL version 2.1 license.
 
 Contact
 	gem-contact@litislab.eu
 
 Version
-	v2014.06.17
-
-Cet outil se base sur les travaux de Pierre Le Bodic et al. :
-% Pierre Le Bodic, Pierre Héroux, Sébastien Adam et Yves Lecourtier (2012).
-% "An integer linear program for substitution-tolerant subgraph isomorphism and its use
-% for symbol spotting in technical drawings". Pattern Recognition, 45(12), 4214-4224.
-
-1) Installation :
-    ./install.sh
-
-    L'ordinateur doit être connecté à Internet. Le script peut temporairement avoir besoin
-    des privilèges du super-utilisateur (installation de dépendances). Le script d'installation
-    a été testé sous Linux Mint 15 et devrait fonctionner pour Ubuntu 13.04 et supérieurs.
-
-    Si l'installation s'est bien passée, il reste encore deux étapes de configuration.
-    Tout d'abord, ajoutez des variables d'environnement dans le .bashrc : 
-
-	    export GUROBI_HOME=/opt/gurobi560/linux64
-	    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GUROBI_HOME/lib:$HOME/bin/GEM++/lib
-	    export PATH=$PATH:$GUROBI_HOME/bin:$HOME/bin/GEM++/bin:$HOME/bin/GEM++/script
-
-    Enfin, activez une licence académique Gurobi (le solveur de programmes linéaires utilisé)
-    Pour cela, rendez-vous sur :
-	    http://pages.gurobi.com/GeneralRegistration.html
-    afin de créer un compte Académique ("Academic"/"Université de Rouen"/"Research Staff").
-
-    Après s'être connecté, rendez-vous sur :
-	    http://www.gurobi.com/download/licenses/current
-    cliquer sur "Free Academic", accepter les conditions et cliquer sur "Request License".
-
-    Finalement, recopiez la commande, apparaissant en gras sur la page, dans un terminal :
-	    > grbgetkey xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-
-    Lorsque le programme demande où stocker la licence, renseignez le chemin "/opt/gurobi560",
-    ou laissez le chemin par défaut et notez-le.
-
-    Afin de tester si l'installation s'est bien passée, vous pouvez ouvrir un nouveau
-    terminal et taper "gurobi.sh". Si une invite de commande python se démarre sans erreur,
-    alors la configuration s'est bien déroulée.
-
-2) Utilisation :
-
-    2.1) Calcul de distance entre deux graphes :
-	    * Utilisation : single_distance.sh graphe1 graphe2 substitution.fw creation.fw
-
-	    * graphe1 et graphe2 sont des fichiers de description de graphes, qui peuvent comporter des
-        attributs sur les noeuds et sur les arcs. Ils doivent être au format .gml ou .gxl,
-        et doivent être du même type (orientés ou non-orientés).
-
-	    * substitution.fw et creation.fw sont des fichiers décrivant les poids des attributs des noeuds
-	    et des arcs pour le calcul des coûts de substitution et de création de noeuds et d'arcs.
-
-	    * La distance est calculée par résolution d'un programme linéaire en nombre binaires.
-
-	2.2) Calcul d'une matrice de distance pour un ensemble de graphes
-        * Utilisation : all_distances.sh dossier substitution.fw creation.fw sortie.mat extension
-
-        * dossier est un dossier contenant tous les fichiers *.gml ou *.gxl à traiter.
-        Le script cherche les fichiers récursivement dans le dossier, donc vous pouvez très bien
-        appeler le script all_distances.sh sur un dossier contenant une arborescence du type :
-            dossier/
-	            -> classe1/
-		            -> graphe_c1_1.gml
-		            -> graphe_c1_2.gml
-	            -> classe2/
-		            -> graphe_c2_1.gml
-		            -> graphe_c2_2.gml
-
-        * substitution.fw et creation.fw : voir 2.1)
-
-        * sortie.mat est un fichier encodé en caractères contenant la matrice des distances
-        entre chaque paire de graphes. Cette matrice est symétrique, c'est pourquoi le script
-        'all_distances.sh' ne calcule que la moitié des distances avant de reconstruire la matrice
-        complète. Vous pouvez charger ce fichier dans MATLAB avec la commande "load -ascii sortie.mat"
-        ou dans Octave avec "load sortie.mat".
-
-        * extension indique quelle est l'extension des fichiers de description de graphe,
-        les valeurs possibles sont "gml" ou "gxl".
-
-        /!\ ATTENTION /!\ : l'ordre des graphes dans la matrice suit exactement l'ordre
-        fourni par la commande `ls -v $(find dossier_graph -name \*.extension)`.
-        Ceci permet d'ordonner de manière naturelle les dossiers/fichiers comportant un nombre,
-        c'est à dire l'ordre fourni par un explorateur de fichiers type 'nautilus' ou 'nemo'.
-
-        2.3) Calcul d'une matrice de distance entre deux ensembles de graphes
-        * Utilisation : compute_distances.sh dossier1 dossier2 substitution.fw creation.fw sortie.mat extension [nThreads]
-
-        * Paramètres : (voir 2.2).
-
-        * nThreads est un paramètre optionnel, il indique le nombre maximal de threads à utiliser
-        pour la parallélisation du calcul (par défaut : 1).
-
-        * La matrice des distances n'est pas symétrique : dans le fichier de sortie, les graphes
-        du dossier1 sont en lignes, ceux du dossier2 en colonnes.
-
-	2.4) Des exemples de fichiers *.fw sont donnés dans le dossier 'weights'.
-
+	v2015.11.04
