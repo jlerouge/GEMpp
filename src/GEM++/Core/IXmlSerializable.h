@@ -25,26 +25,48 @@ class DLL_EXPORT IXmlSerializable : virtual public IPrintable, virtual public IS
             clean();
         }
 
+        /**
+         * @brief Prints the content of the IXmlSerializable object.
+         * @param p the Printer
+         */
         virtual void print(Printer *p) {
             toXML();
             p->dump("<?xml version=\"1.0\"?>");
             p->dump(doc_->toString(p->getIndentWidth()));
         }
 
+        /**
+         * @brief Saves the content of the IXmlSerializable object.
+         * @param filename the path to the saved file
+         */
         virtual void save(const QString &filename) {
             FileStream::saveFile(this, filename);
         }
 
+        /**
+         * @brief Cleans the IXmlSerializable object.
+         */
         virtual void clean() {
             if(doc_)
                 delete doc_;
             doc_ = 0;
         }
 
+        /**
+         * @brief The DOM document used to serialize the object before saving.
+         */
         QDomDocument *doc_;
 
     protected:
+        /**
+         * @brief Deserializes an object from an XML file.
+         * @param filename the path to the XML file
+         */
         virtual void fromXML(const QString &filename) = 0;
+
+        /**
+         * @brief Serializes an object to a QDomDocument.
+         */
         virtual void toXML() = 0;
 };
 

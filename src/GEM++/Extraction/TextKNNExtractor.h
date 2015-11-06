@@ -3,18 +3,7 @@
 
 #include <QPoint>
 #include "PairExtractor.h"
-#include "Zernike.h"
-#include "BinaryPNG.h"
-#include "../Model/Graph.h"
-#include "qgarlib/CleanedBinaryImage.h"
-#include "qgarlib/Dist34BlackCCImage.h"
-#include "qgarlib/HysteresisBinaryImage.h"
-#include "qgarlib/LabeledSkeletonImage.h"
-#include "qgarlib/LinkedChainList.h"
-#include "qgarlib/PbmFile.h"
-#include "qgarlib/ConnectedComponents.h"
-#include "qgarlib/DilatedBinaryImage.h"
-#include "qgarlib/ErodedBinaryImage.h"
+#include "Model/Graph.h"
 
 using namespace qgar;
 

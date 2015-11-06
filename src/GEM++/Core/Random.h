@@ -12,22 +12,45 @@
     #include <unistd.h>
 #endif
 
-#include "Printer.h"
+#include "../../Portability.h"
 
+/**
+ * @brief The Random class is a utility to generate pseudo-random numbers.
+ *
+ * @author J.Lerouge <julien.lerouge@litislab.fr>
+ */
 class DLL_EXPORT Random {
     public:
+        /**
+         * @brief Seeds the pseudo-random number generator. A same seed will
+         * give the same sequence of numbers. When the seed parameter is negative,
+         * a combination of the current time and of the PID of the current program
+         * is used to give more "real" random numbers.
+         * @param seed the seed of the sequence
+         */
         static void seedRand(int seed = -1);
 
+        /**
+         * @brief Generates a random real number between 0 and 1.
+         * @return a real between 0 and 1
+         */
         static double randDouble();
-        static double randDouble(double low, double high);
-        static int randInt(int low, int high);
 
-        static void randPerm(QVector<int> &v);
-        static QVector<int> randPerm(int n);
-        static QVector<int> randPerm(int low, int high);
+        /**
+         * @brief Generates a random real number between lower and upper bounds.
+         * @param lower the lower bound
+         * @param upper the upper bound
+         * @return a real between lower and upper bounds
+         */
+        static double randDouble(double lower, double upper);
 
-        static QVector<int> id(int n);
-        static QVector<int> id(int low, int high);
+        /**
+         * @brief Generates a random integer number between lower and upper bounds.
+         * @param lower the lower bound
+         * @param upper the upper bound
+         * @return an integer between lower and upper bounds
+         */
+        static int randInt(int lower, int upper);
 };
 
-#endif /* RANDOM_H */
+#endif /* __RANDOM_H__ */
