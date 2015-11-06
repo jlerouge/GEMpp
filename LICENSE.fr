@@ -1,14 +1,4 @@
-Droit d'auteur
-	GEM++ est la propriété du laboratoire LITIS (www.litislab.fr)
-	(c) 2013-2014 LITIS
-Contact
-	gem-contact@litislab.eu
-Conditions d'utilisation
-	GEM++ est un logiciel libre, distribué sous les termes de la licence
-	CeCILL version 2.1, détaillée ci-dessous.
-
------------------------------------------------------------------------------
-  CONTRAT DE LICENCE DE LOGICIEL LIBRE CeCILL
+﻿  CONTRAT DE LICENCE DE LOGICIEL LIBRE CeCILL
 
 Version 2.1 du 2013-06-21
 
