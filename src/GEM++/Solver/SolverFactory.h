@@ -1,5 +1,5 @@
-#ifndef __SOLVERFACTORY_H__
-#define __SOLVERFACTORY_H__
+#ifndef GEMPP_SOLVERFACTORY_H
+#define GEMPP_SOLVERFACTORY_H
 
 #include "Solver.h"
 
@@ -10,7 +10,7 @@ class DLL_EXPORT SolverFactory {
         virtual Solver* create() = 0;
 };
 
-#define SolverFactory_iid "eu.litislab.GEM++.SolverFactory"
+#define GEMPP_SolverFactory_iid "eu.litislab.GEM++.SolverFactory"
 Q_DECLARE_INTERFACE(SolverFactory, SolverFactory_iid)
 
-#endif /* __SOLVERFACTORY_H__ */
+#endif /* GEMPP_SOLVERFACTORY_H */

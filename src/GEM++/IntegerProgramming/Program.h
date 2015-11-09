@@ -1,5 +1,5 @@
-#ifndef __PROGRAM_H__
-#define __PROGRAM_H__
+#ifndef GEMPP_PROGRAM_H
+#define GEMPP_PROGRAM_H
 
 #include <QSet>
 #include "Variable.h"
@@ -107,4 +107,4 @@ class DLL_EXPORT Program : virtual public IPrintable, virtual public ISaveable {
         QHash<QString, Variable *> variables_;
 };
 
-#endif /*__PROGRAM_H__*/
+#endif /*PROGRAM_H*/

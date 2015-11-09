@@ -1,5 +1,5 @@
-#ifndef __QLABELITEM_H__
-#define __QLABELITEM_H__
+#ifndef GEMPP_QLABELITEM_H
+#define GEMPP_QLABELITEM_H
 
 #include <QGraphicsSimpleTextItem>
 #include <QBrush>
@@ -12,4 +12,4 @@ class DLL_EXPORT QLabelItem : public QGraphicsSimpleTextItem {
         void view(bool visible = true);
 };
 
-#endif /* __QLABELITEM_H__ */
+#endif /* GEMPP_QLABELITEM_H */

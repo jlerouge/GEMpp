@@ -1,5 +1,5 @@
-#ifndef __LINEAREXPRESSION_H__
-#define __LINEAREXPRESSION_H__
+#ifndef GEMPP_LINEAREXPRESSION_H
+#define GEMPP_LINEAREXPRESSION_H
 
 #include <QList>
 #include "Variable.h"
@@ -112,4 +112,4 @@ LinearExpression *operator+(LinearExpression *e, Term t);
 LinearExpression *operator-(LinearExpression *e, Term t);
 
 
-#endif /*__LINEAREXPRESSION_H__*/
+#endif /*LINEAREXPRESSION_H*/

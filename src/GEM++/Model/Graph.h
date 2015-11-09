@@ -1,5 +1,5 @@
-#ifndef __GRAPH_H__
-#define __GRAPH_H__
+#ifndef GEMPP_GRAPH_H
+#define GEMPP_GRAPH_H
 
 #include <QSet>
 #include <QList>
@@ -64,4 +64,4 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ISaveable, vi
         QList<Edge *> edges_;
 };
 
-#endif /*__GRAPH_H__*/
+#endif /*GRAPH_H*/

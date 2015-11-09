@@ -3,7 +3,7 @@
 QCommandLineParser ConsoleApplication::parser_;
 
 ConsoleApplication::ConsoleApplication(int &argc, char **argv) : QCoreApplication(argc, argv) {
-    setApplicationVersion(QString("%1 (build : %2 @ %3)").arg(VERSION, __DATE__, __TIME__));
+    setApplicationVersion(QString("%1 (build : %2 @ %3)").arg(VERSION, DATE, TIME));
 }
 
 ConsoleApplication::~ConsoleApplication() {}

@@ -1,5 +1,5 @@
-#ifndef __ISAVEABLE_H__
-#define __ISAVEABLE_H__
+#ifndef GEMPP_ISAVEABLE_H
+#define GEMPP_ISAVEABLE_H
 
 class QString;
 #include "../../Portability.h"
@@ -26,4 +26,4 @@ class DLL_EXPORT ISaveable {
         virtual void save(const QString &filename) = 0;
 };
 
-#endif /*__ISAVEABLE_H__*/
+#endif /*ISAVEABLE_H*/

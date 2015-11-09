@@ -1,16 +1,32 @@
-#ifndef __BIPARTITEGED_H__
-#define __BIPARTITEGED_H__
+#ifndef GEMPP_BIPARTITEGED_H
+#define GEMPP_BIPARTITEGED_H
 
 #include "GED.h"
 
-class DLL_EXPORT BipartiteGED: virtual public GraphEditDistance {
+/**
+ * @brief The BipartiteGraphMatching class is an implementation of the suboptimal
+ * bipartite graph matching algorithm that solves the graph edist distance problem.
+ *
+ * @author J.Lerouge <julien.lerouge@litislab.fr>
+ * @see GraphEditDistance
+ */
+class DLL_EXPORT BipartiteGraphMatching: virtual public GraphEditDistance {
     public:
-        BipartiteGED(Problem *pb, double up = 1);
-        virtual ~BipartiteGED();
+        /**
+         * @brief Constructs a new BipartiteGraphMatching object with parameters.
+         * @param pb the problem to solve
+         * @param up the upper bound approximation parameter
+         */
+        BipartiteGraphMatching(Problem *pb, double up = 1);
+
+        /**
+         * @brief Destructs a BipartiteGraphMatching object.
+         */
+        virtual ~BipartiteGraphMatching();
 
     protected:
         virtual void initConstraints();
         virtual void initObjective();
 };
 
-#endif /*__BIPARTITEGED_H__*/
+#endif /* GEMPP_BIPARTITEGED_H */

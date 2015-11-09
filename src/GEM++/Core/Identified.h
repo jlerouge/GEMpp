@@ -1,5 +1,5 @@
-#ifndef __IDENTIFIED_H__
-#define __IDENTIFIED_H__
+#ifndef GEMPP_IDENTIFIED_H
+#define GEMPP_IDENTIFIED_H
 
 #include "Constants.h"
 
@@ -51,4 +51,4 @@ class DLL_EXPORT Identified
         QString id_;
 };
 
-#endif /*__IDENTIFIED_H__*/
+#endif /*IDENTIFIED_H*/

@@ -1,5 +1,5 @@
-#ifndef __QCONFIGURATIONDIALOG_H__
-#define __QCONFIGURATIONDIALOG_H__
+#ifndef GEMPP_QCONFIGURATIONDIALOG_H
+#define GEMPP_QCONFIGURATIONDIALOG_H
 
 #include <QtWidgets>
 #include "QScienceSpinBox.h"
@@ -62,4 +62,4 @@ class DLL_EXPORT QConfigurationDialog : public QDialog {
         QPushButton *more;
 };
 
-#endif /* __QCONFIGURATIONDIALOG_H__ */
+#endif /* GEMPP_QCONFIGURATIONDIALOG_H */

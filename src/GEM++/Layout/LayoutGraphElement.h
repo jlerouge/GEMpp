@@ -1,5 +1,5 @@
-#ifndef _LAYOUTGRAPHELEMENT_H_
-#define _LAYOUTGRAPHELEMENT_H_
+#ifndef GEMPP__LAYOUTGRAPHELEMENT_H_
+#define GEMPP__LAYOUTGRAPHELEMENT_H_
 
 #include <QObject>
 #include <QColor>
@@ -20,4 +20,4 @@ class DLL_EXPORT LayoutGraphElement {
         int size_;
 };
 
-#endif /* _LAYOUTGRAPHELEMENT_H_ */
+#endif /* GEMPP__LAYOUTGRAPHELEMENT_H_ */

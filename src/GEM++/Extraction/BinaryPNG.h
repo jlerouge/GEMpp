@@ -1,5 +1,5 @@
-#ifndef __BINARYPNG_H__
-#define __BINARYPNG_H__
+#ifndef GEMPP_BINARYPNG_H
+#define GEMPP_BINARYPNG_H
 
 #include <QImage>
 #include <QFileInfo>
@@ -42,4 +42,4 @@ class DLL_EXPORT BinaryPNG {
         static BinaryImage addBorder(BinaryImage &img, uint borderWidth, QGEbw color);
 };
 
-#endif /*__BINARYPNG_H__*/
+#endif /*BINARYPNG_H*/

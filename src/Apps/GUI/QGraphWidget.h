@@ -1,5 +1,5 @@
-#ifndef __QGRAPHWIDGET_H__
-#define __QGRAPHWIDGET_H__
+#ifndef GEMPP_QGRAPHWIDGET_H
+#define GEMPP_QGRAPHWIDGET_H
 
 #include <QtWidgets>
 #include <QFileDialog>
@@ -43,4 +43,4 @@ class QGraphWidget : public ForceDirectedLayout {
         Graph *subgraph_;
 };
 
-#endif /* __QGRAPHWIDGET_H__ */
+#endif /* GEMPP_QGRAPHWIDGET_H */

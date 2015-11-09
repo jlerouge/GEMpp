@@ -1,5 +1,5 @@
-#ifndef __MATRIX_H__
-#define __MATRIX_H__
+#ifndef GEMPP_MATRIX_H
+#define GEMPP_MATRIX_H
 
 #include <QList>
 #include "ISaveable.h"
@@ -197,4 +197,4 @@ class DLL_EXPORT Matrix : public PrintableMatrix<T>, virtual public ISaveable {
         void save(const QString &filename) { FileStream::saveFile(this, filename); }
 };
 
-#endif /*__MATRIX_H__*/
+#endif /*MATRIX_H*/

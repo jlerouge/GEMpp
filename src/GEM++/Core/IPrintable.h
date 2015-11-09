@@ -1,5 +1,5 @@
-#ifndef __IPRINTABLE_H__
-#define __IPRINTABLE_H__
+#ifndef GEMPP_IPRINTABLE_H
+#define GEMPP_IPRINTABLE_H
 
 #include "Printer.h"
 
@@ -35,4 +35,4 @@ class DLL_EXPORT IPrintable {
         }
 };
 
-#endif /*__IPRINTABLE_H__*/
+#endif /*IPRINTABLE_H*/

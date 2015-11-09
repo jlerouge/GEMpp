@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef GEMPP_MAINWINDOW_H
+#define GEMPP_MAINWINDOW_H
 
 #include <QtWidgets>
 #include <QMainWindow>
@@ -46,4 +46,4 @@ class MainWindow : public QMainWindow
         QAction *aboutQtAct;
 };
 
-#endif /* __MAINWINDOW_H__ */
+#endif /* GEMPP_MAINWINDOW_H */

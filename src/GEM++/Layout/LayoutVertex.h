@@ -1,5 +1,5 @@
-#ifndef _LAYOUTVERTEX_H_
-#define _LAYOUTVERTEX_H_
+#ifndef GEMPP__LAYOUTVERTEX_H_
+#define GEMPP__LAYOUTVERTEX_H_
 
 #include <QVector2D>
 #include "LayoutGraphElement.h"
@@ -33,4 +33,4 @@ class DLL_EXPORT LayoutVertex : virtual public Vertex, virtual public LayoutGrap
         bool locked_;
 };
 
-#endif /* _LAYOUTVERTEX_H_ */
+#endif /* GEMPP__LAYOUTVERTEX_H_ */

@@ -1,11 +1,11 @@
-#ifndef __WEIGHTHASH_H__
-#define __WEIGHTHASH_H__
+#ifndef GEMPP_WEIGHTHASH_H
+#define GEMPP_WEIGHTHASH_H
 
 #include <QHash>
 #include "Weight.h"
 
-#define DEFAULT_MODE ADD
-#define DEFAULT_ROOT 1
+#define GEMPP_DEFAULT_MODE ADD
+#define GEMPP_DEFAULT_ROOT 1
 
 class DLL_EXPORT WeightHash : virtual public QHash<QString, Weight *> {
     public:
@@ -32,4 +32,4 @@ class DLL_EXPORT WeightHash : virtual public QHash<QString, Weight *> {
         uint root_;
 };
 
-#endif /*__WEIGHTS_H__*/
+#endif /*WEIGHTS_H*/

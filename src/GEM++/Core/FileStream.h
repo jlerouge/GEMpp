@@ -1,5 +1,5 @@
-#ifndef __FILESTREAM_H__
-#define __FILESTREAM_H__
+#ifndef GEMPP_FILESTREAM_H
+#define GEMPP_FILESTREAM_H
 
 #include <QFile>
 #include "IPrintable.h"
@@ -49,4 +49,4 @@ class DLL_EXPORT FileStream {
         static bool removeFile(const QString &filename);
 };
 
-#endif /*__FILESTREAM_H__*/
+#endif /*FILESTREAM_H*/

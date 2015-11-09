@@ -1,7 +1,8 @@
 #include "Zernike.h"
+
 QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
     QList<double> zvalues;
-    int N; //, D;
+    int N;
 
     // N is the minimum of im.width() and im.height()
     N = im.width() < im.height() ? im.width() : im.height();
@@ -9,7 +10,6 @@ QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
         GEM_exception(QString("Zernike polynomial order (=%1) must be less than %2").arg(L).arg(MAX_ORDER-1));
     if (rad <= 0.0)
         rad = N;
-    //D = (int)(rad * 2);
 
     static double H1[MAX_ORDER][MAX_ORDER];
     static double H2[MAX_ORDER][MAX_ORDER];
@@ -64,14 +64,9 @@ QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
         }
     }
 
-    //area = PI * rad * rad;
     for (i = 0; i < cols; i++) {
-    // In the paper, the center of the unit circle was the center of the image
-    //	x = (double)(2*i+1-N)/(double)D;
         x = (i+1 - m10_m00) / rad;
         for (j = 0; j < rows; j++) {
-        // In the paper, the center of the unit circle was the center of the image
-        //	y = (double)(2*j+1-N)/(double)D;
             y = (j+1 - m01_m00) / rad;
             r2 = x*x + y*y;
             r = sqrt (r2);
@@ -94,8 +89,6 @@ QList<double> zernike2D (const BinaryImage &im, int L, double rad) {
 
             Rnmp2 = Rnm2 = 0;
             for (n = 0; n <= L; n++) {
-            // In the paper, this was divided by the area in pixels
-            // seemed that pi was supposed to be the area of a unit circle.
                 const_t = (n+1) * f/PI;
                 Rn = R[n];
                 if (n >= 2) Rnm2 = R[n-2];

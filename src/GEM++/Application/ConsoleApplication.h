@@ -1,5 +1,5 @@
-#ifndef __CONSOLEAPPLICATION_H__
-#define __CONSOLEAPPLICATION_H__
+#ifndef GEMPP_CONSOLEAPPLICATION_H
+#define GEMPP_CONSOLEAPPLICATION_H
 
 #include <QCommandLineParser>
 #include <QCoreApplication>
@@ -32,4 +32,4 @@ class DLL_EXPORT ConsoleApplication : public QCoreApplication {
         static QCommandLineParser parser_;
 };
 
-#endif /* __CONSOLEAPPLICATION_H__ */
+#endif /* GEMPP_CONSOLEAPPLICATION_H */

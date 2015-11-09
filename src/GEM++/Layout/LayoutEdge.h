@@ -1,5 +1,5 @@
-#ifndef _LAYOUTEDGE_H_
-#define _LAYOUTEDGE_H_
+#ifndef GEMPP__LAYOUTEDGE_H_
+#define GEMPP__LAYOUTEDGE_H_
 
 #include "LayoutGraphElement.h"
 #include "../Model/Edge.h"
@@ -16,4 +16,4 @@ class DLL_EXPORT LayoutEdge : virtual public Edge, virtual public LayoutGraphEle
         static Edge *downcast(LayoutEdge *e);
 };
 
-#endif /* _LAYOUTEDGE_H_ */
+#endif /* GEMPP__LAYOUTEDGE_H_ */

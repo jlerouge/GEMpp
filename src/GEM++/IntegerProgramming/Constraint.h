@@ -1,5 +1,5 @@
-#ifndef __CONSTRAINT_H__
-#define __CONSTRAINT_H__
+#ifndef GEMPP_CONSTRAINT_H
+#define GEMPP_CONSTRAINT_H
 
 #include "Expression.h"
 #include "../Core/Identified.h"
@@ -106,4 +106,4 @@ class DLL_EXPORT Constraint : virtual public IPrintable, public Identified {
         static uint count_;
 };
 
-#endif /*__CONSTRAINT_H__*/
+#endif /*CONSTRAINT_H*/

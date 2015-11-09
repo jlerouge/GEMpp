@@ -12,8 +12,8 @@
     GNU General Public License for more details.
 */
 
-#ifndef __GLPKPLUGIN_H__
-#define __GLPKPLUGIN_H__
+#ifndef GLPKPLUGIN_H
+#define GLPKPLUGIN_H
 
 #include <QObject>
 #include <QtPlugin>
@@ -56,4 +56,4 @@ class GLPKFactory : public QObject, public SolverFactory {
         }
 };
 
-#endif /* __GLPKPLUGIN_H__ */
+#endif /* GLPKPLUGIN_H */

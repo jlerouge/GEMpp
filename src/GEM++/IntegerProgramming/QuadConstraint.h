@@ -1,5 +1,5 @@
-#ifndef __QUADCONSTRAINT_H__
-#define __QUADCONSTRAINT_H__
+#ifndef GEMPP_QUADCONSTRAINT_H
+#define GEMPP_QUADCONSTRAINT_H
 
 #include "Constraint.h"
 #include "QuadExpression.h"
@@ -56,4 +56,4 @@ class DLL_EXPORT QuadConstraint : virtual public Constraint {
         QString toString();
 };
 
-#endif /*__QUADCONSTRAINT_H__*/
+#endif /*QUADCONSTRAINT_H*/

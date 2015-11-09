@@ -1,5 +1,5 @@
-#ifndef __RANDOM_H__
-#define __RANDOM_H__
+#ifndef GEMPP_RANDOM_H
+#define GEMPP_RANDOM_H
 
 #include <QtGlobal>
 #include <QVector>
@@ -8,7 +8,7 @@
 #if defined(WIN32) || defined(WIN64) // Windows platform
     #include <io.h>
     #include <process.h>
-#elif defined(LINUX) && (__GNUC__ >= 4) // Linux platform
+#elif defined(LINUX) && (GNUC >= 4) // Linux platform
     #include <unistd.h>
 #endif
 
@@ -53,4 +53,4 @@ class DLL_EXPORT Random {
         static int randInt(int lower, int upper);
 };
 
-#endif /* __RANDOM_H__ */
+#endif /* GEMPP_RANDOM_H */

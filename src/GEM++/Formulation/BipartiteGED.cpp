@@ -1,15 +1,15 @@
 #include "BipartiteGED.h"
 
-BipartiteGED::BipartiteGED(Problem *pb, double up) : Formulation(pb) {
+BipartiteGraphMatching::BipartiteGraphMatching(Problem *pb, double up) : Formulation(pb) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init(up);
 }
 
-BipartiteGED::~BipartiteGED() {
+BipartiteGraphMatching::~BipartiteGraphMatching() {
     delete lp_;
 }
 
-void BipartiteGED::initConstraints() {
+void BipartiteGraphMatching::initConstraints() {
     for(i=0; i < nVP; ++i)
         *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0);
 
@@ -17,7 +17,7 @@ void BipartiteGED::initConstraints() {
         *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getCol(k)), LinearConstraint::LESS_EQ, 1.0);
 }
 
-void BipartiteGED::initObjective() {
+void BipartiteGraphMatching::initObjective() {
     LinearExpression *exp = new LinearExpression();
 
     for(i=0; i < nVP; ++i)

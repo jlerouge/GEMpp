@@ -1,5 +1,5 @@
-#ifndef __QEDGEITEM_H__
-#define __QEDGEITEM_H__
+#ifndef GEMPP_QEDGEITEM_H
+#define GEMPP_QEDGEITEM_H
 
 #include <QGraphicsLineItem>
 #include <QPen>
@@ -22,4 +22,4 @@ class DLL_EXPORT QEdgeItem : public QGraphicsLineItem {
         QVertexItem *target_;
 };
 
-#endif /* __QEDGEITEM_H__ */
+#endif /* GEMPP_QEDGEITEM_H */

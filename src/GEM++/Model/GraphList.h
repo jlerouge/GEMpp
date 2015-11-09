@@ -1,5 +1,5 @@
-#ifndef __GRAPHLIST_H__
-#define __GRAPHLIST_H__
+#ifndef GEMPP_GRAPHLIST_H
+#define GEMPP_GRAPHLIST_H
 
 #include <QDirIterator>
 #include "Graph.h"
@@ -19,21 +19,14 @@ class DLL_EXPORT GraphList : virtual public IPrintable, virtual public ICleanabl
         QList<Graph *>::iterator begin();
         QList<Graph *>::iterator end();
 
-        //        void addGraph(const QString &graphClass, Graph *g);
-        //        Graph *getGraph(const QString &graphClass, int i) const;
-        //        int getClassCount() const;
-        //        QList<QString> getClasses() const;
-        //        int getClassSize(const QString &graphClass) const;
-
         virtual void print(Printer *p);
         virtual void clean();
 
     private:
         QDir dir_;
         QList<Graph *> graphs_;
-        //QMap< QString, QList<Graph *> > classes_;
 };
 
 bool compareFileNamesNatural(const QString &s1, const QString &s2);
 
-#endif /*__GRAPH_H__*/
+#endif /*GRAPH_H*/

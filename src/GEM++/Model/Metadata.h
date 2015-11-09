@@ -1,5 +1,5 @@
-#ifndef __METADATA_H__
-#define __METADATA_H__
+#ifndef GEMPP_METADATA_H
+#define GEMPP_METADATA_H
 
 #include <QtXml/QtXml>
 #include <QMap>
@@ -34,4 +34,4 @@ class DLL_EXPORT Metadata : virtual public IXmlSerializable {
         QMap<int, QMap<QString, QString> > *attributes[GraphElement::COUNT];
 };
 
-#endif /*__METADATA_H__*/
+#endif /*METADATA_H*/

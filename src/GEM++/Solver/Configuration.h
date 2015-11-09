@@ -1,5 +1,5 @@
-#ifndef __CONFIGURATION_H__
-#define __CONFIGURATION_H__
+#ifndef GEMPP_CONFIGURATION_H
+#define GEMPP_CONFIGURATION_H
 
 #include "../Core/ICleanable.h"
 #include "../Model/Problem.h"
@@ -41,4 +41,4 @@ class DLL_EXPORT Configuration : virtual public IPrintable, virtual public IClea
         double timeLimit;
 };
 
-#endif /* __CONFIGURATION_H__ */
+#endif /* GEMPP_CONFIGURATION_H */

@@ -1,5 +1,5 @@
-#ifndef __PLUGINLOADER_H__
-#define __PLUGINLOADER_H__
+#ifndef GEMPP_PLUGINLOADER_H
+#define GEMPP_PLUGINLOADER_H
 
 #include <QPluginLoader>
 #include "SolverFactory.h"
@@ -12,4 +12,4 @@ class DLL_EXPORT PluginLoader : public QPluginLoader {
         Solver *loadSolver(Solver::Solvers solver);
 };
 
-#endif /* __PLUGINLOADER_H__ */
+#endif /* GEMPP_PLUGINLOADER_H */

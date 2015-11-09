@@ -1,5 +1,5 @@
-#ifndef __PROBLEM_H__
-#define __PROBLEM_H__
+#ifndef GEMPP_PROBLEM_H
+#define GEMPP_PROBLEM_H
 
 #include "Graph.h"
 #include "Weights.h"
@@ -44,4 +44,4 @@ class DLL_EXPORT Problem : virtual public IPrintable, virtual public ISaveable {
         bool deleteGraphs_;
 };
 
-#endif /*__PROBLEM_H__*/
+#endif /*PROBLEM_H*/

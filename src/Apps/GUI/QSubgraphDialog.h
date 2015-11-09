@@ -1,5 +1,5 @@
-#ifndef __QSUBGRAPHDIALOG_H__
-#define __QSUBGRAPHDIALOG_H__
+#ifndef GEMPP_QSUBGRAPHDIALOG_H
+#define GEMPP_QSUBGRAPHDIALOG_H
 
 #include <QtWidgets>
 #include <QDialog>
@@ -23,4 +23,4 @@ class QSubgraphDialog : public QDialog {
         int vertexIndex_;
 };
 
-#endif /* __QSUBGRAPHDIALOG_H__ */
+#endif /* GEMPP_QSUBGRAPHDIALOG_H */

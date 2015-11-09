@@ -1,5 +1,5 @@
-#ifndef __MATCHINGAPPLICATION_H__
-#define __MATCHINGAPPLICATION_H__
+#ifndef GEMPP_MATCHINGAPPLICATION_H
+#define GEMPP_MATCHINGAPPLICATION_H
 
 #include <QQueue>
 #include "ConsoleApplication.h"
@@ -75,4 +75,4 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
         int totalCount_;
 };
 
-#endif /* __MATCHINGAPPLICATION_H__ */
+#endif /* GEMPP_MATCHINGAPPLICATION_H */

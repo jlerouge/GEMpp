@@ -1,5 +1,5 @@
-#ifndef __GRAPHELEMENT_H__
-#define __GRAPHELEMENT_H__
+#ifndef GEMPP_GRAPHELEMENT_H
+#define GEMPP_GRAPHELEMENT_H
 
 #include <QMap>
 #include "../Core/IPrintable.h"
@@ -52,4 +52,4 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
         QMap<QString, QString> symbolicAttributes_;
 };
 
-#endif /*__ELEMENT_H__*/
+#endif /*ELEMENT_H*/

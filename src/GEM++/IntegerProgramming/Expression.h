@@ -1,5 +1,5 @@
-#ifndef __EXPRESSION_H__
-#define __EXPRESSION_H__
+#ifndef GEMPP_EXPRESSION_H
+#define GEMPP_EXPRESSION_H
 
 #include "../Core/IPrintable.h"
 
@@ -89,4 +89,4 @@ void operator+=(Expression &e, double d);
  */
 void operator-=(Expression &e, double d);
 
-#endif /*__EXPRESSION_H__*/
+#endif /*EXPRESSION_H*/

@@ -1,5 +1,5 @@
-#ifndef __LINEARPROGRAM_H__
-#define __LINEARPROGRAM_H__
+#ifndef GEMPP_LINEARPROGRAM_H
+#define GEMPP_LINEARPROGRAM_H
 
 #include "Program.h"
 #include "LinearConstraint.h"
@@ -124,4 +124,4 @@ class DLL_EXPORT LinearProgram : public Program {
 void operator+=(LinearProgram &lp, LinearConstraint *c);
 void operator+=(LinearProgram &lp, LinearExpression *e);
 
-#endif /*__LINEARPROGRAM_H__*/
+#endif /*LINEARPROGRAM_H*/

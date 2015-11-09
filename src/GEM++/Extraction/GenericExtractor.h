@@ -1,5 +1,5 @@
-#ifndef __GENERICEXTRACTOR_H__
-#define __GENERICEXTRACTOR_H__
+#ifndef GEMPP_GENERICEXTRACTOR_H
+#define GEMPP_GENERICEXTRACTOR_H
 
 #include "ExtractionConfiguration.h"
 
@@ -44,7 +44,7 @@ class DLL_EXPORT GenericExtractor {
 
         /**
          * @brief Sets the output of the extraction.
-         * @param input the output
+         * @param output the output
          */
         void setOutput(const QVariant &output);
 
@@ -107,4 +107,4 @@ class DLL_EXPORT GenericExtractor {
         virtual void performExtraction() = 0;
 };
 
-#endif /*__GENERICEXTRACTOR_H__*/
+#endif /*GENERICEXTRACTOR_H*/

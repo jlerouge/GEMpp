@@ -1,5 +1,5 @@
-#ifndef __INDEXED_H__
-#define __INDEXED_H__
+#ifndef GEMPP_INDEXED_H
+#define GEMPP_INDEXED_H
 
 #include "../../Portability.h"
 
@@ -51,4 +51,4 @@ class DLL_EXPORT Indexed {
         int index_;
 };
 
-#endif /*__INDEXED_H__*/
+#endif /*INDEXED_H*/

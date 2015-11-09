@@ -80,7 +80,7 @@ void Matcher::run() {
                     break;
                 case GraphEditDistance::BIPARTITE:
                     initBipartiteCosts();
-                    ged = new BipartiteGED(pb_, cfg_->upperbound);
+                    ged = new BipartiteGraphMatching(pb_, cfg_->upperbound);
                     break;
                 default:
                     break;

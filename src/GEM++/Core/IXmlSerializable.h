@@ -1,5 +1,5 @@
-#ifndef __IXMLSERIALIZABLE_H__
-#define __IXMLSERIALIZABLE_H__
+#ifndef GEMPP_IXMLSERIALIZABLE_H
+#define GEMPP_IXMLSERIALIZABLE_H
 
 #include <QtXml/QtXml>
 #include "FileStream.h"
@@ -70,4 +70,4 @@ class DLL_EXPORT IXmlSerializable : virtual public IPrintable, virtual public IS
         virtual void toXML() = 0;
 };
 
-#endif /*__IXMLSERIALIZABLE_H__*/
+#endif /*IXMLSERIALIZABLE_H*/

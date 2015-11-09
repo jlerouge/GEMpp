@@ -1,5 +1,5 @@
-#ifndef _LAYOUTGRAPH_H_
-#define _LAYOUTGRAPH_H_
+#ifndef GEMPP__LAYOUTGRAPH_H_
+#define GEMPP__LAYOUTGRAPH_H_
 
 #include <QVector2D>
 #include <QObject>
@@ -41,4 +41,4 @@ class DLL_EXPORT LayoutGraph: public QObject, public Graph{
         QTimer *timer_;
 };
 
-#endif /* _LAYOUTGRAPH_H_ */
+#endif /* GEMPP__LAYOUTGRAPH_H_ */

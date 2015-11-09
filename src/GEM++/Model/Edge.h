@@ -1,5 +1,5 @@
-#ifndef __EDGE_H__
-#define __EDGE_H__
+#ifndef GEMPP_EDGE_H
+#define GEMPP_EDGE_H
 
 #include "GraphElement.h"
 
@@ -22,4 +22,4 @@ class DLL_EXPORT Edge : virtual public GraphElement {
         Vertex *target_;
 };
 
-#endif /*__EDGE_H__*/
+#endif /*EDGE_H*/

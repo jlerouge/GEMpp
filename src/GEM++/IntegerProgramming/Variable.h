@@ -1,5 +1,5 @@
-#ifndef __VARIABLE_H__
-#define __VARIABLE_H__
+#ifndef GEMPP_VARIABLE_H
+#define GEMPP_VARIABLE_H
 
 #include <QHash>
 #include <QPair>
@@ -151,4 +151,4 @@ bool operator==(Quad q1, Quad q2);
  */
 bool isActive(QuadTerm t);
 
-#endif /*__VARIABLE_H__*/
+#endif /*VARIABLE_H*/

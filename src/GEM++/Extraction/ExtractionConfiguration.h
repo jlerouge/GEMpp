@@ -1,5 +1,5 @@
-#ifndef __EXTRACTIONCONFIGURATION_H__
-#define __EXTRACTIONCONFIGURATION_H__
+#ifndef GEMPP_EXTRACTIONCONFIGURATION_H
+#define GEMPP_EXTRACTIONCONFIGURATION_H
 
 #include "Core/IPrintable.h"
 
@@ -52,4 +52,4 @@ class DLL_EXPORT ExtractionConfiguration : virtual public IPrintable {
         int zernikeOrder;
 };
 
-#endif /* __EXTRACTIONCONFIGURATION_H__ */
+#endif /* GEMPP_EXTRACTIONCONFIGURATION_H */

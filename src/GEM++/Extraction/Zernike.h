@@ -4,8 +4,8 @@
 
   Implemented from pseudo-code by Ilya Goldberg 2011-04-27
 */
-#ifndef __ZERNIKE_H__
-#define __ZERNIKE_H__
+#ifndef GEMPP_ZERNIKE_H
+#define GEMPP_ZERNIKE_H
 
 #include <QList>
 #include <cmath>
@@ -15,8 +15,14 @@
 
 using namespace qgar;
 
-#define MAX_ORDER 32
+#define GEMPP_MAX_ORDER 32
 
+/**
+ * @brief Computes the 2D Zernike invariant moments of binary shapes.
+ * @param order the Zernike polynomial order (must be less than GEMPP_MAX_ORDER)
+ * @param rad the radius used for normalization
+ * @return the zernike moments
+ */
 QList<double> zernike2D(const BinaryImage &im, int order = 8, double rad = 0);
 
-#endif /*__ZERNIKE_H__*/
+#endif /* GEMPP_ZERNIKE_H */

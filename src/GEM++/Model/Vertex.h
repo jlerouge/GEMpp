@@ -1,5 +1,5 @@
-#ifndef __VERTEX_H__
-#define __VERTEX_H__
+#ifndef GEMPP_VERTEX_H
+#define GEMPP_VERTEX_H
 
 #include <QSet>
 #include "GraphElement.h"
@@ -33,4 +33,4 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
         int parentIndex_;
 };
 
-#endif /*__VERTEX_H__*/
+#endif /*VERTEX_H*/

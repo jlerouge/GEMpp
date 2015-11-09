@@ -1,8 +1,8 @@
-#ifndef __PRINTER_H__
-#define __PRINTER_H__
+#ifndef GEMPP_PRINTER_H
+#define GEMPP_PRINTER_H
 
-#define qcout QTextStream(stdout)
-#define qcerr QTextStream(stderr)
+#define GEMPP_qcout QTextStream(stdout)
+#define GEMPP_qcerr QTextStream(stderr)
 
 #include <QTextStream>
 #include "Constants.h"
@@ -103,4 +103,4 @@ class DLL_EXPORT Printer {
         int indentLevel_;
 };
 
-#endif /*__PRINTER_H__*/
+#endif /*PRINTER_H*/

@@ -1,5 +1,5 @@
-#ifndef __HZEXTRACTOR_H__
-#define __HZEXTRACTOR_H__
+#ifndef GEMPP_HZEXTRACTOR_H
+#define GEMPP_HZEXTRACTOR_H
 
 #include <QRectF>
 #include <QList>
@@ -21,7 +21,7 @@ class DLL_EXPORT HomogeneousZoneExtractor : virtual public SingleExtractor {
         HomogeneousZoneExtractor();
 
         /**
-         * @brief Destructs a GenericExtractor object with parameters.
+         * @brief Constructs a HomogeneousZoneExtractor object with parameters.
          * @param input the input of the extraction
          * @param output the output of the extraction
          * @param metadata metadata on the extraction
@@ -83,4 +83,4 @@ class DLL_EXPORT HomogeneousZoneExtractor : virtual public SingleExtractor {
         //static QSet<int> directionalVisibility(QList<QRectF> rects, QList<int> visibleRects, QRectF rect, double thresh);
 };
 
-#endif /*__HZEXTRACTOR_H__*/
+#endif /*HZEXTRACTOR_H*/

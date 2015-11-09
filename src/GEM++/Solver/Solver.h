@@ -1,5 +1,5 @@
-#ifndef __SOLVER_H__
-#define __SOLVER_H__
+#ifndef GEMPP_SOLVER_H
+#define GEMPP_SOLVER_H
 
 #include "Configuration.h"
 #include "../Formulation/Solution.h"
@@ -41,7 +41,7 @@ class DLL_EXPORT Solver {
         virtual void prepare() = 0;
 };
 
-//#define Solver_iid "eu.litislab.GEM++.Solver"
+//#define GEMPP_Solver_iid "eu.litislab.GEM++.Solver"
 //Q_DECLARE_INTERFACE(Solver, Solver_iid)
 
-#endif /* __SOLVER_H__ */
+#endif /* GEMPP_SOLVER_H */

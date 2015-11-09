@@ -1,5 +1,5 @@
-#ifndef __LINEARCONSTRAINT_H__
-#define __LINEARCONSTRAINT_H__
+#ifndef GEMPP_LINEARCONSTRAINT_H
+#define GEMPP_LINEARCONSTRAINT_H
 
 #include "Constraint.h"
 #include "LinearExpression.h"
@@ -56,4 +56,4 @@ class DLL_EXPORT LinearConstraint : virtual public Constraint {
         QString toString();
 };
 
-#endif /*__LINEARCONSTRAINT_H__*/
+#endif /*LINEARCONSTRAINT_H*/

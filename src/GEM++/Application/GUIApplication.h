@@ -1,5 +1,5 @@
-#ifndef __GUIAPPLICATION_H__
-#define __GUIAPPLICATION_H__
+#ifndef GEMPP_GUIAPPLICATION_H
+#define GEMPP_GUIAPPLICATION_H
 
 #include <QMessageBox>
 #include <QApplication>
@@ -26,4 +26,4 @@ class DLL_EXPORT GUIApplication : public QApplication {
         static QString applicationDescription_;
 };
 
-#endif /* __GUIAPPLICATION_H__ */
+#endif /* GEMPP_GUIAPPLICATION_H */

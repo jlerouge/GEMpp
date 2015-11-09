@@ -2,7 +2,7 @@
 
 #include <limits>
 
-//#define QSPINBOX_QSBDEBUG
+//#define GEMPP_QSPINBOX_QSBDEBUG
 #ifdef QSPINBOX_QSBDEBUG
 #  define QSBDEBUG qDebug
 #else
@@ -155,7 +155,7 @@ bool QScienceSpinBox::isIntermediateValue(const QString &str) const
     else if (dotindex == 0 || (dotindex == 1 && str.at(0) == QLatin1Char('+'))) {
         // '+' at negative max
         if (negative) {
-            QSBDEBUG() << __FILE__ << __LINE__ << "returns false";
+            QSBDEBUG() << FILE << LINE << "returns false";
             return false;
         }
         doleft = false;
@@ -165,7 +165,7 @@ bool QScienceSpinBox::isIntermediateValue(const QString &str) const
     else if (dotindex == 1 && str.at(0) == QLatin1Char('-')) {
         // '-' at positiv max
         if (!negative) {
-            QSBDEBUG() << __FILE__ << __LINE__ << "returns false";
+            QSBDEBUG() << FILE << LINE << "returns false";
             return false;
         }
         doleft = false;
@@ -189,7 +189,7 @@ bool QScienceSpinBox::isIntermediateValue(const QString &str) const
 
     qint64 match = min_left;
     if (doleft && !isIntermediateValueHelper(left, min_left, max_left, &match)) {
-        QSBDEBUG() << __FILE__ << __LINE__ << "returns false";
+        QSBDEBUG() << FILE << LINE << "returns false";
         return false;
     }
     if (doright) {
@@ -199,16 +199,16 @@ bool QScienceSpinBox::isIntermediateValue(const QString &str) const
                 const bool ret = isIntermediateValueHelper(qAbs(left),
                                                            negative ? max_right : min_right,
                                                            negative ? min_right : max_right);
-                QSBDEBUG() << __FILE__ << __LINE__ << "returns" << ret;
+                QSBDEBUG() << FILE << LINE << "returns" << ret;
                 return ret;
             } else if (qAbs(max_left - min_left) == 1) {
                 const bool ret = isIntermediateValueHelper(qAbs(left), min_right, negative ? 0 : dec)
                                  || isIntermediateValueHelper(qAbs(left), negative ? dec : 0, max_right);
-                QSBDEBUG() << __FILE__ << __LINE__ << "returns" << ret;
+                QSBDEBUG() << FILE << LINE << "returns" << ret;
                 return ret;
             } else {
                 const bool ret = isIntermediateValueHelper(qAbs(left), 0, dec);
-                QSBDEBUG() << __FILE__ << __LINE__ << "returns" << ret;
+                QSBDEBUG() << FILE << LINE << "returns" << ret;
                 return ret;
             }
         }
@@ -221,10 +221,10 @@ bool QScienceSpinBox::isIntermediateValue(const QString &str) const
         qint64 tmpl = negative ? max_right : min_right;
         qint64 tmpr = negative ? min_right : max_right;
         const bool ret = isIntermediateValueHelper(right, tmpl, tmpr);
-        QSBDEBUG() << __FILE__ << __LINE__ << "returns" << ret;
+        QSBDEBUG() << FILE << LINE << "returns" << ret;
         return ret;
     }
-    QSBDEBUG() << __FILE__ << __LINE__ << "returns true";
+    QSBDEBUG() << FILE << LINE << "returns true";
     return true;
 }
 
@@ -301,7 +301,7 @@ QVariant QScienceSpinBox::validateAndInterpret(
     // First char must not be thousand-char
     if (copy.at(0) == thousand)
     {
-        QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+        QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
         state = QValidator::Invalid;
         goto end;
     }
@@ -317,14 +317,14 @@ QVariant QScienceSpinBox::validateAndInterpret(
             }							 // should be treated as typing right arrow
             // too many decimal points
             if (copy.size() - dec > QDoubleSpinBox::decimals() + 1) {
-                QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
                 state = QValidator::Invalid;
                 goto end;
             }
             // after decimal separator no thousand char
             for (int i=dec + 1; i<copy.size(); ++i) {
                 if (copy.at(i).isSpace() || copy.at(i) == thousand) {
-                    QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                    QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
                     state = QValidator::Invalid;
                     goto end;
                 }
@@ -337,13 +337,13 @@ QVariant QScienceSpinBox::validateAndInterpret(
             if ((last == thousand || last.isSpace())
                 && (secondLast == thousand || secondLast.isSpace())) {
                 state = QValidator::Invalid;
-                QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
                 goto end;
             }
             // two space chars is invalid
             else if (last.isSpace() && (!thousand.isSpace() || secondLast.isSpace())) {
                 state = QValidator::Invalid;
-                QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
                 goto end;
             }
         }
@@ -357,7 +357,7 @@ QVariant QScienceSpinBox::validateAndInterpret(
         // convert 'copy' to double, and check if that was 'ok'
         QLocale loc(locale());
         num = loc.toDouble(copy, &ok);
-        QSBDEBUG() << __FILE__ << __LINE__ << loc << copy << num << ok;
+        QSBDEBUG() << FILE << LINE << loc << copy << num << ok;
 
 
         // conversion to double did fail
@@ -369,7 +369,7 @@ QVariant QScienceSpinBox::validateAndInterpret(
                 // something else is responable -> Invalid
                 if (max < 1000 && min > -1000 && copy.contains(thousand)) {
                     state = QValidator::Invalid;
-                    QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                    QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
                     goto end;
                 }
 
@@ -377,7 +377,7 @@ QVariant QScienceSpinBox::validateAndInterpret(
                 const int len = copy.size();
                 for (int i=0; i<len- 1; ++i) {
                     if (copy.at(i) == thousand && copy.at(i + 1) == thousand) {
-                        QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                        QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
                         state = QValidator::Invalid;
                         goto end;
                     }
@@ -394,7 +394,7 @@ QVariant QScienceSpinBox::validateAndInterpret(
                 // if conversion still not valid, then reason unknown -> Invalid
                 if (!ok) {
                     state = QValidator::Invalid;
-                    QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                    QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
                     goto end;
                 }
                 notAcceptable = true; // -> state = Intermediate
@@ -404,7 +404,7 @@ QVariant QScienceSpinBox::validateAndInterpret(
         // no thousand sign, but still invalid for unknown reason
         if (!ok) {
             state = QValidator::Invalid;
-            QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+            QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
         }
         // number valid and within valid range
         else if (num >= min && num <= max) {
@@ -413,18 +413,18 @@ QVariant QScienceSpinBox::validateAndInterpret(
             } else {
                 state = QValidator::Acceptable;
             }
-            QSBDEBUG() << __FILE__ << __LINE__<< "state is set to "
+            QSBDEBUG() << FILE << LINE<< "state is set to "
                        << (state == QValidator::Intermediate ? "Intermediate" : "Acceptable");
         }
         // when max and min is the same the only non-Invalid input is max (or min)
         else if (max == min) {
             state = QValidator::Invalid;
-            QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+            QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
         } else {
             // value out of valid range (coves only special cases)
             if ((num >= 0 && num > max) || (num < 0 && num < min)) {
                 state = QValidator::Invalid;
-                QSBDEBUG() << __FILE__ << __LINE__<< "state is set to Invalid";
+                QSBDEBUG() << FILE << LINE<< "state is set to Invalid";
             } else {
                 // invalid range, further test with 'isIntermediateValue'
                 if (isIntermediateValue(copy)) {
@@ -432,7 +432,7 @@ QVariant QScienceSpinBox::validateAndInterpret(
                 } else {
                     state =  QValidator::Invalid;
                 }
-                QSBDEBUG() << __FILE__ << __LINE__<< "state is set to "
+                QSBDEBUG() << FILE << LINE<< "state is set to "
                            << (state == QValidator::Intermediate ? "Intermediate" : "Acceptable");
             }
         }

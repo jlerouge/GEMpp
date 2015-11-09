@@ -1,5 +1,5 @@
-#ifndef __QScienceSpinBox_H__
-#define __QScienceSpinBox_H__
+#ifndef GEMPP_QScienceSpinBox_H
+#define GEMPP_QScienceSpinBox_H
 
 #include <QDoubleSpinBox>
 #include <QDoubleValidator>

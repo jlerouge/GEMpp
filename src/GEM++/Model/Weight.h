@@ -1,5 +1,5 @@
-#ifndef __WEIGHT_H__
-#define __WEIGHT_H__
+#ifndef GEMPP_WEIGHT_H
+#define GEMPP_WEIGHT_H
 
 #include "../Core/Printer.h"
 
@@ -38,4 +38,4 @@ class DLL_EXPORT Weight {
         uint power_;
         double value_;
 };
-#endif /*__WEIGHT_H__*/
+#endif /*WEIGHT_H*/

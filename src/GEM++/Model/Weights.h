@@ -1,5 +1,5 @@
-#ifndef __WEIGHTS_H__
-#define __WEIGHTS_H__
+#ifndef GEMPP_WEIGHTS_H
+#define GEMPP_WEIGHTS_H
 
 #include <QStringList>
 #include <qmath.h>
@@ -7,13 +7,13 @@
 #include "WeightHash.h"
 #include "../Core/IXmlSerializable.h"
 
-#define DEFAULT_S_CONST 0.0
-#define DEFAULT_S_ATTR 1.0
-#define DEFAULT_S_POWER 2
+#define GEMPP_DEFAULT_S_CONST 0.0
+#define GEMPP_DEFAULT_S_ATTR 1.0
+#define GEMPP_DEFAULT_S_POWER 2
 
-#define DEFAULT_C_CONST 1.0
-#define DEFAULT_C_ATTR 0.0
-#define DEFAULT_C_POWER 1
+#define GEMPP_DEFAULT_C_CONST 1.0
+#define GEMPP_DEFAULT_C_ATTR 0.0
+#define GEMPP_DEFAULT_C_POWER 1
 
 class DLL_EXPORT Weights : virtual public IXmlSerializable {
         friend class QConfigurationDialog;
@@ -68,4 +68,4 @@ void operator*=(Weights &w, double d);
 void operator+=(Weights &w1, Weights w2);
 uint levenshtein(QString s1, QString s2);
 
-#endif /*__WEIGHTS_H__*/
+#endif /*WEIGHTS_H*/

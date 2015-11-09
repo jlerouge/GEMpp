@@ -1,5 +1,5 @@
-#ifndef __MATCHER_H__
-#define __MATCHER_H__
+#ifndef GEMPP_MATCHER_H
+#define GEMPP_MATCHER_H
 
 #include <QObject>
 #include <QRunnable>
@@ -48,4 +48,4 @@ class DLL_EXPORT Matcher : public QObject, virtual public QRunnable, virtual pub
         void outputRowGenIteration(int iteration, int generated, QPair<int, int> nb);
 };
 
-#endif /* __MATCHER_H__ */
+#endif /* GEMPP_MATCHER_H */

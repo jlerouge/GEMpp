@@ -1,5 +1,5 @@
-#ifndef __QUADPROGRAM_H__
-#define __QUADPROGRAM_H__
+#ifndef GEMPP_QUADPROGRAM_H
+#define GEMPP_QUADPROGRAM_H
 
 #include "Program.h"
 #include "LinearConstraint.h"
@@ -107,4 +107,4 @@ void operator+=(QuadProgram &lp, LinearConstraint *c);
 void operator+=(QuadProgram &lp, QuadConstraint *c);
 void operator+=(QuadProgram &lp, QuadExpression *e);
 
-#endif /*__QUADPROGRAM_H__*/
+#endif /*QUADPROGRAM_H*/

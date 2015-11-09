@@ -1,5 +1,5 @@
-#ifndef _FDLAYOUT_H_
-#define _FDLAYOUT_H_
+#ifndef GEMPP__FDLAYOUT_H_
+#define GEMPP__FDLAYOUT_H_
 
 #include <QMessageBox>
 #include <QApplication>
@@ -73,4 +73,4 @@ class DLL_EXPORT ForceDirectedLayout : public QWidget
         bool focus_;
 };
 
-#endif /* _FDLAYOUT_H_ */
+#endif /* GEMPP__FDLAYOUT_H_ */

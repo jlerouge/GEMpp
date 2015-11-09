@@ -1,5 +1,5 @@
-#ifndef __QVERTEXITEM_H__
-#define __QVERTEXITEM_H__
+#ifndef GEMPP_QVERTEXITEM_H
+#define GEMPP_QVERTEXITEM_H
 
 #include <QGraphicsRectItem>
 #include <QBrush>
@@ -55,4 +55,4 @@ class DLL_EXPORT QVertexItem : public QGraphicsRectItem {
         MatchStatus status_;
 };
 
-#endif /* __QVERTEXITEM_H__ */
+#endif /* GEMPP_QVERTEXITEM_H */

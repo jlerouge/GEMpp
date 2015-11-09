@@ -1,5 +1,5 @@
-#ifndef __QUADEXPRESSION_H__
-#define __QUADEXPRESSION_H__
+#ifndef GEMPP_QUADEXPRESSION_H
+#define GEMPP_QUADEXPRESSION_H
 
 #include "LinearExpression.h"
 
@@ -114,4 +114,4 @@ QuadExpression *operator-(double d, QuadTerm t);
 QuadExpression *operator+(QuadExpression *e, QuadTerm t);
 QuadExpression *operator-(QuadExpression *e, QuadTerm t);
 
-#endif /*__QUADEXPRESSION_H__*/
+#endif /*QUADEXPRESSION_H*/

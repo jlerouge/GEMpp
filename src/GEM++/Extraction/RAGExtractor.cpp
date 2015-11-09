@@ -1,12 +1,10 @@
 #include "RAGExtractor.h"
 
 RegionAdjacencyGraphExtractor::RegionAdjacencyGraphExtractor() : SingleExtractor() {
-    ct = 0;
     graph_ = 0;
 }
 
 RegionAdjacencyGraphExtractor::RegionAdjacencyGraphExtractor(const QString &input, const QString &output, const QString &metadata, ExtractionConfiguration *excfg) : SingleExtractor(input, output, metadata, excfg) {
-    ct = 0;
     graph_ = 0;
 }
 
