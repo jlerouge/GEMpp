@@ -22,8 +22,8 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MainAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-InfoBeforeFile=..\..\src\Plugins\GLPK\README
-LicenseFile=..\..\src\Plugins\GLPK\LICENSE
+InfoBeforeFile=..\..\src\plugins\GLPK\README
+LicenseFile=..\..\src\plugins\GLPK\LICENSE
 OutputBaseFilename=gem++glpk_{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
@@ -43,7 +43,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\..\build\win64\release\GEM++GLPK.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Plugins\GLPK\glpk_4_56.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\plugins\GLPK\glpk_4_56.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

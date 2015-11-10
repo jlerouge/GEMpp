@@ -52,21 +52,21 @@ Source: "..\..\build\win64\release\GEM++multidist.exe"; DestDir: "{app}"; Flags:
 Source: "..\..\build\win64\release\GEM++multisub.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\build\win64\release\GEM++sub.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\build\win64\release\Qgar.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\icudt54.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\icuin54.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\icuuc54.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\libEGL.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\libGLESv2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\imageformats\qgif.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\imageformats\qsvg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\imageformats\qtiff.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "..\..\src\Libraries\Qt\win64\5.5.1\imageformats\qwbmp.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\icudt54.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\icuin54.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\icuuc54.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\libEGL.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\libGLESv2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\imageformats\qgif.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\imageformats\qsvg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\imageformats\qtiff.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "..\..\src\dependencies\Qt\win64\5.5.1\imageformats\qwbmp.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

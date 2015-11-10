@@ -10,7 +10,7 @@ linux {
 }
 LIBS += -L$$OUTLIB -lGEM++$$LIBMODE
 win32: RC_FILE = $$ROOT/gui.rc
-INCLUDEPATH += $$ROOT/GEM++/
+INCLUDEPATH += $$ROOT/library/
 DESTDIR = $$OUTBIN
 target.path = $$PREFIX/bin
 INSTALLS += target
