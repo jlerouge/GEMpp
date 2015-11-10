@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://julien.lerouge.me/GEM++/weights">
+<xs:schema targetNamespace="http://julien.lerouge.me/GEM++/weights"
+           xmlns="http://julien.lerouge.me/GEM++/weights"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
 	<!-- definition of types -->
 	<xs:simpleType name="positiveDouble">
 	  	<xs:restriction base="xs:double">
@@ -7,51 +11,42 @@
 	  	</xs:restriction>
 	</xs:simpleType>
 
-	<!-- definition of attributes -->
-	<xs:attribute name="type">
-		<xs:simpleType>
-		    <xs:restriction base="xs:token">
-				<xs:enumeration value="constant"/>
-				<xs:enumeration value="numeric"/>
-		  		<xs:enumeration value="string"/>
-		  		<xs:enumeration value="symbolic"/>
-		    </xs:restriction>
-		</xs:simpleType>
-	</xs:attribute>
-
-	<xs:attribute name="mode">
-		<xs:simpleType>
-		    <xs:restriction base="xs:token">
-				<xs:enumeration value="add"/>
-		  		<xs:enumeration value="multiply"/>
-		    </xs:restriction>
-		</xs:simpleType>
-	</xs:attribute>
-
-	<xs:attribute name="power" type="xs:positiveInteger"/>
-	<xs:attribute name="root" type="xs:positiveInteger"/>
-	<xs:attribute name="name" type="xs:token"/>
-
 	<!-- definition of complex elements and types -->
 	<xs:element name="attribute">
 	  	<xs:complexType>
 			<xs:simpleContent>
-		  		<xs:extension base="positiveDouble">
-		    		<xs:attribute ref="name"/>
-		    		<xs:attribute ref="power"/>
-		    		<xs:attribute ref="type" use="required"/>
-		  		</xs:extension>
+    		<xs:extension base="positiveDouble">
+      		<xs:attribute name="name" type="xs:token"/>
+      		<xs:attribute name="power" type="xs:positiveInteger"/>
+          <xs:attribute name="type" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+	            <xs:enumeration value="constant"/>
+	            <xs:enumeration value="numeric"/>
+            		<xs:enumeration value="string"/>
+            		<xs:enumeration value="symbolic"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+    		</xs:extension>
 			</xs:simpleContent>
 	  	</xs:complexType>
 	</xs:element>
 
-  	<xs:complexType name="attributes">
+	<xs:complexType name="attributes">
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:element ref="attribute"/>
-   		</xs:sequence>
-		<xs:attribute ref="mode"/>
-		<xs:attribute ref="root"/>
-  	</xs:complexType>
+ 		</xs:sequence>
+	  <xs:attribute name="mode">
+		  <xs:simpleType>
+		      <xs:restriction base="xs:token">
+				  <xs:enumeration value="add"/>
+		    		<xs:enumeration value="multiply"/>
+		      </xs:restriction>
+		  </xs:simpleType>
+	  </xs:attribute>
+		<xs:attribute name="root" type="xs:positiveInteger"/>
+	</xs:complexType>
 
 	<xs:element name="nodes" type="attributes"/>
 	<xs:element name="edges" type="attributes"/>

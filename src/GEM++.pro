@@ -4,8 +4,7 @@ GEM++.depends = Libraries
 Apps.depends = GEM++
 Apps.depends = Libraries
 Plugins.depends = GEM++
-HEADERS += ../doc/user/pages/Installation.h \
-           ../doc/user/pages/License.h \
-           ../doc/user/pages/MainPage.h \
-           ../doc/user/pages/ThirdPartyNotices.h \
-           ../doc/dev/pages/MainPage.h
+HEADERS += ../doc/pages/GettingStarted.h \
+           ../doc/pages/License.h \
+           ../doc/pages/MainPage.h \
+           ../doc/pages/ThirdPartyNotices.h

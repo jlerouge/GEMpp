@@ -27,6 +27,7 @@ class DLL_EXPORT BinaryPNG {
 
         /**
          * @brief Writes a monochrome PNG image.
+         * @param img the monochrome image
          * @param filename the path to the image file to write
          * @param borderWidth the width of the border to add to the image before writing
          * @param color the color of the border to add to the image before writing

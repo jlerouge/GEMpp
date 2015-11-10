@@ -74,6 +74,7 @@ class DLL_EXPORT RegionAdjacencyGraphExtractor : public SingleExtractor {
         /**
          * @brief Computes the centroid point of a white connected component in a binary image.
          * @param img the binary image
+         * @param origin the origin top left point in the original image coordinates
          * @return the centroid point
          */
         static QPoint getCentroid(BinaryImage &img, const GenPoint<int> &origin);

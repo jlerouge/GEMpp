@@ -1,5 +1,25 @@
 /** @page gettingstarted Getting started
 
+    @section download Download
+    You can download the latest compiled binaries :
+        - Windows :
+            - GEM++
+            - optional plugins :
+                - GEM++CPLEX
+                - GEM++GLPK
+                - GEM++Gurobi
+        - Linux :
+            - GEM++
+            - optional plugins :
+                - GEM++CPLEX
+                - GEM++GLPK
+                - GEM++Gurobi
+
+    You must install at least one plugin (with one back-end solver) in order to solve graph matching problems.
+
+    Alternatively, you can also download the latest source archive :
+        - gem++_source_v2015_11_04.tar.gz
+
     @section installation Installation
     @subsection packages Pre-compiled binaries
     @subsubsection packages-windows On Windows
@@ -19,6 +39,6 @@
         cd /path/to/download/directory
         git clone http://.../GEM++.git
 
-    @date 2014-01-31
+    @date 2015-11-09
     @author J.Lerouge <julien.lerouge@litislab.fr>
 */

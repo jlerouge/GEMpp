@@ -17,6 +17,7 @@ class DLL_EXPORT BipartiteEdges: public Formulation {
     public:
         /**
          * @brief Constructs a new BipartiteEdges object with parameters.
+         * @param pb the problem to solve
          * @param i the index of the vertex in the query graph
          * @param k the index of the vertex in the target graph
          */

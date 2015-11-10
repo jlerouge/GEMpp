@@ -35,7 +35,6 @@ class DLL_EXPORT Vectorizer : public SingleExtractor {
          * @brief Constructs a Vectorizer object with parameters.
          * @param input the input filename of the extraction
          * @param output the output filename of the extraction
-         * @param metadata the metadata filename on the extraction
          * @param excfg configuration of the extractor
          */
         Vectorizer(const QString &input, const QString &output, ExtractionConfiguration *excfg);

@@ -57,7 +57,7 @@ class DLL_EXPORT PairExtractor : virtual public GenericExtractor {
 
         /**
          * @brief Sets the two metadata filenames of the extraction.
-         * @param metadata the two metadata filenames
+         * @param filenames the two metadata filenames
          */
         void setMetadata(const QPair<QString, QString> &filenames);
 

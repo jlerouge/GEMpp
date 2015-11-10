@@ -23,7 +23,7 @@ class DLL_EXPORT Indexed {
 
         /**
          * @brief Constructs a new Indexed object with an index.
-         * @param i the index
+         * @param index the index
          */
         Indexed(int index);
 

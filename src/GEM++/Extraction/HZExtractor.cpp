@@ -200,7 +200,7 @@ QSet<int> HomogeneousZoneExtractor::visibility(QList<QRectF> rectangles, QRectF 
     return result;
 }
 
-QSet<int> HomogeneousZoneExtractor::inclusion(QList<QRectF> rectangles, QRectF rect, double thresh) {
+QSet<int> HomogeneousZoneExtractor::intersection(QList<QRectF> rectangles, QRectF rect, double thresh) {
     QSet<int> result;
     QRectF temp;
     for(int i = 0; i < rectangles.size(); ++i) {

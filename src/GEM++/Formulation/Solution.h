@@ -105,7 +105,7 @@ class DLL_EXPORT Solution : virtual public IPrintable, virtual public ISaveable,
 
         /**
          * @brief Returns the objective value of the solution.
-         * @param the objective value
+         * @return the objective value
          */
         double getObjective();
 
@@ -119,7 +119,7 @@ class DLL_EXPORT Solution : virtual public IPrintable, virtual public ISaveable,
         /**
          * @brief Returns the index of the active variable of the solution where one
          * of the involved vertex is known.
-         * @param the index of the known vertex
+         * @param subId the index of the known vertex
          * @param left if true, the known vertex is a query vertex, else it is a target vertex
          * @return the active variable index
          */

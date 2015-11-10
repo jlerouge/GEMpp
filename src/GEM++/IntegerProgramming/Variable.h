@@ -43,7 +43,7 @@ class DLL_EXPORT Variable : virtual public IPrintable, public Identified {
         enum Type{
             BOUNDED, /**< a bounded integer variable (\f$ x \in [\![a, b]\!] \f$ where \f$ (a,b) \in \mathbb{Z}^2, a \leq b \f$) */
             BINARY, /**< a binary variable (\f$ x \in \mathbb{B} = \{0; 1\} \f$) */
-            CONTINUOUS /**< a continuous variable \f$) */
+            CONTINUOUS /**< a continuous variable (\f$ x \in \mathbb{R} \f$) */
         };
 
         /**

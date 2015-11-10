@@ -19,14 +19,15 @@ class DLL_EXPORT IPrintable {
          * @brief Destructs an IPrintable.
          */
         virtual ~IPrintable() {}
+
         /**
          * @brief Prints an IPrintable to a Printer.
          * @param p the Printer
          */
         virtual void print(Printer *p) = 0;
+
         /**
          * @brief Shows an IPrintable using a Printer.
-         * @param p the Printer
          */
         virtual void show() {
             Printer p;
