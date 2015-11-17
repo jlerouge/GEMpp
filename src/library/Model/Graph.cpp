@@ -395,7 +395,7 @@ void Graph::fromGXL(const QString &filename) {
 }
 
 void Graph::fromXML(const QString &filename) {
-    metadata_->fromXML(filename);
+    metadata_->load(filename);
     QString path = QFileInfo(filename).path();
     fromFile(path+"/"+metadata_->getGraphAttribute("graphfile").toString());
 }

@@ -47,13 +47,16 @@ class DLL_EXPORT Weights : virtual public IXmlSerializable {
 
         WeightHash *getWeights(Operation op, GraphElement::Type t) const;
 
-    protected:
         void load(const QString &filename, Operation op);
-        virtual void fromXML();
+        void load(const QDomElement &root, Operation op);
         void save(const QString &filename, Operation op);
+
+    protected:
+        virtual void fromXML();
         virtual void toXML();
 
     private:
+        void fromXMLElement(const QDomElement &element);
         double weightedCost(GraphElement *e1, GraphElement *e2 = 0) const;
 
         QHash<QPair<Operation, GraphElement::Type>, WeightHash *> weights_;

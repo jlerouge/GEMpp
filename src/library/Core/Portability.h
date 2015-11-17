@@ -1,12 +1,12 @@
-#ifndef __PORTABILITY_H__
-#define __PORTABILITY_H__
+#ifndef GEMPP_PORTABILITY_H
+#define GEMPP_PORTABILITY_H
 
 // Cross-platform compilation
 #if defined(WIN32) || defined(WIN64) // Windows platform
     #ifdef DLL_BUILD
-            #define DLL_EXPORT __declspec(dllexport)
+        #define DLL_EXPORT __declspec(dllexport)
     #else
-            #define DLL_EXPORT
+        #define DLL_EXPORT
     #endif
     #define GETPID _getpid
     #ifndef INFINITY
@@ -20,4 +20,4 @@
 	#define GETPID getpid
 #endif
 
-#endif /* __PORTABILITY_H__ */
+#endif /* GEMPP_PORTABILITY_H */

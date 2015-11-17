@@ -22,6 +22,7 @@ HEADERS += \
     Core/ILoadable.h \
     Core/IPrintable.h \
     Core/ISaveable.h \
+    Core/LocalStorage.h \
     Core/Math.h \
     Core/Matrix.h \
     Core/Portability.h \
@@ -93,6 +94,7 @@ SOURCES += \
     Core/Identified.cpp \
     Core/Indexed.cpp \
     Core/IXmlSerializable.cpp \
+    Core/LocalStorage.cpp \
     Core/Math.cpp \
     Core/Printer.cpp \
     Core/Random.cpp \
