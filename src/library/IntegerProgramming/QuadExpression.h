@@ -44,7 +44,7 @@ class DLL_EXPORT QuadExpression : virtual public LinearExpression {
         void multiplyBy(double d);
 
         /**
-         * @brief Adds a quadratic term to the QuadExpression. If the ::Quad concerned by the ::QuadTerm
+         * @brief Adds a quadratic term to the QuadExpression. If the Quad concerned by the QuadTerm
          * is already present in the QuadExpression, its coefficient is updated.
          */
         void addQuadTerm(QuadTerm t);
@@ -79,16 +79,16 @@ class DLL_EXPORT QuadExpression : virtual public LinearExpression {
         static QuadExpression *sum(QList<Variable*> &vars);
 
         /**
-         * @brief Sums a QList of ::Quad in a QuadExpression.
+         * @brief Sums a QList of Quad in a QuadExpression.
          * @return \f$ \sum_{k=0}^{quads.size()-1} quads[k] \f$
          */
         static QuadExpression *sum(QList<Quad> &quads);
 
     private:
         /**
-         * @brief The quadratic terms of the QuadExpression, stored as key-value pairs : the ::Quad
+         * @brief The quadratic terms of the QuadExpression, stored as key-value pairs : the Quad
          * is the key whereas the coefficient is the value.
-         * Hence, a ::Quad may be present at most one time in the terms, but its coefficient may be updated.
+         * Hence, a Quad may be present at most one time in the terms, but its coefficient may be updated.
          */
         QHash<Quad, double> quadTerms_;
 };

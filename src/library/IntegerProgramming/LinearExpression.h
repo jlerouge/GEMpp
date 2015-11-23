@@ -45,7 +45,7 @@ class DLL_EXPORT LinearExpression : virtual public Expression {
         void multiplyBy(double d);
 
         /**
-         * @brief Adds a linear Term to the LinearExpression. If the Variable concerned by the ::Term
+         * @brief Adds a linear Term to the LinearExpression. If the Variable concerned by the Term
          * is already present in the LinearExpression, its coefficient is updated.
          * @param t The Term to add
          */

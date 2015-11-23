@@ -33,6 +33,7 @@ class DLL_EXPORT FileUtils {
          * @brief Serializes an IPrintable to a file.
          * @param ip the IPrintable object to serialize
          * @param filename the path to the file
+         * @param append appends the content to the already existing file (if any) or overwrite it
          */
         static void save(IPrintable *ip, const QString &filename, bool append = false);
 
@@ -40,6 +41,7 @@ class DLL_EXPORT FileUtils {
          * @brief Serializes a QString to a file.
          * @param s the QString to serialize
          * @param filename the path to the file
+         * @param append appends the content to the already existing file (if any) or overwrite it
          */
         static void save(const QString &s, const QString &filename, bool append = false);
 
@@ -53,6 +55,7 @@ class DLL_EXPORT FileUtils {
         /**
          * @brief Opens a file, and throws an Exception if it fails.
          * @param file the file to open
+         * @param mode the opening mode
          */
         static void open(QFile &file, QFile::OpenMode mode);
 

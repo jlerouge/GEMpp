@@ -10,7 +10,7 @@
 class Variable;
 
 /**
- * @brief The ::Term type represents the multiplication of a variable by a coefficient as a pair. It is the constituting element of a LinearExpression.
+ * @brief The Term type represents the multiplication of a variable by a coefficient as a pair. It is the constituting element of a LinearExpression.
  * @see LinearExpression
  */
 typedef QPair<Variable*, double> Term;
