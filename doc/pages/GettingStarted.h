@@ -1,25 +1,25 @@
 /** @page gettingstarted Getting started
 
     @section download Download
-    You may download the latest compiled binaries from this page :
+    You may download the latest (v1.0.0) compiled binaries from this page :
         - Windows :
-            - GEM++
+            - GEM++ [(32 bits)](https://github.com/jlerouge/GEMpp/releases/download/1.0.0/gempp_win32.exe) [(64 bits)](https://github.com/jlerouge/GEMpp/releases/download/1.0.0/gempp_win64.exe)
             - optional plugins :
-                - Cplex
-                - Glpk
-                - Gurobi
+                - CPLEX
+                - GLPK [(32 bits)](https://github.com/jlerouge/GEMppGLPK/releases/download/1.0.0/gemppglpk_win32.exe) [(64 bits)](https://github.com/jlerouge/GEMppGLPK/releases/download/1.0.0/gemppglpk_win64.exe)
+                - GuRoBi
         - Linux :
-            - GEM++
+            - GEM++ [(.deb)](https://github.com/jlerouge/GEMpp/releases/download/1.0.0/gempp_amd64.deb) [(.tar.gz)](https://github.com/jlerouge/GEMpp/releases/download/1.0.0/gempp_amd64.tar.gz)
             - optional plugins :
-                - Cplex
-                - Glpk
-                - Gurobi
+                - CPLEX
+                - GLPK
+                - GuRoBi
 
     You must install at least one plugin (with one back-end solver) in order to solve graph matching problems.
 
-    Alternatively, you can also download the latest source archive :
-        - GEM++ (contains Cplex and Gurobi plugins sources): gem++_source_v2015_11_23.tar.gz
-        - optional Glpk plugin (distributed under the terms of the GNU GPL v3): gem++_glpk_source_v2015_11_23.tar.gz
+    Alternatively, you can also download the latest source archives:
+        - GEM++ (also contains CPLEX and GuRoBi plugins sources): [(.zip)](https://github.com/jlerouge/GEMpp/archive/1.0.0.zip) [(.tar.gz)](https://github.com/jlerouge/GEMpp/archive/1.0.0.tar.gz)
+        - optional GLPK plugin, distributed under the terms of the GNU GPL v3: [(.zip)](https://github.com/jlerouge/GEMppGLPK/archive/1.0.0.zip) [(.tar.gz)](https://github.com/jlerouge/GEMppGLPK/archive/1.0.0.tar.gz)
 
     @section installation Installation
     @subsection packages Pre-compiled binaries
