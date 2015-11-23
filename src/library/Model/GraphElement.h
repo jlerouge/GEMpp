@@ -46,7 +46,7 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
          * @param name the name
          * @return the type
          */
-        static Type fromName(QString tName);
+        static Type fromName(QString name);
 
         /**
          * @brief Constructs a new GraphElement object.

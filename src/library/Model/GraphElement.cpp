@@ -5,11 +5,11 @@ const char* GraphElement::typeName[GraphElement::COUNT] = {
     "edge"
 };
 
-GraphElement::Type GraphElement::fromName(QString tName) {
+GraphElement::Type GraphElement::fromName(QString name) {
     for(Type t = (Type)0; t < COUNT; t = (Type)((int)t + 1))
-        if(QString(typeName[t]).startsWith(tName, Qt::CaseInsensitive))
+        if(QString(typeName[t]).startsWith(name, Qt::CaseInsensitive))
             return t;
-    Exception(QString("Type '%1' not recognized, please use v(ertex) or e(dge).").arg(tName));
+    Exception(QString("Type '%1' not recognized, please use v(ertex) or e(dge).").arg(name));
     return COUNT;
 }
 

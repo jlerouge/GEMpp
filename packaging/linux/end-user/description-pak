@@ -1,18 +1,19 @@
-GEM++ : Graph Extraction and Matching C++ toolkit
+﻿GEM++ :	a Graph Extraction and Matching C++ software (v2015.11.23)
 
-GEM++ provides graph matching functionalities implemented with binary programming, such as :
-	* Graph Edit Distance (linear and quadratic programming), and some approximations :
-		- lower bound (constraint aggregation)
-		- upper bound (pruning of the branch & bound tree)
-		- bipartite graph matching
-	* Subgraph isomorphism, with several level of tolerance :
-		- exact (no tolerance)
-		- substitution-tolerant (label substitutions are allowed)
-		- error-tolerant (topology errors and substitutions are allowed)
+GEM++ is a framework designed to implement a binary linear programming approach of the graph edit distance and subgraph isomorphism, on directed or undirected attributed graphs. GEM++ enables attributes weighting for nodes and edges, and it provides both exact and approximated formulations for the resolution.
 
-GEM++ is compatible with several mathematical solvers :
-	- GLPK
-	- Gurobi
-	- Cplex
+Main developers :
+- Julien Lerouge
+- Maroua Hammami
+- Pierre Héroux
+- Sébastien Adam
 
-GEM++ has been developed by the LITIS laboratory (www.litislab.fr).
+Contributors :
+- Pierre Le Bodic
+
+If you used GEM++ software in any published work, you are highly encouraged (though not required) to cite the following paper:
+- J. Lerouge, P. Le Bodic, P. Héroux and S. Adam, "GEM++: A Tool for Solving Substitution-Tolerant Subgraph Isomorphism" , Proceedings of GbRPR 2015 10th IAPR-TC-15 International Workshop. LNCS Vol. 9069. Springer, 2015.
+
+GEM++ is the property of LITIS lab (c) 2013-2015 LITIS.
+GEM++ is a free software, distributed under the terms of the CeCILL version 2.1 license.
+Please report bugs and suggestions to gem-contact@litislab.eu

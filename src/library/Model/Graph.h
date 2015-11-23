@@ -44,7 +44,7 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ISaveable, vi
          * @param name the name
          * @return the type
          */
-        static Type fromName(QString type);
+        static Type fromName(QString name);
 
         /**
          * @brief Constructs a new Graph object with parameters.
@@ -116,7 +116,7 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ISaveable, vi
 
         /**
          * @brief Returns the metadata on the graph.
-         * @param the metadata
+         * @return the metadata
          */
         Metadata *getMetadata() const;
 
