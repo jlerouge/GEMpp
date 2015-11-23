@@ -764,9 +764,9 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ../src/Apps \
-                         ../src/GEM++ \
-                         ../src/Plugins \
+INPUT                  = ../src/apps \
+                         ../src/library \
+                         ../src/plugins \
                          ./pages
 
 # This tag can be used to specify the character encoding of the source files

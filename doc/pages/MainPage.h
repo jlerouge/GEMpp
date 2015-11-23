@@ -3,7 +3,7 @@
         <tr><td style="background-image: url('tab_b.png'); background-size: 1% 100%; border-right: none;"><img src="../../ressources/images/logo/logo2.png" alt="GEM++ logo"/></td>
         <td style="background-image: url('tab_b.png'); background-size: 1% 100%; border-left: none;">
             - **Name** : GEM++
-            - **Version** : 1.0.0-beta (build: 2015-11-04)
+            - **Version** : 1.0.0-beta (build: 2015-11-23)
             - **Description** : A Graph Extraction and Matching C++ software
             - **Developers** : Julien Lerouge, Maroua Hammami, Pierre Héroux, Sébastien Adam
             - **Contributors** : Pierre Le Bodic
@@ -13,7 +13,7 @@
 
     @section Features
 
-    GEM++ is a software implementing several graph matching approaches, using [Integer Programming](http://en.wikipedia.org/wiki/Integer_programming "Wikipedia article on Integer Programming").
+    GEM++ is a software implementing several graph matching approaches, using [binary linear programming](https://en.wikipedia.org/wiki/Integer_programming).
     It is composed of five main executables and one common library :
         - **GEM++dist** is a command-line executable, that computes an edit distance between two graphs;
         - **GEM++sub** is a second command-line executable, that searches a subgraph isomorphism between a pattern graph and a target graph;
@@ -24,11 +24,10 @@
 
     Here are the main functionnalities of GEM++ :
         - Supports undirected or directed, labeled or unlabeled graphs, stored in the following graph file formats :
-            - GML (Graph Modeling Language)
-            - GXL (Graph eXchange Language)
+            - [GML](https://en.wikipedia.org/wiki/Graph_Modelling_Language) (Graph Modeling Language)
+            - [GXL](https://en.wikipedia.org/wiki/GXL) (Graph eXchange Language)
         - Supports the weighting of vertices and edges labels, with feature weights configuration files (see \ref weights);
-        - Provides different matching algorithms, solved by [Integer Programming](http://en.wikipedia.org/wiki/Integer_programming "Wikipedia article on Integer Programming"),
-          especially Binary Linear Programming (BLP) :
+        - Provides different matching algorithms, solved by binary linear programming :
             - Graph edit distance (GED), that can be used in its exact form or with following approximations :
                 - Upper-bound, reducing the number of possible matchings by forbidding some substitutions,
                 - Bipartite graph matching \cite riesen2009approximate;
@@ -42,9 +41,8 @@
             - [GLPK](http://www.gnu.org/software/glpk/ "GLPK homepage")
 
     @section reference Reference
-    GEM++ is a software developed by Julien Lerouge, Pierre Héroux and Sébastien Adam.<br />
-    Please cite the following paper in any published work which uses this sofware.<br />
-        - J. Lerouge, P. Le Bodic, P. HÃ©roux and S. Adam, "GEM++: A Tool for Solving Substitution-Tolerant Subgraph Isomorphism" , Proceedings of GbRPR 2015 10th IAPR-TC-15 International Workshop. LNCS Vol. 9069. Springer, 2015. \cite gbr2015
+    If you used GEM++ software in any published work, you are highly encouraged (though not required) to cite the following paper:<br />
+        - J. Lerouge, P. Le Bodic, P. Héroux and S. Adam, "GEM++: A Tool for Solving Substitution-Tolerant Subgraph Isomorphism" , Proceedings of GbRPR 2015 10th IAPR-TC-15 International Workshop. LNCS Vol. 9069. Springer, 2015. \cite gbr2015
 
     See also our @ref citelist.
 
@@ -55,7 +53,7 @@
     @section thirdparty Third-party libraries
     GEM++ has been developed with the following softwares and tools :
         - [Qt Open-Source SDK](http://qt-project.org/ "Qt-project homepage"), a multi-plateform object-oriented C++ framework, developed by [The Qt Company Ltd](http://www.qt.io/ "Qt homepage") and released under the GNU LGPL (see @ref tpqt),
-        - [QgarLib](http://www.qgar.org/ "Qgar project homepage"), a document analysis C++ library, developed by [LORIA](http://www.loria.fr/la-recherche-en/equipes/qgar "LORIA's Qgar homepage") and released under the GNU LGPL (see @ref tpqgarlib),
+        - [QgarLib](http://www.qgar.org/ "Qgar project homepage"), a document analysis C++ library, developed by [LORIA](http://www.loria.fr/la-recherche-en/equipes/qgar "LORIA's Qgar homepage") and released under the GNU LGPL (see @ref tpqgarlib).
 
     See @ref thirdpartynotices for more detailed information.
 
@@ -68,6 +66,6 @@
 
     See @ref licensing for more detailed information.
 
-    @date 2015-11-09
+    @date 2015-11-23
     @author J.Lerouge <julien.lerouge@litislab.fr>
 */

@@ -9,7 +9,8 @@
 
     The attached notices are provided for information only.
 
-    -------------------------------------------------------------------------------
+    @date 2015-11-23
+    @author J.Lerouge <julien.lerouge@litislab.fr>
 
     @section tpqt Qt Toolkit licensing
 
@@ -22,8 +23,6 @@
     Reference:
         - http://www.qt.io/terms-conditions/
         - [GNU Lesser General Public License, version 2.1](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
-
-    -------------------------------------------------------------------------------
 
     @section tpqgarlib QgarLib licensing
 
