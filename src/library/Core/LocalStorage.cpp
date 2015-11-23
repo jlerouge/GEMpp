@@ -1,42 +1,42 @@
 #include "LocalStorage.h"
 
-PIVAJ::LocalStorage::LocalStorage(const QString &uniqueID) : Identified(uniqueID) {
+LocalStorage::LocalStorage(const QString &uniqueID) : Identified(uniqueID) {
     if(uniqueID.isEmpty())
         setID(createUniqueID());
 }
 
-PIVAJ::LocalStorage::LocalStorage(const LocalStorage &other) : Identified(other) {}
+LocalStorage::LocalStorage(const LocalStorage &other) : Identified(other) {}
 
-PIVAJ::LocalStorage::~LocalStorage() {}
+LocalStorage::~LocalStorage() {}
 
-QDir PIVAJ::LocalStorage::getDir() {
+QDir LocalStorage::getDir() {
     return QDir(getPath());
 }
 
-QString PIVAJ::LocalStorage::getPath() {
+QString LocalStorage::getPath() {
     return FileUtils::slashed(getLocalDir(), getID());
 }
 
-bool PIVAJ::LocalStorage::exists() {
+bool LocalStorage::exists() {
     return getDir().exists();
 }
 
-bool PIVAJ::LocalStorage::create() {
+bool LocalStorage::create() {
     return getLocalDir().mkpath(getID());
 }
 
-bool PIVAJ::LocalStorage::remove() {
+bool LocalStorage::remove() {
     return getDir().removeRecursively();
 }
 
-QString PIVAJ::LocalStorage::createUniqueID() {
+QString LocalStorage::createUniqueID() {
     return QUuid::createUuid().toString();
 }
 
-QDir PIVAJ::LocalStorage::getLocalDir() {
+QDir LocalStorage::getLocalDir() {
     return QDir(getLocalPath());
 }
 
-QString PIVAJ::LocalStorage::getLocalPath() {
+QString LocalStorage::getLocalPath() {
     return QStandardPaths::standardLocations(QStandardPaths::DataLocation).first();
 }

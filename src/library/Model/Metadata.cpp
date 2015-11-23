@@ -80,7 +80,6 @@ void Metadata::fromXML() {
         edge = edge.nextSiblingElement("Edge");
         ++index;
     }
-    file.close();
 }
 
 void Metadata::toXML() {

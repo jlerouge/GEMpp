@@ -41,4 +41,6 @@ class DLL_EXPORT Solver {
         virtual void prepare() = 0;
 };
 
+Q_DECLARE_METATYPE(Solver::Solvers)
+
 #endif /* GEMPP_SOLVER_H */

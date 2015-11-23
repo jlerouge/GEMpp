@@ -23,8 +23,10 @@ Weights::Weights(const QString &substitution, const QString &creation) : IXmlSer
         for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1))
             weights_.insert(qMakePair(op,t), new WeightHash());
 
-    fromFile(substitution, SUBSTITUTION);
-    fromFile(creation, CREATION);
+    if(FileUtils::isValid(substitution))
+        load(substitution, SUBSTITUTION);
+    if(FileUtils::isValid(creation))
+        load(creation, CREATION);
 
     for(Operation op = (Operation)0; op < COUNT; op = (Operation)((int)op + 1))
         for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1))
@@ -80,15 +82,22 @@ WeightHash *Weights::getWeights(Operation op, GraphElement::Type t) const {
     return weights_[qMakePair(op, t)];
 }
 
-void Weights::save(const QString &filename, Operation op) {
-    FileUtils::checkExtension(filename, ".fw");
+void Weights::load(const QString &filename, Operation op) {
+    FileUtils::checkExtension(filename, "fw");
     setCurrentOperation(op);
-    IXmlSerializable::save(filename);
+    IXmlSerializable::load(filename);
+}
+
+void Weights::load(const QDomElement &root, Operation op) {
+    setCurrentOperation(op);
+    fromXMLElement(root);
 }
 
 void Weights::fromXML() {
-    /* Begin parsing */
-    document()->setContent(&file, true);
+    fromXMLElement(document()->documentElement());
+}
+
+void Weights::fromXMLElement(const QDomElement &root) {
     QDomElement attributes, attribute;
     QString name = "";
     Weight::Type type;
@@ -96,7 +105,7 @@ void Weights::fromXML() {
     double value = getDefaultWeight(currentOperation_);
 
     for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1)) {
-        attributes = document()->documentElement().firstChildElement((t == GraphElement::VERTEX)? "nodes" : "edges");
+        attributes = root.firstChildElement((t == GraphElement::VERTEX)? "nodes" : "edges");
         if(attributes.hasAttribute("mode"))
             getWeights(currentOperation_, t)->setMode(WeightHash::fromName(attributes.attribute("mode")));
         if(attributes.hasAttribute("root"))
@@ -116,13 +125,10 @@ void Weights::fromXML() {
             attribute = attribute.nextSiblingElement("attribute");
         }
     }
-    /* End parsing */
-
-    file.close();
 }
 
 void Weights::save(const QString &filename, Operation op) {
-    FileUtils::checkExtension(filename, ".fw");
+    FileUtils::checkExtension(filename, "fw");
     setCurrentOperation(op);
     IXmlSerializable::save(filename);
 }

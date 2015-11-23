@@ -36,4 +36,4 @@ class DLL_EXPORT IPrintable {
         }
 };
 
-#endif /*IPRINTABLE_H*/
+#endif /* GEMPP_IPRINTABLE_H */

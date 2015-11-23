@@ -22,4 +22,4 @@ class DLL_EXPORT Edge : virtual public GraphElement {
         Vertex *target_;
 };
 
-#endif /*EDGE_H*/
+#endif /* GEMPP_EDGE_H */
