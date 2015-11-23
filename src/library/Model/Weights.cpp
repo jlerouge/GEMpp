@@ -83,7 +83,7 @@ WeightHash *Weights::getWeights(Operation op, GraphElement::Type t) const {
 }
 
 void Weights::load(const QString &filename, Operation op) {
-    FileUtils::checkExtension(filename, ".fw");
+    FileUtils::checkExtension(filename, "fw");
     setCurrentOperation(op);
     IXmlSerializable::load(filename);
 }
@@ -128,7 +128,7 @@ void Weights::fromXMLElement(const QDomElement &root) {
 }
 
 void Weights::save(const QString &filename, Operation op) {
-    FileUtils::checkExtension(filename, ".fw");
+    FileUtils::checkExtension(filename, "fw");
     setCurrentOperation(op);
     IXmlSerializable::save(filename);
 }

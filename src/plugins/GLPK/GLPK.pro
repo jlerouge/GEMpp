@@ -3,7 +3,7 @@ include($$ROOT/plugin.pri)
 #VERSION = $$GEMVERSION
 QT += core
 win32 {
-    GLPK_HOME = C:\glpk-4.56
+    GLPK_HOME = C:\Users\Lieno\src\GEM++\src\plugins\GLPK\glpk-4.56
     INCLUDEPATH += $$GLPK_HOME/src
     LIBS += -L$$GLPK_HOME/w$$ARCH/ -lglpk_4_56
 }

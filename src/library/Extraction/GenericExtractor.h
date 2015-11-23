@@ -17,7 +17,7 @@ class DLL_EXPORT GenericExtractor {
         GenericExtractor();
 
         /**
-         * @brief Destructs a GenericExtractor object with parameters.
+         * @brief Constructs a GenericExtractor object with parameters.
          * @param input the input of the extraction
          * @param output the output of the extraction
          * @param metadata metadata on the extraction

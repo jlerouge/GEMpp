@@ -396,8 +396,10 @@ void Graph::fromGXL(const QString &filename) {
 
 void Graph::fromXML(const QString &filename) {
     metadata_->load(filename);
-    QString path = QFileInfo(filename).path();
-    fromFile(path+"/"+metadata_->getGraphAttribute("graphfile").toString());
+    QString graphFile = metadata_->getGraphAttribute("graphfile").toString();
+    if(!FileUtils::isAbsolute(graphFile))
+        graphFile = FileUtils::slashed(FileUtils::path(filename), graphFile);
+    fromFile(graphFile);
 }
 
 void Graph::print(Printer *p) {
