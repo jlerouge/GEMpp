@@ -17,7 +17,7 @@ Contributors
 	Pierre Le Bodic
 
 References
-	J. Lerouge, P. Le Bodic, P. HÃ©roux and S. Adam, "GEM++: A Tool for Solving
+	J. Lerouge, P. Le Bodic, P. Héroux and S. Adam, "GEM++: A Tool for Solving
 		Substitution-Tolerant Subgraph Isomorphism" , Proceedings of GbRPR 2015
 		10th IAPR-TC-15 International Workshop. LNCS Vol. 9069. Springer, 2015.
 
@@ -32,4 +32,4 @@ Contact
 	gem-contact@litislab.eu
 
 Version
-	v2015.11.04
+	v2015.11.23
