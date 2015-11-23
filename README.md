@@ -1,5 +1,21 @@
 # GEM++ : a Graph Extraction and Matching C++ software
 
+
+<table>
+<tr>
+<td><div>
+<img src="https://raw.githubusercontent.com/jlerouge/GEMpp/master/ressources/images/logo/logo2.png"  alt="GEM++ logo"/>
+</div>
+ </td><td><ul>
+<li><b>Name</b> : GEM++</li>
+<li><b>Description</b> : A Graph Extraction and Matching C++ software</li>
+<li><b>Developers</b> : Julien Lerouge, Maroua Hammami, Pierre Héroux, Sébastien Adam</li>
+<li><b>Contributors</b> : Pierre Le Bodic</li>
+<li><b>Contact</b> : <a href="mailto:gem-contact@litislab.eu">gem-contact@litislab.eu</a></li>
+</ul>
+</td></tr>
+</table>
+
 ## Detailed features
 GEM++ is a software implementing several graph matching approaches, using [binary linear programming](https://en.wikipedia.org/wiki/Integer_programming). It is composed of five main executables and one common library :
   - **GEM++dist** is a command-line executable, that computes an edit distance between two graphs;
@@ -26,22 +42,9 @@ Here are the main functionnalities of GEM++ :
     - [Gurobi Optimizer](http://www.gurobi.com/ "Gurobi homepage")
     - [GLPK](http://www.gnu.org/software/glpk/ "GLPK homepage")
 
-## Authors
-Main developers : 
-- Julien Lerouge
-- Maroua Hammami
-- Pierre Héroux
-- Sébastien Adam
-
-Contributors :
-- Pierre Le Bodic
-
 ## References
 If you used GEM++ software in any published work, you are highly encouraged (though not required) to cite the following paper:
   - J. Lerouge, P. Le Bodic, P. Héroux and S. Adam, "GEM++: A Tool for Solving Substitution-Tolerant Subgraph Isomorphism" , Proceedings of GbRPR 2015 10th IAPR-TC-15 International Workshop. LNCS Vol. 9069. Springer, 2015.
-
-## Contact
-Please report bugs and suggestions to gem-contact@litislab.eu
 
 ## Third party libraries
 GEM++ has been developed with the following softwares and tools :
