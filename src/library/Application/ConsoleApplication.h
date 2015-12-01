@@ -78,6 +78,11 @@ class DLL_EXPORT ConsoleApplication : public QCoreApplication {
         static void addHelpOption();
 
         /**
+         * @brief Parses the command line arguments.
+         */
+        static void parseArguments();
+
+        /**
          * @brief Processes the command line arguments.
          */
         static void processArguments();
@@ -102,11 +107,21 @@ class DLL_EXPORT ConsoleApplication : public QCoreApplication {
          */
         static QStringList positionalArguments();
 
+        /**
+         * @brief Clears the positional arguments from the
+         * arguments list.
+         */
+        static void clearPositionalArguments();
 
         /**
          * @brief Displays application version and exits.
          */
         static void showVersion();
+
+        /**
+         * @brief Displays help message and exits.
+         */
+        static void showHelp();
 
         /**
          * @brief Hooks the exceptions up and tries to

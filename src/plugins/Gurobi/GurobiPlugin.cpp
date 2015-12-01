@@ -4,7 +4,7 @@ Gurobi::Gurobi() : Solver() {
     try {
         env_ = new GRBEnv();
     } catch(GRBException e) {
-        GEM_exception("Gurobi is not correctly configured or has no valid license key.");
+        Exception("Gurobi is not correctly configured or has no valid license key.");
     }
     model_ = (GRBModel *)0;
 }
@@ -28,7 +28,7 @@ void Gurobi::init(Configuration *cfg) {
 
 void Gurobi::prepare() {
     // Parameters
-    env_->set(GRB_DoubleParam_MIPGap, pow(10, -PRECISION));
+    env_->set(GRB_DoubleParam_MIPGap, pow(10, -GEMPP_PRECISION));
     env_->set(GRB_IntParam_OutputFlag, cfg_->verbose);
     env_->set(GRB_DoubleParam_TimeLimit, cfg_->timeLimit);
     env_->set(GRB_IntParam_Threads, cfg_->threadsPerInstance);
@@ -101,7 +101,7 @@ void Gurobi::update(bool newBounds) {
 
 double Gurobi::solve(Solution *sol) {
     if(!model_)
-        GEM_exception("Gurobi solver must be initialized before solving.");
+        Exception("Gurobi solver must be initialized before solving.");
     double obj = 0;
     switch(lp_ ? lp_->getSense() : qp_->getSense()) {
         case Program::MINIMIZE:

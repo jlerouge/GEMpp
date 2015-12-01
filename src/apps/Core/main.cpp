@@ -24,21 +24,21 @@ int main(int argc, char **argv) {
             Exception("You must provide a GEM++ command.");
         }
         QString commandName = args[0];
+        int commandIndex = coreApp.arguments().indexOf(commandName);
         if(!commandName.compare("GUI", Qt::CaseInsensitive))
-            return system("GEM++GUI");
+            return system("GEM++gui");
 
         bool isMultiMatching = commandName.contains("multi", Qt::CaseInsensitive);
         if(isMultiMatching)
-            commandName = commandName.replace("multi", "");
+            commandName.replace("multi", "");
         Problem::Type type = Problem::fromName(commandName);
-        commandName = Problem::toName(type).toLower();
         coreApp.clearPositionalArguments();
 
         // Build the new command line arguments
         int n_argc = argc-1;
         char **n_argv = (char **) malloc(n_argc*sizeof(char *));
         // Allocates memory to print the executable name and the command name
-        int ret = asprintf(&n_argv[0], "%s %s", argv[0], commandName.toStdString().c_str());
+        int ret = asprintf(&n_argv[0], "%s %s", argv[0], args[0].toStdString().c_str());
         if(ret < 0)
             Exception("There was a problem with dynamic memory allocation.");
         for(int i=1; i < n_argc; ++i)

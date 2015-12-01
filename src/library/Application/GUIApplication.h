@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include "Core/Portability.h"
+#include "Core/Constants.h"
 
 /**
  * @brief The GUIApplication class implements graphical user interface applications.

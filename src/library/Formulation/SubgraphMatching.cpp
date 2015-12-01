@@ -1,4 +1,4 @@
-#include "SubIso.h"
+#include "SubgraphMatching.h"
 
 const char *SubgraphMatching::methodName[SubgraphMatching::COUNT] = {
     "Exact",

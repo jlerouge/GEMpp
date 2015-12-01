@@ -51,10 +51,12 @@ void ConsoleApplication::addVerboseOption() {
     addOption("v", "verbose", "Shows additional information.");
 }
 
+void ConsoleApplication::parseArguments() {
+    parser_.parse(instance()->arguments());
+}
+
 void ConsoleApplication::processArguments() {
-    parser_.process(*instance());
-    if(parser_.isSet("version"))
-        showVersion();
+    parser_.process(instance()->arguments());
 }
 
 bool ConsoleApplication::isOptionSet(const QString &name) {
@@ -69,10 +71,17 @@ QStringList ConsoleApplication::positionalArguments() {
     return parser_.positionalArguments();
 }
 
+void ConsoleApplication::clearPositionalArguments() {
+    parser_.clearPositionalArguments();
+}
+
 void ConsoleApplication::showVersion() {
-    qcout << ConsoleApplication::applicationName() << endl;
-    qcout << ConsoleApplication::applicationVersion() << endl;
+    qcout << ConsoleApplication::applicationName() << " " << ConsoleApplication::applicationVersion() << endl;
     ::exit(EXIT_SUCCESS);
+}
+
+void ConsoleApplication::showHelp() {
+    parser_.showHelp(EXIT_SUCCESS);
 }
 
 bool ConsoleApplication::notify(QObject *o, QEvent *e) {
