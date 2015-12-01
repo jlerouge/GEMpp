@@ -32,6 +32,12 @@ class DLL_EXPORT ConsoleApplication : public QCoreApplication {
         static void setApplicationDescription(const QString &description);
 
         /**
+         * @brief Appends this description to the overall description of the application.
+         * @param description the description
+         */
+        static void appendApplicationDescription(const QString &description);
+
+        /**
          * @brief Returns the description of the application.
          * @return the description
          */

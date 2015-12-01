@@ -4,12 +4,18 @@ QCommandLineParser ConsoleApplication::parser_;
 
 ConsoleApplication::ConsoleApplication(int &argc, char **argv) : QCoreApplication(argc, argv) {
     setApplicationVersion(QString("%1 (build : %2 @ %3)").arg(GEMPP_VERSION, __DATE__, __TIME__));
+    setOrganizationName(ORGANIZATION_NAME);
+    setApplicationName(APPLICATION_NAME);
 }
 
 ConsoleApplication::~ConsoleApplication() {}
 
 void ConsoleApplication::setApplicationDescription(const QString &description) {
     parser_.setApplicationDescription(description);
+}
+
+void ConsoleApplication::appendApplicationDescription(const QString &description) {
+    parser_.setApplicationDescription(parser_.applicationDescription() + description);
 }
 
 QString ConsoleApplication::applicationDescription() {

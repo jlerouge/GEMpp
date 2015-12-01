@@ -5,6 +5,7 @@ QT += core xml gui widgets opengl
 LIBS += -L$$OUTLIB -lQgar$$LIBMODE
 INCLUDEPATH += $$ROOT/dependencies/QGar/
 HEADERS += \
+    Application/ApplicationFactory.h \
     Application/ConsoleApplication.h \
     Application/GUIApplication.h \
     Application/MatchingApplication.h \
@@ -69,10 +70,10 @@ HEADERS += \
     Formulation/Formulation.h \
     Formulation/GED.h \
     Formulation/LinearGED.h \
-    Formulation/SubIso.h \
-    Formulation/ExactSubIso.h \
-    Formulation/ErrorTolSubIso.h \
-    Formulation/SubTolSubIso.h \
+    Formulation/SubgraphMatching.h \
+    Formulation/SubgraphIsomorphism.h \
+    Formulation/MCSM.h \
+    Formulation/STSM.h \
     Formulation/Solution.h \
     Formulation/SolutionList.h \
     Solver/Configuration.h \
@@ -81,6 +82,7 @@ HEADERS += \
     Solver/SolverFactory.h \
     Solver/PluginLoader.h
 SOURCES += \
+    Application/ApplicationFactory.cpp \
     Application/ConsoleApplication.cpp \
     Application/GUIApplication.cpp \
     Application/MatchingApplication.cpp \
@@ -138,10 +140,10 @@ SOURCES += \
     Formulation/Formulation.cpp \
     Formulation/GED.cpp \
     Formulation/LinearGED.cpp \
-    Formulation/SubIso.cpp \
-    Formulation/ExactSubIso.cpp \
-    Formulation/ErrorTolSubIso.cpp \
-    Formulation/SubTolSubIso.cpp \
+    Formulation/SubgraphMatching.cpp \
+    Formulation/SubgraphIsomorphism.cpp \
+    Formulation/MCSM.cpp \
+    Formulation/STSM.cpp \
     Formulation/Solution.cpp \
     Formulation/SolutionList.cpp \
     Solver/Configuration.cpp \

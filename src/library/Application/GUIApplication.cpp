@@ -2,7 +2,10 @@
 
 QString GUIApplication::applicationDescription_;
 
-GUIApplication::GUIApplication(int &argc, char **argv) : QApplication(argc, argv) {}
+GUIApplication::GUIApplication(int &argc, char **argv) : QApplication(argc, argv) {
+    setOrganizationName(ORGANIZATION_NAME);
+    setApplicationName(APPLICATION_NAME);
+}
 
 GUIApplication::~GUIApplication() {}
 

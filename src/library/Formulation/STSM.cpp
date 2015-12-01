@@ -1,15 +1,15 @@
-#include "SubTolSubIso.h"
+#include "STSM.h"
 
-SubstitutionTolerantSubgraphIsomorphism::SubstitutionTolerantSubgraphIsomorphism(Problem *pb, double up, bool induced) : Formulation(pb, induced) {
+SubstitutionTolerantSubgraphMatching::SubstitutionTolerantSubgraphMatching(Problem *pb, double up, bool induced) : Formulation(pb, induced) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init(up);
 }
 
-SubstitutionTolerantSubgraphIsomorphism::~SubstitutionTolerantSubgraphIsomorphism() {
+SubstitutionTolerantSubgraphMatching::~SubstitutionTolerantSubgraphMatching() {
     delete lp_;
 }
 
-void SubstitutionTolerantSubgraphIsomorphism::restrictProblem(double up) {
+void SubstitutionTolerantSubgraphMatching::restrictProblem(double up) {
     if(up < 1) {
         for(auto row : x_variables)
             for(auto v : row)
@@ -37,8 +37,8 @@ void SubstitutionTolerantSubgraphIsomorphism::restrictProblem(double up) {
         }
 
         for(ij=0; ij < nEP; ++ij) {
-            i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-            j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+            i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+            j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
             for(kl=0; kl < nET; ++kl) {
                 k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
                 l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
@@ -57,7 +57,7 @@ void SubstitutionTolerantSubgraphIsomorphism::restrictProblem(double up) {
     }
 }
 
-void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
+void SubstitutionTolerantSubgraphMatching::initConstraints() {
     for(i=0; i < nVP; ++i)
         *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::EQUAL, 1.0);
 
@@ -69,8 +69,8 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
 
     // (F1)
     //    for(ij=0; ij < nEP; ++ij) {
-    //        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-    //        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+    //        i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+    //        j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
     //        for(kl=0; kl < nET; ++kl) {
     //            if(y_variables.getElement(ij, kl)->isActive()) {
     //                k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
@@ -93,8 +93,8 @@ void SubstitutionTolerantSubgraphIsomorphism::initConstraints() {
     // (F2)
     LinearExpression *e1, *e2;
     for(ij=0; ij < nEP; ++ij) {
-        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+        i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+        j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
         for(k=0; k < nVT; ++k) {
             e1 = new LinearExpression();
             e2 = new LinearExpression();

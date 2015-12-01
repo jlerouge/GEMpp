@@ -50,12 +50,12 @@ Program *Formulation::getProgram() {
 }
 
 void Formulation::init(double up) {
-    nVP = pb_->getPattern()->getVertexCount();
+    nVP = pb_->getQuery()->getVertexCount();
     nVT = pb_->getTarget()->getVertexCount();
-    nEP = pb_->getPattern()->getEdgeCount();
+    nEP = pb_->getQuery()->getEdgeCount();
     nET = pb_->getTarget()->getEdgeCount();
     i = j = k = l = ij = kl = 0;
-    isDirected = (pb_->getPattern()->getType() == Graph::DIRECTED);
+    isDirected = (pb_->getQuery()->getType() == Graph::DIRECTED);
     initVariables();
     initCosts();
     restrictProblem(up);

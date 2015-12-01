@@ -36,7 +36,7 @@ MatchingApplication::~MatchingApplication() {
 void MatchingApplication::finished(Problem *pb, double objective) {
     if(!matrix_)
         Exception("The objective matrix must be initialized before updating.");
-    matrix_->setElement(pb->getPattern()->getIndex(), pb->getTarget()->getIndex(), objective);
+    matrix_->setElement(pb->getQuery()->getIndex(), pb->getTarget()->getIndex(), objective);
     delete pb;
 
     if(++finishedCount_ < totalCount_) {
@@ -239,7 +239,7 @@ void MatchingApplication::initConfiguration() {
             break;
         case Problem::SUBGRAPH:
             if(isOptionSet("tolerance"))
-                cfg_->subMethod = SubgraphIsomorphism::fromName(optionValue("tolerance"));
+                cfg_->subMethod = SubgraphMatching::fromName(optionValue("tolerance"));
             cfg_->induced = isOptionSet("induced");
             break;
         default:

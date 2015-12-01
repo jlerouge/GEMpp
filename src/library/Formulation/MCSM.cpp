@@ -1,21 +1,21 @@
-#include "ErrorTolSubIso.h"
+#include "MCSM.h"
 
-ErrorTolerantSubgraphIsomorphism::ErrorTolerantSubgraphIsomorphism(Problem *pb, double up, bool induced) : Formulation(pb, induced) {
+MinimumCostSubgraphMatching::MinimumCostSubgraphMatching(Problem *pb, double up, bool induced) : Formulation(pb, induced) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init(up);
 }
 
-void ErrorTolerantSubgraphIsomorphism::initCosts() {
-    SubgraphIsomorphism::initCosts();
+void MinimumCostSubgraphMatching::initCosts() {
+    SubgraphMatching::initCosts();
     for(i=0; i < nVP; ++i)
         for(k=0; k < nVT; ++k)
-            x_costs.addElement(i, k, -pb_->getPattern()->getVertex(i)->getCost());
+            x_costs.addElement(i, k, -pb_->getQuery()->getVertex(i)->getCost());
     for(ij=0; ij < nEP; ++ij)
         for(kl=0; kl < nET; ++kl)
-            y_costs.addElement(ij, kl, -pb_->getPattern()->getEdge(ij)->getCost());
+            y_costs.addElement(ij, kl, -pb_->getQuery()->getEdge(ij)->getCost());
 }
 
-void ErrorTolerantSubgraphIsomorphism::initConstraints() {
+void MinimumCostSubgraphMatching::initConstraints() {
     for(i=0; i < nVP; ++i)
         *lp_ += new LinearConstraint(LinearExpression::sum(x_variables.getRow(i)), LinearConstraint::LESS_EQ, 1.0);
 
@@ -27,8 +27,8 @@ void ErrorTolerantSubgraphIsomorphism::initConstraints() {
 
     LinearExpression *e1, *e2;
     for(ij=0; ij < nEP; ++ij) {
-        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+        i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+        j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
         for(k=0; k < nVT; ++k) {
             e1 = new LinearExpression();
             e2 = new LinearExpression();
@@ -66,15 +66,15 @@ void ErrorTolerantSubgraphIsomorphism::initConstraints() {
     }
 }
 
-void ErrorTolerantSubgraphIsomorphism::initObjective() {
-    SubgraphIsomorphism::initObjective();
+void MinimumCostSubgraphMatching::initObjective() {
+    SubgraphMatching::initObjective();
 
     // Constant part of the objective
     double c = 0.0;
     for(i=0; i < nVP; ++i)
-        c += pb_->getPattern()->getVertex(i)->getCost();
+        c += pb_->getQuery()->getVertex(i)->getCost();
     for(ij=0; ij < nEP; ++ij)
-        c += pb_->getPattern()->getEdge(ij)->getCost();
+        c += pb_->getQuery()->getEdge(ij)->getCost();
 
     lp_->getObjective()->addConst(c);
 }

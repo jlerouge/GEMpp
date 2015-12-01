@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 
     private slots:
         void distance();
-        void isomorphism();
+        void matching();
         void compute(Problem *pb, Configuration *cfg);
 
     private:
@@ -31,16 +31,16 @@ class MainWindow : public QMainWindow
         void writeSettings();
 
         Matcher *matcher;
-        QGraphWidget *viewPattern;
+        QGraphWidget *viewQuery;
         QGraphWidget *viewTarget;
 
         QMenu *fileMenu;
         QMenu *computeMenu;
         QMenu *helpMenu;
-        QAction *openPatternAct;
+        QAction *openQueryAct;
         QAction *openTargetAct;
         QAction *graphEditDistanceAct;
-        QAction *subgraphIsomorphismAct;
+        QAction *subgraphMatchingAct;
         QAction *exitAct;
         QAction *aboutAct;
         QAction *aboutQtAct;

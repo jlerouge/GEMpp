@@ -4,7 +4,7 @@
 #include "Core/ICleanable.h"
 #include "Model/Problem.h"
 #include "Formulation/GED.h"
-#include "Formulation/SubIso.h"
+#include "Formulation/SubgraphMatching.h"
 
 class DLL_EXPORT Configuration : virtual public IPrintable, virtual public ICleanable {
     public:
@@ -29,7 +29,7 @@ class DLL_EXPORT Configuration : virtual public IPrintable, virtual public IClea
         Formulation::CutMethod cutMethod;
 
         Problem::Type matchingType;
-        SubgraphIsomorphism::Method subMethod;
+        SubgraphMatching::Method subMethod;
         bool induced;
         GraphEditDistance::Method gedMethod;
 

@@ -22,4 +22,13 @@
 /** @brief The time a notification message will be displayed in the GUI before it disappear. */
 #define MESSAGE_TIMEOUT 3000
 
+/** @brief The name of the organization developing the application */
+#define ORGANIZATION_NAME "LITIS"
+
+/** @brief The name of the application */
+#define APPLICATION_NAME "GEM++"
+
+/** @brief The e-mail of the developers / owners */
+#define CONTACT_EMAIL "gem-contact@litislab.fr"
+
 #endif /* GEMPP_CONSTANTS_H */

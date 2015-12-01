@@ -2,17 +2,17 @@
 
 const char *Problem::typeName[Problem::COUNT] = {
     "none",
-    "subgraph isomorphism",
+    "subgraph matching",
     "graph edit distance"
 };
 
-Problem::Type Problem::fromName(QString name) {
-    for(Type t = (Type)0; t < COUNT; t = (Type)((int)t + 1))
-        if(QString(typeName[t]).startsWith(name, Qt::CaseInsensitive))
-            return t;
-    Exception(QString("Problem type '%1' not recognized, please use n(one) or u(ndirected).").arg(name));
-    return COUNT;
-}
+//Problem::Type Problem::fromName(QString name) {
+//    for(Type t = (Type)0; t < COUNT; t = (Type)((int)t + 1))
+//        if(QString(typeName[t]).startsWith(name, Qt::CaseInsensitive))
+//            return t;
+//    Exception(QString("Problem type '%1' not recognized, please use n(one) or u(ndirected).").arg(name));
+//    return COUNT;
+//}
 
 QString Problem::toName(Type type) {
     return typeName[type];
@@ -58,7 +58,7 @@ void Problem::print(Printer *p) {
     p->dump("</problem>");
 }
 
-Graph *Problem::getPattern() const {
+Graph *Problem::getQuery() const {
     return pattern_;
 }
 
@@ -66,12 +66,12 @@ Graph *Problem::getTarget() const {
     return target_;
 }
 
-double Problem::getCost(int iPattern, int iTarget, GraphElement::Type type) const {
+double Problem::getCost(int iQuery, int iTarget, GraphElement::Type type) const {
     switch(type) {
         case GraphElement::VERTEX:
-            return vCosts_.getElement(iPattern, iTarget);
+            return vCosts_.getElement(iQuery, iTarget);
         case GraphElement::EDGE:
-            return eCosts_.getElement(iPattern, iTarget);
+            return eCosts_.getElement(iQuery, iTarget);
         default:
             return 0;
     }
@@ -79,13 +79,13 @@ double Problem::getCost(int iPattern, int iTarget, GraphElement::Type type) cons
     return 0;
 }
 
-void Problem::addCost(int iPattern, int iTarget, double value, GraphElement::Type type) {
+void Problem::addCost(int iQuery, int iTarget, double value, GraphElement::Type type) {
     switch(type) {
         case GraphElement::VERTEX:
-            vCosts_.addElement(iPattern, iTarget, value);
+            vCosts_.addElement(iQuery, iTarget, value);
             break;
         case GraphElement::EDGE:
-            eCosts_.addElement(iPattern, iTarget, value);
+            eCosts_.addElement(iQuery, iTarget, value);
             break;
         default:
             break;

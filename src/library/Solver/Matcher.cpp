@@ -68,7 +68,7 @@ void Matcher::run() {
 
     // Variables declaration
     GraphEditDistance *ged = 0;
-    SubgraphIsomorphism *subiso = 0;
+    SubgraphMatching *sm = 0;
     Formulation *f = 0;
     SolutionList *sl = 0;
 
@@ -89,19 +89,19 @@ void Matcher::run() {
             break;
         case Problem::SUBGRAPH:
             switch(cfg_->subMethod) {
-                case SubgraphIsomorphism::EXACT:
-                    subiso = new ExactSubgraphIsomorphism(pb_, cfg_->induced);
+                case SubgraphMatching::EXACT:
+                    sm = new SubgraphIsomorphism(pb_, cfg_->induced);
                     break;
-                case SubgraphIsomorphism::LABEL:
-                    subiso = new SubstitutionTolerantSubgraphIsomorphism(pb_, cfg_->upperbound, cfg_->induced);
+                case SubgraphMatching::LABEL:
+                    sm = new SubstitutionTolerantSubgraphMatching(pb_, cfg_->upperbound, cfg_->induced);
                     break;
-                case SubgraphIsomorphism::TOPOLOGY:
-                    subiso = new ErrorTolerantSubgraphIsomorphism(pb_, cfg_->upperbound, cfg_->induced);
+                case SubgraphMatching::TOPOLOGY:
+                    sm = new MinimumCostSubgraphMatching(pb_, cfg_->upperbound, cfg_->induced);
                     break;
                 default:
                     break;
             }
-            f = (Formulation *) subiso;
+            f = (Formulation *) sm;
             break;
         case Problem::NONE:
             break;
@@ -140,7 +140,7 @@ void Matcher::run() {
         if(!cfg_->solution.isEmpty()) {
             QString filename = cfg_->solution;
             if(!QString::compare(filename, GEMPP_AUTO))
-                filename = QString("%1_%2.sol").arg(pb_->getPattern()->getID(), pb_->getTarget()->getID());
+                filename = QString("%1_%2.sol").arg(pb_->getQuery()->getID(), pb_->getTarget()->getID());
             if(!cfg_->outputDir.isEmpty())
                 filename = cfg_->outputDir + "/" + filename;
             sl->save(filename);
@@ -149,7 +149,7 @@ void Matcher::run() {
         if(!cfg_->program.isEmpty()) {
             QString filename = cfg_->program;
             if(!QString::compare(filename, GEMPP_AUTO))
-                filename = QString("%1_%2.lp").arg(pb_->getPattern()->getID(), pb_->getTarget()->getID());
+                filename = QString("%1_%2.lp").arg(pb_->getQuery()->getID(), pb_->getTarget()->getID());
             if(!cfg_->outputDir.isEmpty())
                 filename = cfg_->outputDir + "/" + filename;
             f->getProgram()->save(filename);
@@ -172,7 +172,7 @@ void Matcher::run() {
                     delete ged;
                     break;
                 case Problem::SUBGRAPH:
-                    delete subiso;
+                    delete sm;
                     break;
                 case Problem::NONE:
                     break;
@@ -189,7 +189,7 @@ void Matcher::run() {
 
 void Matcher::initBipartiteCosts() {
     int nVP, nVT, i, k;
-    nVP = pb_->getPattern()->getVertexCount();
+    nVP = pb_->getQuery()->getVertexCount();
     nVT = pb_->getTarget()->getVertexCount();
 
     BipartiteEdges *bipe;
@@ -203,7 +203,7 @@ void Matcher::initBipartiteCosts() {
     }
     Vertex *v;
     for(i=0; i < nVP; ++i) {
-        v = pb_->getPattern()->getVertex(i);
+        v = pb_->getQuery()->getVertex(i);
         for(auto e : v->getEdges(Vertex::EDGE_IN_OUT))
             v->setCost(v->getCost()+e->getCost());
     }

@@ -27,7 +27,7 @@ void BipartiteGraphMatching::initObjective() {
     // Constant part of the objective
     double c = 0;
     for(i=0; i < nVP; ++i)
-        c += pb_->getPattern()->getVertex(i)->getCost();
+        c += pb_->getQuery()->getVertex(i)->getCost();
     for(k=0; k < nVT; ++k)
         c += pb_->getTarget()->getVertex(k)->getCost();
 

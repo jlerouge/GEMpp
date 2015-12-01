@@ -21,7 +21,7 @@ void Configuration::clean() {
     number = 1;
 
     matchingType = Problem::NONE;
-    subMethod = SubgraphIsomorphism::TOPOLOGY;
+    subMethod = SubgraphMatching::TOPOLOGY;
     induced = false;
     gedMethod = GraphEditDistance::LINEAR;
 
@@ -56,7 +56,7 @@ void Configuration::print(Printer *p) {
             p->dump("gedMethod : "+GraphEditDistance::toName(gedMethod));
             break;
         case Problem::SUBGRAPH:
-            p->dump("subMethod : "+SubgraphIsomorphism::toName(subMethod));
+            p->dump("subMethod : "+SubgraphMatching::toName(subMethod));
             p->dump(QString("induced : %1").arg(induced));
             break;
         default:
@@ -69,8 +69,8 @@ void Configuration::print(Printer *p) {
 }
 
 bool Configuration::check() {
-    if((matchingType == Problem::SUBGRAPH) && (upperbound < 1.0) && (subMethod == SubgraphIsomorphism::EXACT))
-        Exception("GEM++ forbids upper-bound approximation with exact subgraph isomorphism.\n"
+    if((matchingType == Problem::SUBGRAPH) && (upperbound < 1.0) && (subMethod == SubgraphMatching::EXACT))
+        Exception("GEM++ forbids upper-bound approximation with subgraph isomorphism.\n"
                                "Please use substitution or error tolerant form instead.");
     return true;
 }

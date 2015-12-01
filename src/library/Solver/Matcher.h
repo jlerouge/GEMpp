@@ -9,8 +9,8 @@
 #include "Formulation/LinearGED.h"
 #include "Formulation/BipartiteGED.h"
 #include "Formulation/BipartiteEdges.h"
-#include "Formulation/ErrorTolSubIso.h"
-#include "Formulation/ExactSubIso.h"
+#include "Formulation/MCSM.h"
+#include "Formulation/SubgraphIsomorphism.h"
 #include "Formulation/SolutionList.h"
 
 class DLL_EXPORT Matcher : public QObject, virtual public QRunnable, virtual public ICleanable {

@@ -111,9 +111,9 @@ void QConfigurationDialog::init() {
         ogl->addWidget(induced, row++, 1);
 
         subMethod = new QComboBox(this);
-        for(int s = 0; s < SubgraphIsomorphism::COUNT; ++s)
-            subMethod->addItem(SubgraphIsomorphism::toName((SubgraphIsomorphism::Method)s), (SubgraphIsomorphism::Method)s);
-        subMethod->setCurrentIndex((int)SubgraphIsomorphism::TOPOLOGY);
+        for(int s = 0; s < SubgraphMatching::COUNT; ++s)
+            subMethod->addItem(SubgraphMatching::toName((SubgraphMatching::Method)s), (SubgraphMatching::Method)s);
+        subMethod->setCurrentIndex((int)SubgraphMatching::TOPOLOGY);
         ogl->addWidget(new QLabel("Tolerance : ", this), row, 0, Qt::AlignRight);
         ogl->addWidget(subMethod, row++, 1);
     } else if(pb->getType() == Problem::GED) {
@@ -168,8 +168,8 @@ void QConfigurationDialog::toggleMore() {
 }
 
 void QConfigurationDialog::initTables() {
-    Vertex *v = (pb->getPattern()->getVertexCount() > 0)? pb->getPattern()->getVertex(0) : 0;
-    Edge *e = (pb->getPattern()->getEdgeCount() > 0)? pb->getPattern()->getEdge(0) : 0;
+    Vertex *v = (pb->getQuery()->getVertexCount() > 0)? pb->getQuery()->getVertex(0) : 0;
+    Edge *e = (pb->getQuery()->getEdgeCount() > 0)? pb->getQuery()->getEdge(0) : 0;
     int nbAttr = (v ? v->getNumericAttributes().size() + v->getSymbolicAttributes().size() : 0) +
             (e ? e->getNumericAttributes().size() + e->getSymbolicAttributes().size() : 0) + 2; // +2 : constants
 
@@ -304,8 +304,8 @@ void QConfigurationDialog::initTables() {
 }
 
 void QConfigurationDialog::updateTables() {
-    Vertex *v = (pb->getPattern()->getVertexCount() > 0)? pb->getPattern()->getVertex(0) : 0;
-    Edge *e = (pb->getPattern()->getEdgeCount() > 0)? pb->getPattern()->getEdge(0) : 0;
+    Vertex *v = (pb->getQuery()->getVertexCount() > 0)? pb->getQuery()->getVertex(0) : 0;
+    Edge *e = (pb->getQuery()->getEdgeCount() > 0)? pb->getQuery()->getEdge(0) : 0;
 
     int row = 0;
     if(v) {
@@ -343,8 +343,8 @@ void QConfigurationDialog::updateTables() {
 }
 
 void QConfigurationDialog::updateWeights() {
-    Vertex *v = (pb->getPattern()->getVertexCount() > 0)? pb->getPattern()->getVertex(0) : 0;
-    Edge *e = (pb->getPattern()->getEdgeCount() > 0)? pb->getPattern()->getEdge(0) : 0;
+    Vertex *v = (pb->getQuery()->getVertexCount() > 0)? pb->getQuery()->getVertex(0) : 0;
+    Edge *e = (pb->getQuery()->getEdgeCount() > 0)? pb->getQuery()->getEdge(0) : 0;
     int row = 0;
     if(v) {
         QList<QString> vNumAttr = v->getNumericAttributes().keys();
@@ -432,7 +432,7 @@ void QConfigurationDialog::confirm() {
             break;
         case Problem::SUBGRAPH:
             cfg->induced = induced->isChecked();
-            cfg->subMethod = (SubgraphIsomorphism::Method)subMethod->currentData().toInt();
+            cfg->subMethod = (SubgraphMatching::Method)subMethod->currentData().toInt();
             break;
         default:
             break;

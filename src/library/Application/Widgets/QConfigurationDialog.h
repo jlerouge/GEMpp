@@ -5,7 +5,7 @@
 #include "QScienceSpinBox.h"
 #include "Solver/Solver.h"
 #include "Formulation/GED.h"
-#include "Formulation/SubIso.h"
+#include "Formulation/SubgraphMatching.h"
 #include "Model/WeightHash.h"
 
 class DLL_EXPORT QConfigurationDialog : public QDialog {

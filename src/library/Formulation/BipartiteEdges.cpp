@@ -2,7 +2,7 @@
 
 BipartiteEdges::BipartiteEdges(Problem *pb, int i, int k) : Formulation(pb) {
     lp_ = new LinearProgram(Program::MINIMIZE);
-    vi_ = pb->getPattern()->getVertex(i);
+    vi_ = pb->getQuery()->getVertex(i);
     vk_ = pb->getTarget()->getVertex(k);
     init();
 }

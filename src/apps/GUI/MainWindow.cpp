@@ -9,10 +9,10 @@ MainWindow::MainWindow() {
     QGridLayout *gridLayout = new QGridLayout();
     gridLayout->setHorizontalSpacing(8);
 
-    viewPattern = new QGraphWidget(widget, QGraphWidget::PATTERN);
+    viewQuery = new QGraphWidget(widget, QGraphWidget::PATTERN);
     viewTarget = new QGraphWidget(widget, QGraphWidget::TARGET);
 
-    gridLayout->addWidget(viewPattern, 0, 0);
+    gridLayout->addWidget(viewQuery, 0, 0);
     gridLayout->addWidget(viewTarget, 0, 1);
     widget->setLayout(gridLayout);
     setCentralWidget(widget);
@@ -25,17 +25,17 @@ MainWindow::MainWindow() {
 
 void MainWindow::closeEvent(QCloseEvent *e) {
     Q_UNUSED(e);
-    delete viewPattern;
+    delete viewQuery;
     delete viewTarget;
     delete matcher; // FIXME
     writeSettings();
 }
 
 void MainWindow::createActions() {
-    openPatternAct = new QAction(QIcon(":/images/open1.png"), tr("Open &pattern graph"), this);
-    openPatternAct->setShortcut(QKeySequence(tr("Ctrl+P")));
-    openPatternAct->setStatusTip(tr("Load the pattern graph from an existing file"));
-    connect(openPatternAct, SIGNAL(triggered()), viewPattern, SLOT(open()));
+    openQueryAct = new QAction(QIcon(":/images/open1.png"), tr("Open &query graph"), this);
+    openQueryAct->setShortcut(QKeySequence(tr("Ctrl+P")));
+    openQueryAct->setStatusTip(tr("Load the query graph from an existing file"));
+    connect(openQueryAct, SIGNAL(triggered()), viewQuery, SLOT(open()));
 
     openTargetAct = new QAction(QIcon(":/images/open2.png"), tr("Open &target graph"), this);
     openTargetAct->setShortcut(QKeySequence(tr("Ctrl+T")));
@@ -47,10 +47,10 @@ void MainWindow::createActions() {
     graphEditDistanceAct->setStatusTip(tr("Computes the graph edit distance between the two graphs"));
     connect(graphEditDistanceAct, SIGNAL(triggered()), this, SLOT(distance()));
 
-    subgraphIsomorphismAct = new QAction(QIcon(":/images/compute.png"), tr("Subgraph isomorphism"), this);
-    subgraphIsomorphismAct->setShortcut(QKeySequence(tr("Ctrl+I")));
-    subgraphIsomorphismAct->setStatusTip(tr("Look for an isomorphism between the pattern and a subgraph of the target"));
-    connect(subgraphIsomorphismAct, SIGNAL(triggered()), this, SLOT(isomorphism()));
+    subgraphMatchingAct = new QAction(QIcon(":/images/compute.png"), tr("Subgraph matching"), this);
+    subgraphMatchingAct->setShortcut(QKeySequence(tr("Ctrl+I")));
+    subgraphMatchingAct->setStatusTip(tr("Look for a matching between the query and a subgraph of the target"));
+    connect(subgraphMatchingAct, SIGNAL(triggered()), this, SLOT(matching()));
 
     exitAct = new QAction(QIcon(":/images/exit.png"), tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
@@ -69,13 +69,13 @@ void MainWindow::createActions() {
 
 void MainWindow::createMenus() {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(openPatternAct);
+    fileMenu->addAction(openQueryAct);
     fileMenu->addAction(openTargetAct);
     fileMenu->addAction(exitAct);
 
     computeMenu = menuBar()->addMenu(tr("&Compute"));
     computeMenu->addAction(graphEditDistanceAct);
-    computeMenu->addAction(subgraphIsomorphismAct);
+    computeMenu->addAction(subgraphMatchingAct);
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(aboutAct);
@@ -84,37 +84,37 @@ void MainWindow::createMenus() {
 
 void MainWindow::createToolbar() {
     QToolBar *toolbar = new QToolBar("Outils", this);
-    toolbar->addAction(openPatternAct);
+    toolbar->addAction(openQueryAct);
     toolbar->addAction(openTargetAct);
     addToolBar(Qt::TopToolBarArea, toolbar);
 }
 
 void MainWindow::distance() {
-    if(!viewPattern->getGraph() || !viewTarget->getGraph())
-        Exception("You must load pattern and target graphs first.");
-    Problem *pb = new Problem(Problem::GED, viewPattern->getGraph(), viewTarget->getGraph());
+    if(!viewQuery->getGraph() || !viewTarget->getGraph())
+        Exception("You must load query and target graphs first.");
+    Problem *pb = new Problem(Problem::GED, viewQuery->getGraph(), viewTarget->getGraph());
     QConfigurationDialog cd(pb, "Graph Edit Distance");
     connect(&cd, SIGNAL(compute(Problem*,Configuration*)), this, SLOT(compute(Problem*,Configuration*)));
     cd.exec();
     activateWindow();
 }
 
-void MainWindow::isomorphism() {
-    if(!viewPattern->getGraph() || !viewTarget->getGraph())
-        Exception("You must load pattern and target graphs first.");
+void MainWindow::matching() {
+    if(!viewQuery->getGraph() || !viewTarget->getGraph())
+        Exception("You must load query and target graphs first.");
 
-    if(!viewPattern->getSubgraph()) {
+    if(!viewQuery->getSubgraph()) {
         if (QMessageBox::Yes == QMessageBox(QMessageBox::Information, "Query graph",
                                             "Would you like to use the complete\n"
-                                            "pattern graph for your query ?",
+                                            "query graph for your query ?",
                                             QMessageBox::Yes|QMessageBox::No).exec()) {
-            viewPattern->selectSubgraph(0, -1);
+            viewQuery->selectSubgraph(0, -1);
         } else
-            Exception("You must select a subgraph on the pattern first.");
+            Exception("You must select a subgraph on the query first.");
     }
 
-    Problem *pb = new Problem(Problem::SUBGRAPH, viewPattern->getSubgraph(), viewTarget->getGraph());
-    QConfigurationDialog cd(pb, "Subgraph Isomorphism");
+    Problem *pb = new Problem(Problem::SUBGRAPH, viewQuery->getSubgraph(), viewTarget->getGraph());
+    QConfigurationDialog cd(pb, "Subgraph matching");
     connect(&cd, SIGNAL(compute(Problem*,Configuration*)), this, SLOT(compute(Problem*,Configuration*)));
     cd.exec();
     activateWindow();

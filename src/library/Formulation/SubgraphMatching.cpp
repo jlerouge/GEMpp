@@ -1,12 +1,12 @@
 #include "SubIso.h"
 
-const char *SubgraphIsomorphism::methodName[SubgraphIsomorphism::COUNT] = {
+const char *SubgraphMatching::methodName[SubgraphMatching::COUNT] = {
     "Exact",
     "Label",
     "Topology"
 };
 
-SubgraphIsomorphism::Method SubgraphIsomorphism::fromName(QString name) {
+SubgraphMatching::Method SubgraphMatching::fromName(QString name) {
     for(Method m = (Method)0; m < COUNT; m = (Method)((int)m + 1))
         if(QString(methodName[m]).startsWith(name, Qt::CaseInsensitive))
             return m;
@@ -14,11 +14,11 @@ SubgraphIsomorphism::Method SubgraphIsomorphism::fromName(QString name) {
     return COUNT;
 }
 
-QString SubgraphIsomorphism::toName(Method method) {
+QString SubgraphMatching::toName(Method method) {
     return methodName[method];
 }
 
-SubgraphIsomorphism::~SubgraphIsomorphism() {
+SubgraphMatching::~SubgraphMatching() {
     for(auto v : x_variables)
         for(auto it : v)
             delete it;
@@ -27,12 +27,12 @@ SubgraphIsomorphism::~SubgraphIsomorphism() {
             delete it;
 }
 
-void SubgraphIsomorphism::initVariables() {
+void SubgraphMatching::initVariables() {
     QString id;
     x_variables = Matrix<Variable*>(nVP, nVT);
     for(i=0; i < nVP; ++i) {
         for(k=0; k < nVT; ++k) {
-            //id = QString("x_%1,%2").arg(pb_->getPattern()->getVertex(i)->getIndex()).arg(pb_->getTarget()->getVertex(k)->getIndex());
+            //id = QString("x_%1,%2").arg(pb_->getQuery()->getVertex(i)->getIndex()).arg(pb_->getTarget()->getVertex(k)->getIndex());
             id = QString("x_%1,%2").arg(i).arg(k);
             x_variables.setElement(i, k, new Variable(id));
         }
@@ -40,14 +40,14 @@ void SubgraphIsomorphism::initVariables() {
     y_variables = Matrix<Variable*>(nEP, nET);
     for(ij=0; ij < nEP; ++ij) {
         for(kl=0; kl < nET; ++kl) {
-            //id = QString("y_%1,%2").arg(pb_->getPattern()->getEdge(ij)->getIndex()).arg(pb_->getTarget()->getEdge(kl)->getIndex());
+            //id = QString("y_%1,%2").arg(pb_->getQuery()->getEdge(ij)->getIndex()).arg(pb_->getTarget()->getEdge(kl)->getIndex());
             id = QString("y_%1,%2").arg(ij).arg(kl);
             y_variables.setElement(ij, kl, new Variable(id));
         }
     }
 }
 
-void SubgraphIsomorphism::initCosts() {
+void SubgraphMatching::initCosts() {
     x_costs = Matrix<double>(nVP, nVT);
     for(i=0; i < nVP; ++i)
         for(k=0; k < nVT; ++k)
@@ -58,7 +58,7 @@ void SubgraphIsomorphism::initCosts() {
             y_costs.setElement(ij, kl, pb_->getCost(ij, kl, GraphElement::EDGE));
 }
 
-void SubgraphIsomorphism::initObjective() {
+void SubgraphMatching::initObjective() {
     LinearExpression *exp = new LinearExpression();
     for(i=0; i < nVP; ++i)
         for(k=0; k < nVT; ++k)
@@ -71,7 +71,7 @@ void SubgraphIsomorphism::initObjective() {
     lp_->setObjective(exp);
 }
 
-void SubgraphIsomorphism::cut(Solution *sol, CutMethod cm) {
+void SubgraphMatching::cut(Solution *sol, CutMethod cm) {
     LinearConstraint *c;
     QList<Variable *> vars = sol->getVariables().keys();
     switch(cm) {

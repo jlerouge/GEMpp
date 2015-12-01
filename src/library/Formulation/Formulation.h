@@ -11,7 +11,7 @@ class Solution;
  * @brief The Formulation class represents the mathematical programming formulation used
  * to solve a graph matching problem.
  *
- * The formulation is dedicated to a particular problem (subgraph isomorphism, graph edit
+ * The formulation is dedicated to a particular problem (subgraph matching, graph edit
  * distance...), an thus generates a linear/quadratic program that can be used to solve it.
  *
  * @author J.Lerouge <julien.lerouge@litislab.fr>

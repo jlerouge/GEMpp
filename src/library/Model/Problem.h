@@ -12,23 +12,23 @@ class DLL_EXPORT Problem : virtual public IPrintable, virtual public ISaveable {
          */
         enum Type{
             NONE, /**< no matching performed */
-            SUBGRAPH, /**< subgraph isomorphism */
+            SUBGRAPH, /**< subgraph matching */
             GED, /**< graph edit distance */
             COUNT
         };
 
         static const char *typeName[COUNT];
         static QString toName(Type type);
-        static Type fromName(QString name);
+        //static Type fromName(QString name);
 
         Problem(Type t, const QString &pattern, const QString &target, const QString &substitution, const QString &creation);
         Problem(Type t, Graph *pattern, Graph *target, Weights *weights = 0);
         virtual ~Problem();
 
-        Graph *getPattern() const;
+        Graph *getQuery() const;
         Graph *getTarget() const;
-        double getCost(int iPattern, int iTarget, GraphElement::Type type) const;
-        void addCost(int iPattern, int iTarget, double value, GraphElement::Type type);
+        double getCost(int iQuery, int iTarget, GraphElement::Type type) const;
+        void addCost(int iQuery, int iTarget, double value, GraphElement::Type type);
         void computeCosts(Weights *weights);
         Type getType() const;
 

@@ -18,7 +18,7 @@ void LinearGraphEditDistance::initVariables() {
     y_variables = Matrix<Variable*>(nEP, nET);
     for(ij=0; ij < nEP; ++ij) {
         for(kl=0; kl < nET; ++kl) {
-            //id = QString("y_%1,%2").arg(pb_->getPattern()->getEdge(ij)->getIndex()).arg(pb_->getTarget()->getEdge(kl)->getIndex());
+            //id = QString("y_%1,%2").arg(pb_->getQuery()->getEdge(ij)->getIndex()).arg(pb_->getTarget()->getEdge(kl)->getIndex());
             id = QString("y_%1,%2").arg(ij).arg(kl);
             y_variables.setElement(ij, kl, new Variable(id));
         }
@@ -30,7 +30,7 @@ void LinearGraphEditDistance::initCosts() {
     y_costs = Matrix<double>(nEP, nET);
     for(ij=0; ij < nEP; ++ij)
         for(kl=0; kl < nET; ++kl)
-            y_costs.setElement(ij, kl, pb_->getCost(ij, kl, GraphElement::EDGE) - pb_->getPattern()->getEdge(ij)->getCost() - pb_->getTarget()->getEdge(kl)->getCost());
+            y_costs.setElement(ij, kl, pb_->getCost(ij, kl, GraphElement::EDGE) - pb_->getQuery()->getEdge(ij)->getCost() - pb_->getTarget()->getEdge(kl)->getCost());
 }
 
 void LinearGraphEditDistance::restrictProblem(double up) {
@@ -41,8 +41,8 @@ void LinearGraphEditDistance::restrictProblem(double up) {
                 v->activate();
 
         for(ij=0; ij < nEP; ++ij) {
-            i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-            j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+            i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+            j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
             for(kl=0; kl < nET; ++kl) {
                 k = pb_->getTarget()->getEdge(kl)->getOrigin()->getIndex();
                 l = pb_->getTarget()->getEdge(kl)->getTarget()->getIndex();
@@ -76,8 +76,8 @@ void LinearGraphEditDistance::initConstraints() {
 
     // (F1)
     //    for(ij=0; ij < nEP; ++ij) {
-    //        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-    //        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+    //        i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+    //        j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
     //        for(kl=0; kl < nET; ++kl) {
     //            // Adding a constraint is useless if y_ij,kl is inactive
     //            if(y_variables.getElement(ij, kl)->isActive()) {
@@ -101,8 +101,8 @@ void LinearGraphEditDistance::initConstraints() {
     // (F2)
     LinearExpression *e1, *e2;
     for(ij=0; ij < nEP; ++ij) {
-        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+        i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+        j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
         for(k=0; k < nVT; ++k) {
             e1 = new LinearExpression();
             e2 = new LinearExpression();
@@ -138,11 +138,11 @@ void LinearGraphEditDistance::initObjective() {
     // Constant part of the objective
     double c = 0;
     for(i=0; i < nVP; ++i)
-        c += pb_->getPattern()->getVertex(i)->getCost();
+        c += pb_->getQuery()->getVertex(i)->getCost();
     for(k=0; k < nVT; ++k)
         c += pb_->getTarget()->getVertex(k)->getCost();
     for(ij=0; ij < nEP; ++ij)
-        c += pb_->getPattern()->getEdge(ij)->getCost();
+        c += pb_->getQuery()->getEdge(ij)->getCost();
     for(kl=0; kl < nET; ++kl)
         c += pb_->getTarget()->getEdge(kl)->getCost();
 

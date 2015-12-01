@@ -126,12 +126,12 @@ void Solution::printSolution(Printer *p) {
                 p->unindent();
                 p->dump("</substitution>");
             }
-        if(x_variables_.size() < pb->getPattern()->getVertexCount() ||
+        if(x_variables_.size() < pb->getQuery()->getVertexCount() ||
                 ((x_variables_.size() < pb->getTarget()->getVertexCount()) &&
                  (formulation_->getProblem()->getType() != Problem::SUBGRAPH))) {
-            for(int i=0; i < pb->getPattern()->getVertexCount(); ++i)
+            for(int i=0; i < pb->getQuery()->getVertexCount(); ++i)
                 if(!x_variables_.contains(i)) {
-                    p->dump(QString("<insertion cost=\"%1\">").arg(pb->getPattern()->getVertex(i)->getCost()));
+                    p->dump(QString("<insertion cost=\"%1\">").arg(pb->getQuery()->getVertex(i)->getCost()));
                     p->indent();
                     p->dump(QString("<node type=\"query\" index=\"%1\"/>").arg(i));
                     p->unindent();
@@ -156,24 +156,24 @@ void Solution::printSolution(Printer *p) {
                 p->dump(QString("<substitution cost=\"%1\">").arg(pb->getCost(it.key(), it.value(), GraphElement::EDGE)));
                 p->indent();
                 p->dump(QString("<edge type=\"query\" from=\"%1\" to=\"%2\"/>")
-                        .arg(pb->getPattern()->getEdge(it.key())->getOrigin()->getIndex())
-                        .arg(pb->getPattern()->getEdge(it.key())->getTarget()->getIndex()));
+                        .arg(pb->getQuery()->getEdge(it.key())->getOrigin()->getIndex())
+                        .arg(pb->getQuery()->getEdge(it.key())->getTarget()->getIndex()));
                 p->dump(QString("<edge type=\"target\" from=\"%1\" to=\"%2\"/>")
                         .arg(pb->getTarget()->getEdge(it.value())->getOrigin()->getIndex())
                         .arg(pb->getTarget()->getEdge(it.value())->getTarget()->getIndex()));
                 p->unindent();
                 p->dump("</substitution>");
             }
-        if(y_variables_.size() < pb->getPattern()->getEdgeCount() ||
+        if(y_variables_.size() < pb->getQuery()->getEdgeCount() ||
                 ((y_variables_.size() < pb->getTarget()->getEdgeCount()) &&
                  (formulation_->getProblem()->getType() != Problem::SUBGRAPH))) {
-            for(int ij=0; ij < formulation_->getProblem()->getPattern()->getEdgeCount(); ++ij)
+            for(int ij=0; ij < formulation_->getProblem()->getQuery()->getEdgeCount(); ++ij)
                 if(!y_variables_.contains(ij)) {
-                    p->dump(QString("<insertion cost=\"%1\">").arg(pb->getPattern()->getEdge(ij)->getCost()));
+                    p->dump(QString("<insertion cost=\"%1\">").arg(pb->getQuery()->getEdge(ij)->getCost()));
                     p->indent();
                     p->dump(QString("<edge type=\"query\" from=\"%1\" to=\"%2\"/>")
-                            .arg(pb->getPattern()->getEdge(ij)->getOrigin()->getIndex())
-                            .arg(pb->getPattern()->getEdge(ij)->getTarget()->getIndex()));
+                            .arg(pb->getQuery()->getEdge(ij)->getOrigin()->getIndex())
+                            .arg(pb->getQuery()->getEdge(ij)->getTarget()->getIndex()));
                     p->unindent();
                     p->dump("</insertion>");
                 }

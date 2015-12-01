@@ -1,13 +1,13 @@
-#include "ExactSubIso.h"
+#include "SubgraphIsomorphism.h"
 
-ExactSubgraphIsomorphism::ExactSubgraphIsomorphism(Problem *pb, bool induced) : Formulation(pb, induced) {
+SubgraphIsomorphism::SubgraphIsomorphism(Problem *pb, bool induced) : Formulation(pb, induced) {
     lp_ = new LinearProgram(Program::MINIMIZE);
     init();
 }
 
-void ExactSubgraphIsomorphism::restrictProblem(double up) {
+void SubgraphIsomorphism::restrictProblem(double up) {
     if(up < 1)
-        Exception("Exact subgraph isomorphism does not handle upper-bound approximation nor column generation.");
+        Exception("Subgraph isomorphism does not handle upper-bound approximation nor column generation.");
 
     for(auto row : x_variables)
         for(auto v : row)
@@ -23,8 +23,8 @@ void ExactSubgraphIsomorphism::restrictProblem(double up) {
                 x_variables.getElement(i, k)->deactivate();
 
     for(ij=0; ij < nEP; ++ij) {
-        i = pb_->getPattern()->getEdge(ij)->getOrigin()->getIndex();
-        j = pb_->getPattern()->getEdge(ij)->getTarget()->getIndex();
+        i = pb_->getQuery()->getEdge(ij)->getOrigin()->getIndex();
+        j = pb_->getQuery()->getEdge(ij)->getTarget()->getIndex();
         for(kl=0; kl < nET; ++kl) {
             if(y_costs.getElement(ij, kl) > precision)
                 y_variables.getElement(ij, kl)->deactivate();

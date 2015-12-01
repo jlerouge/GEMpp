@@ -38,7 +38,7 @@ void GraphEditDistance::initCosts() {
     x_costs = Matrix<double>(nVP, nVT);
     for(i=0; i < nVP; ++i)
         for(k=0; k < nVT; ++k)
-            x_costs.setElement(i, k, pb_->getCost(i, k, GraphElement::VERTEX) - pb_->getPattern()->getVertex(i)->getCost() - pb_->getTarget()->getVertex(k)->getCost());
+            x_costs.setElement(i, k, pb_->getCost(i, k, GraphElement::VERTEX) - pb_->getQuery()->getVertex(i)->getCost() - pb_->getTarget()->getVertex(k)->getCost());
 }
 
 void GraphEditDistance::restrictProblem(double up) {
