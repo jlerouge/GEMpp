@@ -19,7 +19,7 @@ class DLL_EXPORT Problem : virtual public IPrintable, virtual public ISaveable {
 
         static const char *typeName[COUNT];
         static QString toName(Type type);
-        //static Type fromName(QString name);
+        static Type fromName(QString name);
 
         Problem(Type t, const QString &pattern, const QString &target, const QString &substitution, const QString &creation);
         Problem(Type t, Graph *pattern, Graph *target, Weights *weights = 0);

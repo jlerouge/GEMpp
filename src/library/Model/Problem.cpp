@@ -6,13 +6,13 @@ const char *Problem::typeName[Problem::COUNT] = {
     "graph edit distance"
 };
 
-//Problem::Type Problem::fromName(QString name) {
-//    for(Type t = (Type)0; t < COUNT; t = (Type)((int)t + 1))
-//        if(QString(typeName[t]).startsWith(name, Qt::CaseInsensitive))
-//            return t;
-//    Exception(QString("Problem type '%1' not recognized, please use n(one) or u(ndirected).").arg(name));
-//    return COUNT;
-//}
+Problem::Type Problem::fromName(QString name) {
+    for(Type t = (Type)0; t < COUNT; t = (Type)((int)t + 1))
+        if(QString(typeName[t]).contains(name, Qt::CaseInsensitive))
+            return t;
+    Exception(QString("Problem type '%1' not recognized, please use sub(graph) or dist(ance).").arg(name));
+    return COUNT;
+}
 
 QString Problem::toName(Type type) {
     return typeName[type];
