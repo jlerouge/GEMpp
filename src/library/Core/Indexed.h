@@ -51,4 +51,4 @@ class DLL_EXPORT Indexed {
         int index_;
 };
 
-#endif /*INDEXED_H*/
+#endif /* GEMPP_INDEXED_H */

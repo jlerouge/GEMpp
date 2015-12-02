@@ -109,4 +109,4 @@ class DLL_EXPORT Printer {
         int indentLevel_;
 };
 
-#endif /*PRINTER_H*/
+#endif /* GEMPP_PRINTER_H */

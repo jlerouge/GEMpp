@@ -51,4 +51,4 @@ class DLL_EXPORT Identified
         QString id_;
 };
 
-#endif /*IDENTIFIED_H*/
+#endif /* GEMPP_IDENTIFIED_H */

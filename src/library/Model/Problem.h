@@ -44,4 +44,4 @@ class DLL_EXPORT Problem : virtual public IPrintable, virtual public ISaveable {
         bool deleteGraphs_;
 };
 
-#endif /*PROBLEM_H*/
+#endif /* GEMPP_PROBLEM_H */

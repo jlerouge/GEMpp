@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = Core GUI Distance Isomorphism MultiDistances MultiIsomorphisms #CostsLearning
+SUBDIRS = Core GUI Molecule #CostsLearning

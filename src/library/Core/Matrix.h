@@ -197,4 +197,4 @@ class DLL_EXPORT Matrix : public PrintableMatrix<T>, virtual public ISaveable {
         void save(const QString &filename) { FileUtils::save(this, filename); }
 };
 
-#endif /*MATRIX_H*/
+#endif /* GEMPP_MATRIX_H */

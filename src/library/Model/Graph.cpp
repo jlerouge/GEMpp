@@ -354,7 +354,7 @@ void Graph::fromGXL(const QString &filename) {
         attr = elem.firstChildElement("attr");
         while(!attr.isNull()) {
             attrType = attr.firstChildElement().tagName();
-            if(attrType.compare("integer", Qt::CaseInsensitive) == 0 ||
+            if(attrType.compare("int", Qt::CaseInsensitive) == 0 ||
                     attrType.compare("float", Qt::CaseInsensitive) == 0)
                 v->addNumericAttribute(attr.attribute("name"), attr.firstChildElement().text().toDouble());
             else if(attrType.compare("string", Qt::CaseInsensitive) == 0)
@@ -377,7 +377,7 @@ void Graph::fromGXL(const QString &filename) {
         attr = elem.firstChildElement("attr");
         while(!attr.isNull()) {
             attrType = attr.firstChildElement().tagName();
-            if(attrType.compare("integer", Qt::CaseInsensitive) == 0 ||
+            if(attrType.compare("int", Qt::CaseInsensitive) == 0 ||
                     attrType.compare("float", Qt::CaseInsensitive) == 0)
                 e->addNumericAttribute(attr.attribute("name"), attr.firstChildElement().text().toDouble());
             else if(attrType.compare("string", Qt::CaseInsensitive) == 0)

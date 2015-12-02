@@ -25,4 +25,4 @@ class DLL_EXPORT ICleanable {
         virtual void clean() = 0;
 };
 
-#endif /*ICLEANABLE_H*/
+#endif /* GEMPP_ICLEANABLE_H */

@@ -25,4 +25,4 @@ class DLL_EXPORT ISaveable {
         virtual void save(const QString &filename) = 0;
 };
 
-#endif /*ISAVEABLE_H*/
+#endif /* GEMPP_ISAVEABLE_H */
