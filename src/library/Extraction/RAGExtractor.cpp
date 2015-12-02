@@ -67,8 +67,8 @@ void RegionAdjacencyGraphExtractor::performExtraction() {
             // Zernike invariant moments
             QList<double> moments = zernike2D(CCs.last(), excfg_->zernikeOrder);
             for(int m=0; m<moments.size(); ++m)
-                v->addNumericAttribute("zm"+QString::number(m).rightJustified(2, '0'), moments[m]);
-            v->addNumericAttribute("area", getArea(CCs.last()));
+                v->addAttribute("zm"+QString::number(m).rightJustified(2, '0'), QMetaType::Double, moments[m]);
+            v->addAttribute("area", QMetaType::Int, getArea(CCs.last()));
             graph_->addVertex(v);
 
             // Metadata about the vertex :
@@ -79,7 +79,7 @@ void RegionAdjacencyGraphExtractor::performExtraction() {
             QPoint centroid = getCentroid(CCs.last(), BBs.last().accessTopLeft());
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "centroid_x", centroid.x()-excfg_->tolerance);
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "centroid_y", centroid.y()-excfg_->tolerance);
-            graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "area", v->getNumericAttribute("area"));
+            graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "area", v->getAttribute("area")->getValue().toInt());
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "x", BBs.last().xTopLeft()-excfg_->tolerance);
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "y", BBs.last().yTopLeft()-excfg_->tolerance);
             graph_->getMetadata()->setAttribute(GraphElement::VERTEX, v->getIndex(), "width", BBs.last().width());
@@ -112,8 +112,8 @@ void RegionAdjacencyGraphExtractor::performExtraction() {
                 area2 = graph_->getMetadata()->getAttribute(GraphElement::VERTEX, target->getIndex(), "area").toDouble();
 
                 // Relative position and area
-                e->addNumericAttribute("dist", sqrt(((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1))/(area1 + area2)));
-                e->addNumericAttribute("areaRatio", min(area1, area2)/max(area1, area2));
+                e->addAttribute("dist", QMetaType::Double, sqrt(((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1))/(area1 + area2)));
+                e->addAttribute("areaRatio", QMetaType::Double, min(area1, area2)/max(area1, area2));
                 graph_->addEdge(e);
             }
         }

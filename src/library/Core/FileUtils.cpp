@@ -41,6 +41,10 @@ void FileUtils::close(QFile &file) {
     file.close();
 }
 
+QString FileUtils::getExtension(const QString &filename) {
+    return QFileInfo(filename).suffix();
+}
+
 void FileUtils::checkExtension(const QString &filename, const QString &extension) {
     if(QFileInfo(filename).suffix().compare(extension, Qt::CaseInsensitive) != 0)
         Exception(QString("The file \"%1\" is not a *.%2 file.").arg(filename,extension));

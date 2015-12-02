@@ -32,4 +32,4 @@ class DLL_EXPORT WeightHash : virtual public QHash<QString, Weight *> {
         uint root_;
 };
 
-#endif /*WEIGHTS_H*/
+#endif /* GEMPP_WEIGHTHASH_H */

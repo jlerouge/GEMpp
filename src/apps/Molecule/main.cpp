@@ -24,7 +24,6 @@ int main(int argc, char **argv) {
         QString graphFilename = args[0];
         Graph *graph = new Graph(graphFilename);
         graph->save(FileUtils::changeExtension(graphFilename, "gml"));
-
     } catch (std::exception &e) {
         coreApp.error(e);
     }

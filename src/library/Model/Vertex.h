@@ -98,4 +98,4 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
         int parentIndex_;
 };
 
-#endif /*VERTEX_H*/
+#endif /* GEMPP_VERTEX_H */

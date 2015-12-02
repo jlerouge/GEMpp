@@ -1,20 +1,38 @@
 #include "Graph.h"
 
-const char *Graph::typeName[Graph::COUNT] = {
+const char *Graph::typeName[Graph::TYPE_COUNT] = {
     "directed",
     "undirected"
 };
 
-Graph::Type Graph::fromName(QString name) {
-    for(Type t = (Type)0; t < COUNT; t = (Type)((int)t + 1))
+Graph::Type Graph::toType(QString name) {
+    for(Type t = (Type)0; t < TYPE_COUNT; t = (Type)((int)t + 1))
         if(QString(typeName[t]).startsWith(name, Qt::CaseInsensitive))
             return t;
     Exception(QString("Graph type '%1' not recognized, please use d(irected) or u(ndirected).").arg(name));
-    return COUNT;
+    return TYPE_COUNT;
 }
 
 QString Graph::toName(Type type) {
     return typeName[type];
+}
+
+const char *Graph::formatName[Graph::FORMAT_COUNT] = {
+    "gml",
+    "gxl",
+    "xml"
+};
+
+Graph::Format Graph::toFormat(QString name) {
+    for(Format t = (Format)0; t < FORMAT_COUNT; t = (Format)((int)t + 1))
+        if(QString(formatName[t]).startsWith(name, Qt::CaseInsensitive))
+            return t;
+    Exception(QString("Graph format '%1' not recognized, please use gml, gxl or xml.").arg(name));
+    return FORMAT_COUNT;
+}
+
+QString Graph::toName(Format format) {
+    return formatName[format];
 }
 
 Graph::Graph(Type type) : Identified(), Indexed() {
@@ -23,7 +41,7 @@ Graph::Graph(Type type) : Identified(), Indexed() {
 }
 
 Graph::Graph(const QString &filename) : Graph() {
-    fromFile(filename);
+    load(filename);
 }
 
 Graph::~Graph() {
@@ -54,7 +72,7 @@ void Graph::removeVertex(Vertex *v) {
     int index = v->getIndex();
     QString key;
     if(vertices_[index] != v)
-        Exception(QString("Index mismatch in vertices of the graph %1").arg(id_));
+        Exception(QString("Index mismatch in vertices of the graph %1").arg(getID()));
 
     // Remove the references
     vertices_.removeAt(index);
@@ -88,7 +106,7 @@ void Graph::addEdge(Edge *e) {
 void Graph::removeEdge(Edge *e) {
     int index = e->getIndex();
     if(edges_[index] != e)
-        Exception(QString("Index mismatch in edges of the graph %1").arg(id_));
+        Exception(QString("Index mismatch in edges of the graph %1").arg(getID()));
     edges_.removeAt(index);
     e->getOrigin()->removeEdge(e);
     e->getTarget()->removeEdge(e);
@@ -224,7 +242,8 @@ Graph *Graph::generateInducedSubgraph(const QSet<Vertex *> &vertices) {
     return subgraph;
 }
 
-void Graph::fromFile(const QString &filename) {
+void Graph::load(const QString &filename) {
+    //FileUtils::checkExtension()c
     if(filename.endsWith(".gml", Qt::CaseInsensitive))
         fromGML(filename);
     else if(filename.endsWith(".gxl", Qt::CaseInsensitive))
@@ -233,7 +252,7 @@ void Graph::fromFile(const QString &filename) {
         fromXML(filename);
     else
         Exception(QString("%1 is not a *.gml, *.gxl nor *.xml file.").arg(filename));
-    id_ = QFileInfo(filename).completeBaseName();
+    setID(QFileInfo(filename).completeBaseName());
 }
 
 void Graph::fromGML(const QString &filename) {
@@ -269,10 +288,15 @@ void Graph::fromGML(const QString &filename) {
                 } else if(!it->compare("label", Qt::CaseInsensitive)) {
                     label = (it+1)->remove('\"');
                 } else if(it->compare("comment", Qt::CaseInsensitive)) {
-                    if((it+1)->contains('\"'))
-                        v->addSymbolicAttribute(*it, (it+1)->remove('\"'));
-                    else
-                        v->addNumericAttribute(*it, (it+1)->toDouble());
+                    if((it+1)->contains('\"')) {
+                        v->addAttribute(*it, QMetaType::QString, *(it+1));
+                    } else {
+                        if(it->contains(".")) {
+                            v->addAttribute(*it, QMetaType::Double, (it+1)->toDouble());
+                        } else {
+                            v->addAttribute(*it, QMetaType::Int, (it+1)->toInt());
+                        }
+                    }
                 }
             }
         }
@@ -307,10 +331,15 @@ void Graph::fromGML(const QString &filename) {
                 } else if(!it->compare("label", Qt::CaseInsensitive)) {
                     label = (it+1)->remove('\"');
                 } else if(it->compare("comment", Qt::CaseInsensitive)) {
-                    if((it+1)->contains('\"'))
-                        e->addSymbolicAttribute(*it, (it+1)->remove('\"'));
-                    else
-                        e->addNumericAttribute(*it, (it+1)->toDouble());
+                    if((it+1)->contains('\"')) {
+                        v->addAttribute(*it, QMetaType::QString, *(it+1));
+                    } else {
+                        if(it->contains(".")) {
+                            v->addAttribute(*it, QMetaType::Double, (it+1)->toDouble());
+                        } else {
+                            v->addAttribute(*it, QMetaType::Int, (it+1)->toInt());
+                        }
+                    }
                 }
             }
         }
@@ -328,24 +357,37 @@ void Graph::fromGML(const QString &filename) {
     }
 }
 
+//QMetaType::Type gxlTagNameToType(const QString &tagName) {
+//    if(!tagName.compare("bool", Qt::CaseInsensitive))
+//        return QMetaType::Bool;
+//    if(!tagName.compare("int", Qt::CaseInsensitive))
+//        return QMetaType::Int;
+//    if(!tagName.compare("float", Qt::CaseInsensitive))
+//        return QMetaType::Float;
+//    if(!tagName.compare("string", Qt::CaseInsensitive))
+//        return QMetaType::QString;
+//    Exception(QString("The attribute type %1 is not handled for GXL files.").arg(tagName));
+//    return (QMetaType::Type) 0;
+//}
+
 void Graph::fromGXL(const QString &filename) {
     QFile file(filename);
     if(!file.open(QFile::ReadOnly | QFile::Text))
-        Exception(QString("Error while loading %1").arg(filename, file.errorString()));
+        Exception(QString("Error while loading %1 : %2").arg(filename, file.errorString()));
 
     QDomDocument doc;
     doc.setContent(&file, false);
     QDomElement graph = doc.documentElement().firstChildElement("graph");
 
     // Graph type
-    type_ = (Type)(!graph.attribute("edgemode").compare("undirected", Qt::CaseInsensitive));
+    type_ = toType(graph.attribute("edgemode")); // (Type)(!graph.attribute("edgemode").compare("undirected", Qt::CaseInsensitive));
 
     // Edges have id's
     bool edgeids = !graph.attribute("edgeids", "false").compare("true", Qt::CaseInsensitive);
 
     // Parse vertices
     Vertex *v;
-    QString attrType;
+    QMetaType::Type attrMetaType;
     QDomElement elem = graph.firstChildElement("node");
     QDomElement attr;
     while (!elem.isNull())
@@ -353,12 +395,8 @@ void Graph::fromGXL(const QString &filename) {
         v = new Vertex();
         attr = elem.firstChildElement("attr");
         while(!attr.isNull()) {
-            attrType = attr.firstChildElement().tagName();
-            if(attrType.compare("int", Qt::CaseInsensitive) == 0 ||
-                    attrType.compare("float", Qt::CaseInsensitive) == 0)
-                v->addNumericAttribute(attr.attribute("name"), attr.firstChildElement().text().toDouble());
-            else if(attrType.compare("string", Qt::CaseInsensitive) == 0)
-                v->addSymbolicAttribute(attr.attribute("name"), attr.firstChildElement().text());
+            attrMetaType = Attribute::toType(attr.firstChildElement().tagName().toLower());
+            v->addAttribute(attr.attribute("name"), attrMetaType, Attribute::toVariant(attrMetaType, attr.firstChildElement().text()));
             attr = attr.nextSiblingElement("attr");
         }
         addVertex(v, elem.attribute("id"));
@@ -376,12 +414,8 @@ void Graph::fromGXL(const QString &filename) {
         e->setTarget(vertices_[verticesInsertionOrder_[elem.attribute("to")]]);
         attr = elem.firstChildElement("attr");
         while(!attr.isNull()) {
-            attrType = attr.firstChildElement().tagName();
-            if(attrType.compare("int", Qt::CaseInsensitive) == 0 ||
-                    attrType.compare("float", Qt::CaseInsensitive) == 0)
-                e->addNumericAttribute(attr.attribute("name"), attr.firstChildElement().text().toDouble());
-            else if(attrType.compare("string", Qt::CaseInsensitive) == 0)
-                e->addSymbolicAttribute(attr.attribute("name"), attr.firstChildElement().text());
+            attrMetaType = Attribute::toType(attr.firstChildElement().tagName().toLower());
+            e->addAttribute(attr.attribute("name"), attrMetaType, Attribute::toVariant(attrMetaType, attr.firstChildElement().text()));
             attr = attr.nextSiblingElement("attr");
         }
         addEdge(e);
@@ -399,7 +433,7 @@ void Graph::fromXML(const QString &filename) {
     QString graphFile = metadata_->getGraphAttribute("graphfile").toString();
     if(!FileUtils::isAbsolute(graphFile))
         graphFile = FileUtils::slashed(FileUtils::path(filename), graphFile);
-    fromFile(graphFile);
+    load(graphFile);
 }
 
 void Graph::print(Printer *p) {
@@ -413,12 +447,11 @@ void Graph::print(Printer *p) {
         p->indent();
         p->dump(QString("id %1").arg(v->getIndex()));
         p->dump(QString("label \"%1\"").arg(v->getID()));
-        for(auto att : v->getNumericAttributes().keys())
-            p->dump(QString("%1 %2").arg(att).arg(v->getNumericAttribute(att)));
-        for(auto att : v->getStringAttributes().keys())
-            p->dump(QString("%1 \"%2\"").arg(att).arg(v->getStringAttribute(att)));
-        for(auto att : v->getSymbolicAttributes().keys())
-            p->dump(QString("%1 \"%2\"").arg(att).arg(v->getSymbolicAttribute(att)));
+        for(auto key : v->getAttributes().keys()) {
+            Attribute *att = v->getAttribute(key);
+            QString pattern = att->isTextBased()? "%1 \"%2\"" : "%1 %2";
+            p->dump(pattern.arg(key, att->toString()));
+        }
         p->unindent();
         p->dump("]");
     }
@@ -428,12 +461,11 @@ void Graph::print(Printer *p) {
         p->indent();
         p->dump(QString("source %1").arg(e->getOrigin()->getIndex()));
         p->dump(QString("target %1").arg(e->getTarget()->getIndex()));
-        for(auto att : e->getNumericAttributes().keys())
-            p->dump(QString("%1 %2").arg(att).arg(e->getNumericAttribute(att)));
-        for(auto att : e->getStringAttributes().keys())
-            p->dump(QString("%1 \"%2\"").arg(att).arg(e->getStringAttribute(att)));
-        for(auto att : e->getSymbolicAttributes().keys())
-            p->dump(QString("%1 \"%2\"").arg(att).arg(e->getSymbolicAttribute(att)));
+        for(auto key : e->getAttributes().keys()) {
+            Attribute *att = e->getAttribute(key);
+            QString pattern = att->isTextBased()? "%1 \"%2\"" : "%1 %2";
+            p->dump(pattern.arg(key, att->toString()));
+        }
         p->unindent();
         p->dump("]");
     }

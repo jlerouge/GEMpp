@@ -5,7 +5,7 @@ const char* GraphElement::typeName[GraphElement::COUNT] = {
     "edge"
 };
 
-GraphElement::Type GraphElement::fromName(QString name) {
+GraphElement::Type GraphElement::toType(QString name) {
     for(Type t = (Type)0; t < COUNT; t = (Type)((int)t + 1))
         if(QString(typeName[t]).startsWith(name, Qt::CaseInsensitive))
             return t;
@@ -17,20 +17,22 @@ QString GraphElement::toName(Type type) {
     return typeName[type];
 }
 
-GraphElement::GraphElement() : Identified(), Indexed() {
-    type_ = COUNT;
+GraphElement::GraphElement(Type type) : Identified(), Indexed() {
+    type_ = type;
     cost_ = 0;
 }
 
 GraphElement::GraphElement(const GraphElement &other) : Identified(other), Indexed(other) {
-    cost_ = other.getCost();
     type_ = other.getType();
-    numericAttributes_ = other.getNumericAttributes();
-    stringAttributes_ = other.getStringAttributes();
-    symbolicAttributes_ = other.getSymbolicAttributes();
+    cost_ = other.getCost();
+    for(QString name : other.getAttributes().keys())
+        addAttribute(name, new Attribute(*(other.getAttribute(name))));
 }
 
-GraphElement::~GraphElement() {}
+GraphElement::~GraphElement() {
+    qDeleteAll(attributes_.values());
+    attributes_.clear();
+}
 
 double GraphElement::getCost() const {
     return cost_;
@@ -44,42 +46,28 @@ GraphElement::Type GraphElement::getType() const {
     return type_;
 }
 
-void GraphElement::addNumericAttribute(const QString &attribute, double value) {
-    numericAttributes_.insert(attribute, value);
+void GraphElement::addAttribute(const QString &name, QMetaType::Type type, QVariant value) {
+    addAttribute(name, new Attribute(type, value));
 }
 
-double GraphElement::getNumericAttribute(QString attribute) const {
-    return numericAttributes_[attribute];
+void GraphElement::addAttribute(const QString &name, Attribute *attribute) {
+    attributes_.insert(name, attribute);
 }
 
-void GraphElement::addStringAttribute(const QString &attribute, const QString &value) {
-    stringAttributes_.insert(attribute, value);
+bool GraphElement::hasAttribute(const QString &name) const {
+    return attributes_.contains(name);
 }
 
-QString GraphElement::getStringAttribute(const QString &attribute) const {
-    return stringAttributes_[attribute];
+Attribute *GraphElement::getAttribute(const QString &name) const {
+    if(!hasAttribute(name))
+        Exception(QString("%1 element \"%2\" has no attribute \"%3\"").arg(toName(type_), getID(), name));
+    return attributes_[name];
 }
 
-void GraphElement::addSymbolicAttribute(const QString &attribute, const QString &value) {
-    symbolicAttributes_.insert(attribute, value);
-}
-
-QString GraphElement::getSymbolicAttribute(const QString &attribute) const {
-    return symbolicAttributes_[attribute];
-}
-
-const QMap<QString, double>& GraphElement::getNumericAttributes() const {
-    return numericAttributes_;
-}
-
-const QMap<QString, QString>& GraphElement::getStringAttributes() const {
-    return stringAttributes_;
-}
-
-const QMap<QString, QString>& GraphElement::getSymbolicAttributes() const {
-    return symbolicAttributes_;
+const QMap<QString, Attribute *> &GraphElement::getAttributes() const {
+    return attributes_;
 }
 
 void GraphElement::print(Printer *p) {
-    p->dump(id_);
+    p->dump(getID());
 }

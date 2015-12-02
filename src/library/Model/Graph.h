@@ -16,21 +16,28 @@
  * @see Edge
  * @see Vertex
  */
-class DLL_EXPORT Graph : virtual public IPrintable, virtual public ISaveable, virtual public Identified, virtual public Indexed {
+class DLL_EXPORT Graph : virtual public IPrintable, virtual public ILoadable, virtual public ISaveable, virtual public Identified, virtual public Indexed {
     public:
         /**
          * @brief Indicates the type of the ::Graph.
          */
         enum Type {
             DIRECTED = 0, /**< the edges have directions */
-            UNDIRECTED, /**< the edges have no direction */
-            COUNT /**< used to iterate on Graph::Type */
+            UNDIRECTED,   /**< the edges have no direction */
+            TYPE_COUNT    /**< used to iterate on Graph::Type */
+        };
+
+        enum Format {
+            GML = 0,     /**< Graph Modeling Language */
+            GXL,         /**< Graph eXchange Language */
+            XML,         /**< XML metadata + a GML/GXL file */
+            FORMAT_COUNT /**< used to iterate on Graph::Format */
         };
 
         /**
          * @brief The names of the types.
          */
-        static const char *typeName[COUNT];
+        static const char *typeName[TYPE_COUNT];
 
         /**
          * @brief Returns the name of the type.
@@ -44,7 +51,26 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ISaveable, vi
          * @param name the name
          * @return the type
          */
-        static Type fromName(QString name);
+        static Type toType(QString name);
+
+        /**
+         * @brief The names of the formats.
+         */
+        static const char *formatName[FORMAT_COUNT];
+
+        /**
+         * @brief Returns the name of the format.
+         * @param format the format
+         * @return the name
+         */
+        static QString toName(Format format);
+
+        /**
+         * @brief Retrieves the format from its name.
+         * @param name the name
+         * @return the format
+         */
+        static Format toFormat(QString name);
 
         /**
          * @brief Constructs a new Graph object with parameters.
@@ -172,16 +198,22 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ISaveable, vi
         Graph *randomSubgraph(int iSeed, int vCount);
 
         void print(Printer *p);
-        void save(const QString &filename);
 
-    protected:
         /**
-         * @brief Imports a graph from a graph file. Guess which importation method to use,
-         * using the filename extension.
+         * @brief Exports a graph to a graph file. Guesses which
+         * export method to use using the filename extension.
          * @param filename the graph file
          */
-        void fromFile (const QString &filename);
+        void save(const QString &filename);
 
+        /**
+         * @brief Imports a graph from a graph file. Guesses which
+         * import method to use using the filename extension.
+         * @param filename the graph file
+         */
+        void load(const QString &filename);
+
+    protected:
         /**
          * @brief Imports a graph from a GML graph file.
          * @param filename the graph file
@@ -212,4 +244,4 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ISaveable, vi
         QList<Edge *> edges_;
 };
 
-#endif /*GRAPH_H*/
+#endif /* GEMPP_GRAPH_H */

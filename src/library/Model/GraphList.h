@@ -29,4 +29,4 @@ class DLL_EXPORT GraphList : virtual public IPrintable, virtual public ICleanabl
 
 bool compareFileNamesNatural(const QString &s1, const QString &s2);
 
-#endif /*GRAPH_H*/
+#endif /* GEMPP_GRAPHLIST_H */

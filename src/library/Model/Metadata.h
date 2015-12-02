@@ -33,4 +33,4 @@ class DLL_EXPORT Metadata : virtual public IXmlSerializable {
         QMap<int, QMap<QString, QString> > *attributes[GraphElement::COUNT];
 };
 
-#endif /*METADATA_H*/
+#endif /* GEMPP_METADATA_H */

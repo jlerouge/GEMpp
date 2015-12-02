@@ -30,7 +30,7 @@ Weights::Weights(const QString &substitution, const QString &creation) : IXmlSer
 
     for(Operation op = (Operation)0; op < COUNT; op = (Operation)((int)op + 1))
         for(GraphElement::Type t = (GraphElement::Type)0; t < GraphElement::COUNT; t = (GraphElement::Type)((int)t + 1))
-            if(!containsWeight(op, t, GEMPP_CONST_LABEL))
+            if(!hasWeight(op, t, GEMPP_CONST_LABEL))
                 addWeight(op, t, GEMPP_CONST_LABEL, Weight::CONSTANT, 1, (op == SUBSTITUTION)? GEMPP_DEFAULT_S_CONST : GEMPP_DEFAULT_C_CONST);
 }
 
@@ -40,26 +40,26 @@ Weights::~Weights() {
         delete wh;
 }
 
-bool Weights::containsWeight(Operation op, GraphElement::Type t, QString attribute) const {
+bool Weights::hasWeight(Operation op, GraphElement::Type t, QString attribute) const {
     return getWeights(op,t)->contains(attribute);
 }
 
 Weight *Weights::getWeight(Operation op, GraphElement::Type t, QString attribute) const {
-    if(!containsWeight(op, t, attribute))
+    if(!hasWeight(op, t, attribute))
         Exception(QString("Weights object doesn't contain any %1 weight for %2 attribute \"%3\".").arg(toName(op), GraphElement::toName(t), attribute));
     return getWeights(op,t)->value(attribute);
 }
 
-Weight *Weights::getWeightOrDefault(Operation op, GraphElement::Type t, QString attribute) {
-    if(!containsWeight(op, t, attribute))
-        addWeight(op, t, attribute, Weight::NUMERIC, 1 + (int) op, getDefaultWeight(op));
+Weight *Weights::getWeightOrDefault(Operation op, GraphElement::Type t, QString attribute, QMetaType::Type attributeType) {
+    if(!hasWeight(op, t, attribute))
+        addWeight(op, t, attribute, getDefaultType(attributeType), getDefaultPower(op), getDefaultWeight(op));
     return getWeight(op, t, attribute);
 }
 
 void Weights::addWeight(Operation op, GraphElement::Type t, QString attribute, Weight::Type type, uint power, double value) {
     Weight *w;
     //Exception(QString("Weights object already contains a %1 weight for %2 attribute \"%3\".").arg(toName(op), GraphElement::toName(t), attribute));
-    if(containsWeight(op, t, attribute)) {
+    if(hasWeight(op, t, attribute)) {
         w = getWeight(op, t, attribute);
         w->setType(type);
         w->setPower(power);
@@ -76,6 +76,19 @@ double Weights::getDefaultWeight(Operation op) const {
 
 uint Weights::getDefaultPower(Operation op) const {
     return (op == SUBSTITUTION)? GEMPP_DEFAULT_S_POWER : GEMPP_DEFAULT_C_POWER;
+}
+
+Weight::Type Weights::getDefaultType(QMetaType::Type attributeType) const {
+    switch(attributeType) {
+        case QMetaType::Bool:
+        case QMetaType::QChar:
+            return Weight::DISCRETE;
+        case QMetaType::QString:
+            return Weight::STRING;
+        default:
+            break;
+    }
+    return Weight::NUMERIC;
 }
 
 WeightHash *Weights::getWeights(Operation op, GraphElement::Type t) const {
@@ -164,65 +177,75 @@ void Weights::setCurrentOperation(Operation op) {
     currentOperation_ = op;
 }
 
-double Weights::creationCost(GraphElement *e) const {
+double Weights::creationCost(GraphElement *e) {
     return weightedCost(e);
 }
 
-double Weights::substitutionCost(GraphElement *e1, GraphElement *e2) const {
+double Weights::substitutionCost(GraphElement *e1, GraphElement *e2) {
     if(e1->getType() != e2->getType())
         Exception(QString("There are no possible substitutions between elements of different types"));
 
+    Attribute *att;
+    Weight *w;
     // Test if all symbolic attributes of e1 and e2 are the same
-    for(auto key : e1->getSymbolicAttributes().keys()) {
-        // Compare only symbolic attributes that have non-zero weight
-        if((getWeight(SUBSTITUTION, e1->getType(), key) != 0) && (e1->getSymbolicAttribute(key).compare(e2->getSymbolicAttribute(key), Qt::CaseInsensitive) != 0))
-            // e1 and e2 are of different types
-            return e1->getCost()+e2->getCost();
+    for(auto name : e1->getAttributes().keys()) {
+        att = e1->getAttribute(name);
+        w = getWeightOrDefault(SUBSTITUTION, e1->getType(), name, att->getType());
+        // Compare only symbolic attributes that have non-zero weight,
+        // and test if e1 and e2 have at least one different symbolic attribute
+        if((w->getType() == Weight::DISCRETE) && (w->getValue() != 0) && (att->getValue() != e2->getAttribute(name)->getValue()))
+            return e1->getCost() + e2->getCost();
     }
 
-    // e1 and e2 are of the same type
+    // e1 and e2 have equal symbolic attributes
     return weightedCost(e1, e2);
 }
 
-double Weights::weightedCost(GraphElement *e1, GraphElement *e2) const {
+double Weights::weightedCost(GraphElement *e1, GraphElement *e2) {
     Operation op = (e2 == 0)? CREATION : SUBSTITUTION;
-    GraphElement::Type type = e1->getType();
-    Weight *w = getWeight(op, type, GEMPP_CONST_LABEL);
+    GraphElement::Type eltype = e1->getType();
+    Weight *w = getWeight(op, eltype, GEMPP_CONST_LABEL);
     double total_cost = pow(w->getValue(), w->getPower());
-    double weight, cost;
-    uint power;
-    QList<QString> keys = e1->getNumericAttributes().keys();
-    keys.append(e1->getStringAttributes().keys());
+    double cost;
 
-    for(auto key : keys) {
-        try {
-            w = getWeight(op, type, key);
-            weight = w->getValue();
-            power = w->getPower();
-        } catch (std::exception &e) {
-            weight = getDefaultWeight(op);
-            power = getDefaultPower(op);
-        }
+    for(auto key : e1->getAttributes().keys()) {
+        w = getWeightOrDefault(op, eltype, key);
+
+        // Evaluate only non symbolic attributes
+        if(w->getType() == Weight::DISCRETE)
+            continue;
+
+        cost = 0;
         switch(op) {
             case SUBSTITUTION:
-                if(e1->getNumericAttributes().contains(key)) {
-                    cost = e1->getNumericAttribute(key) - e2->getNumericAttribute(key);
-                } else {
-                    cost = levenshtein(e1->getStringAttribute(key), e2->getStringAttribute(key));
+                switch(w->getType()) {
+                    case Weight::NUMERIC:
+                        cost = e1->getAttribute(key)->getValue().toDouble() - e2->getAttribute(key)->getValue().toDouble();
+                        break;
+                    case Weight::STRING:
+                        cost = levenshtein(e1->getAttribute(key)->getValue().toString(), e2->getAttribute(key)->getValue().toString());
+                        break;
+                    default:
+                        break;
                 }
                 break;
             case CREATION:
-                if(e1->getNumericAttributes().contains(key)) {
-                    cost = e1->getNumericAttribute(key);
-                } else {
-                    cost = e1->getStringAttribute(key).size();
+                switch(w->getType()) {
+                    case Weight::NUMERIC:
+                        cost = e1->getAttribute(key)->getValue().toDouble();
+                        break;
+                    case Weight::STRING:
+                        cost = e1->getAttribute(key)->getValue().toString().size();
+                        break;
+                    default:
+                        break;
                 }
                 break;
             default:
                 break;
         }
-        cost = pow(fabs(weight*cost), power);
-        switch(getWeights(op, type)->getMode()) {
+        cost = pow(fabs(w->getValue()*cost), w->getPower());
+        switch(getWeights(op, eltype)->getMode()) {
             case WeightHash::ADD:
                 total_cost += cost;
                 break;
@@ -234,7 +257,7 @@ double Weights::weightedCost(GraphElement *e1, GraphElement *e2) const {
         }
     }
 
-    uint root = getWeights(op, type)->getRoot();
+    uint root = getWeights(op, eltype)->getRoot();
     if(root > 1)
         total_cost = pow(total_cost, 1.0/root);
     return total_cost;

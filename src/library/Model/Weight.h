@@ -5,7 +5,7 @@
 
 class DLL_EXPORT Weight {
     public:
-        enum Type{
+        enum Type {
             CONSTANT = 0,
             DISCRETE,
             NUMERIC,
@@ -38,4 +38,4 @@ class DLL_EXPORT Weight {
         uint power_;
         double value_;
 };
-#endif /*WEIGHT_H*/
+#endif /* GEMPP_WEIGHT_H */

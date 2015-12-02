@@ -40,13 +40,14 @@ HEADERS += \
     Extraction/TextKNNExtractor.h \
     Extraction/Vectorizer.h \
     Extraction/Zernike.h \
-    Model/Problem.h \
+    Model/Attribute.h \
+    Model/Edge.h \
     Model/Graph.h \
     Model/GraphList.h \
     Model/GraphElement.h \
     Model/Metadata.h \
+    Model/Problem.h \
     Model/Vertex.h \
-    Model/Edge.h \
     Model/Weight.h \
     Model/WeightHash.h \
     Model/Weights.h \
@@ -110,13 +111,14 @@ SOURCES += \
     Extraction/TextKNNExtractor.cpp \
     Extraction/Vectorizer.cpp \
     Extraction/Zernike.cpp \
-    Model/Problem.cpp \
+    Model/Attribute.cpp \
+    Model/Edge.cpp \
     Model/Graph.cpp \
     Model/GraphList.cpp \
     Model/GraphElement.cpp \
     Model/Metadata.cpp \
+    Model/Problem.cpp \
     Model/Vertex.cpp \
-    Model/Edge.cpp \
     Model/Weight.cpp \
     Model/WeightHash.cpp \
     Model/Weights.cpp \

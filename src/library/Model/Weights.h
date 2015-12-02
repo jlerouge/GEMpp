@@ -31,19 +31,20 @@ class DLL_EXPORT Weights : virtual public IXmlSerializable {
         Weights(const QString &substitution = "", const QString &creation = "");
         virtual ~Weights();
 
-        bool containsWeight(Operation op, GraphElement::Type t, QString attribute) const;
+        bool hasWeight(Operation op, GraphElement::Type t, QString attribute) const;
         Weight* getWeight(Operation op, GraphElement::Type t, QString attribute) const;
-        Weight* getWeightOrDefault(Operation op, GraphElement::Type t, QString attribute);
+        Weight* getWeightOrDefault(Operation op, GraphElement::Type t, QString attribute, QMetaType::Type attributeType = QMetaType::Double);
         void addWeight(Operation op, GraphElement::Type t, QString attribute, Weight::Type type, uint power, double value);
 
         double getDefaultWeight(Operation op) const;
         uint getDefaultPower(Operation op) const;
+        Weight::Type getDefaultType(QMetaType::Type attributeType) const;
 
         Operation getCurrentOperation() const;
         void setCurrentOperation(Operation op);
 
-        double creationCost(GraphElement *e) const;
-        double substitutionCost(GraphElement *e1, GraphElement *e2) const;
+        double creationCost(GraphElement *e);
+        double substitutionCost(GraphElement *e1, GraphElement *e2);
 
         WeightHash *getWeights(Operation op, GraphElement::Type t) const;
 
@@ -57,7 +58,7 @@ class DLL_EXPORT Weights : virtual public IXmlSerializable {
 
     private:
         void fromXMLElement(const QDomElement &element);
-        double weightedCost(GraphElement *e1, GraphElement *e2 = 0) const;
+        double weightedCost(GraphElement *e1, GraphElement *e2 = 0);
 
         QHash<QPair<Operation, GraphElement::Type>, WeightHash *> weights_;
         Operation currentOperation_;

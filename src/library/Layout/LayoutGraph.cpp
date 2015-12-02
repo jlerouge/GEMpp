@@ -8,7 +8,7 @@ LayoutGraph::LayoutGraph(QObject *parent, double centerForce, Graph::Type type) 
 }
 
 LayoutGraph::LayoutGraph(const QString &filename, QObject *parent, double centerForce) : LayoutGraph(parent, centerForce) {
-    fromFile(filename);
+    load(filename);
 }
 
 LayoutGraph::~LayoutGraph() {

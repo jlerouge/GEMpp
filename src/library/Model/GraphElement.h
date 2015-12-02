@@ -2,6 +2,7 @@
 #define GEMPP_GRAPHELEMENT_H
 
 #include <QMap>
+#include "Attribute.h"
 #include "Core/IPrintable.h"
 #include "Core/Identified.h"
 #include "Core/Indexed.h"
@@ -25,8 +26,8 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
          */
         enum Type{
             VERTEX = 0, /**< a ::Vertex */
-            EDGE, /**< an ::Edge */
-            COUNT /**< used to iterate on GraphElement::Type enum */
+            EDGE,       /**< an ::Edge */
+            COUNT       /**< used to iterate on GraphElement::Type enum */
         };
 
         /**
@@ -46,12 +47,12 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
          * @param name the name
          * @return the type
          */
-        static Type fromName(QString name);
+        static Type toType(QString name);
 
         /**
          * @brief Constructs a new GraphElement object.
          */
-        GraphElement();
+        GraphElement(Type type = COUNT);
 
         /**
          * @brief Constructs a copy of an existing GraphElement object.
@@ -63,7 +64,6 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
          * @brief Destructs a GraphElement object.
          */
         virtual ~GraphElement();
-
 
         /**
          * @brief Returns the creation cost of this element.
@@ -84,65 +84,45 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
         Type getType() const;
 
         /**
-         * @brief Adds a numeric attribute to the element.
-         * @param attribute the attribute name
-         * @param value the numeric value
+         * @brief Adds an attribute to the element.
+         * @param name the attribute name
+         * @param type the type of the attribute
+         * @param value the value
          */
-        void addNumericAttribute(const QString &attribute, double value);
+        void addAttribute(const QString &name, QMetaType::Type type, QVariant value);
 
         /**
-         * @brief Returns a numeric attribute value.
-         * @param attribute the attribute name
-         * @return the numeric value
+         * @brief Adds an attribute to the element.
+         * @param name the attribute name
+         * @param attribute the attribute
          */
-        double getNumericAttribute(QString attribute) const;
+        void addAttribute(const QString &name, Attribute *attribute);
 
         /**
-         * @brief Returns all numeric attributes.
-         * @return the numeric attributes
+         * @brief Indicates whether the element has a particular attribute.
+         * @param name the attribute name
+         * @return a boolean
          */
-        const QMap<QString, double> &getNumericAttributes() const;
+        bool hasAttribute(const QString &name) const;
 
         /**
-         * @brief Adds a string attribute to the element.
-         * @param attribute the attribute name
-         * @param value the string value
+         * @brief Returns an attribute of the element.
+         * @param name the attribute name
+         * @return the attribute
+         * @warning throws an Exception if the attribute does not exist
          */
-        void addStringAttribute(const QString &attribute, const QString &value);
+        Attribute *getAttribute(const QString &name) const;
 
         /**
-         * @brief Returns a string attribute value.
-         * @param attribute the attribute name
-         * @return the string value
+         * @brief Returns all attributes of the element.
+         * @return the attributes
          */
-        QString getStringAttribute(const QString &attribute) const;
+        const QMap<QString, Attribute *> &getAttributes() const;
 
         /**
-         * @brief Returns all string attributes.
-         * @return the string attributes
+         * @brief Prints the element id to a printer.
+         * @param p the printer
          */
-        const QMap<QString, QString> &getStringAttributes() const;
-
-        /**
-         * @brief Adds a symbolic (discrete) attribute to the element.
-         * @param attribute the attribute name
-         * @param value the symbolic value
-         */
-        void addSymbolicAttribute(const QString &attribute, const QString &value);
-
-        /**
-         * @brief Returns a symbolic attribute value.
-         * @param attribute the attribute name
-         * @return the symbolic value
-         */
-        QString getSymbolicAttribute(const QString &attribute) const;
-
-        /**
-         * @brief Returns all symbolic attributes.
-         * @return the symbolic attributes
-         */
-        const QMap<QString, QString> &getSymbolicAttributes() const;
-
         void print(Printer *p);
 
     protected:
@@ -158,19 +138,9 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
         double cost_;
 
         /**
-         * @brief The numeric attributes of the element.
+         * @brief The attributes of the element.
          */
-        QMap<QString, double> numericAttributes_;
-
-        /**
-         * @brief The string attributes of the element.
-         */
-        QMap<QString, QString> stringAttributes_;
-
-        /**
-         * @brief The symbolic attributes of the element.
-         */
-        QMap<QString, QString> symbolicAttributes_;
+        QMap<QString, Attribute *> attributes_;
 };
 
-#endif /*ELEMENT_H*/
+#endif /* GEMPP_GRAPHELEMENT_H */

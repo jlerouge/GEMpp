@@ -66,6 +66,12 @@ class DLL_EXPORT FileUtils {
         static void close(QFile &file);
 
         /**
+         * @brief Returns the extension of a filename.
+         * @param filename the path to the file
+         */
+        static QString getExtension(const QString &filename);
+
+        /**
          * @brief Checks the extension of a filename.
          * Throws an exception if the extension does not correspond.
          * @param filename the path to the file
