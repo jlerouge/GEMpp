@@ -291,11 +291,10 @@ void Graph::fromGML(const QString &filename) {
                     if((it+1)->contains('\"')) {
                         v->addAttribute(*it, QMetaType::QString, *(it+1));
                     } else {
-                        if(it->contains(".")) {
+                        if((it+1)->contains("."))
                             v->addAttribute(*it, QMetaType::Double, (it+1)->toDouble());
-                        } else {
+                        else
                             v->addAttribute(*it, QMetaType::Int, (it+1)->toInt());
-                        }
                     }
                 }
             }
@@ -332,13 +331,12 @@ void Graph::fromGML(const QString &filename) {
                     label = (it+1)->remove('\"');
                 } else if(it->compare("comment", Qt::CaseInsensitive)) {
                     if((it+1)->contains('\"')) {
-                        v->addAttribute(*it, QMetaType::QString, *(it+1));
+                        e->addAttribute(*it, QMetaType::QString, *(it+1));
                     } else {
-                        if(it->contains(".")) {
-                            v->addAttribute(*it, QMetaType::Double, (it+1)->toDouble());
-                        } else {
-                            v->addAttribute(*it, QMetaType::Int, (it+1)->toInt());
-                        }
+                        if((it+1)->contains("."))
+                            e->addAttribute(*it, QMetaType::Double, (it+1)->toDouble());
+                        else
+                            e->addAttribute(*it, QMetaType::Int, (it+1)->toInt());
                     }
                 }
             }
@@ -356,19 +354,6 @@ void Graph::fromGML(const QString &filename) {
         end = group_end.indexIn(buffer, begin);
     }
 }
-
-//QMetaType::Type gxlTagNameToType(const QString &tagName) {
-//    if(!tagName.compare("bool", Qt::CaseInsensitive))
-//        return QMetaType::Bool;
-//    if(!tagName.compare("int", Qt::CaseInsensitive))
-//        return QMetaType::Int;
-//    if(!tagName.compare("float", Qt::CaseInsensitive))
-//        return QMetaType::Float;
-//    if(!tagName.compare("string", Qt::CaseInsensitive))
-//        return QMetaType::QString;
-//    Exception(QString("The attribute type %1 is not handled for GXL files.").arg(tagName));
-//    return (QMetaType::Type) 0;
-//}
 
 void Graph::fromGXL(const QString &filename) {
     QFile file(filename);

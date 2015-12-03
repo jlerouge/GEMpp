@@ -260,6 +260,7 @@ double Weights::weightedCost(GraphElement *e1, GraphElement *e2) {
     uint root = getWeights(op, eltype)->getRoot();
     if(root > 1)
         total_cost = pow(total_cost, 1.0/root);
+
     return total_cost;
 }
 
