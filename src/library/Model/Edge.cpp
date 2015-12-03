@@ -2,8 +2,7 @@
 
 Edge::Edge() : Edge(0, 0) {}
 
-Edge::Edge(Vertex *origin, Vertex *target) : GraphElement() {
-    type_ = GraphElement::EDGE;
+Edge::Edge(Vertex *origin, Vertex *target) : GraphElement(GraphElement::EDGE) {
     origin_ = origin;
     target_ = target;
 }

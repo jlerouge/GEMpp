@@ -18,8 +18,6 @@
  * @see Weights
  */
 class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identified, virtual public Indexed {
-        friend class Vertex;
-        friend class Edge;
     public:
         /**
          * @brief Indicates the type of the GraphElement.
@@ -84,6 +82,12 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
         Type getType() const;
 
         /**
+         * @brief Sets the type of this element.
+         * @param type the type
+         */
+        void setType(Type type);
+
+        /**
          * @brief Adds an attribute to the element.
          * @param name the attribute name
          * @param type the type of the attribute
@@ -125,13 +129,12 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
          */
         void print(Printer *p);
 
-    protected:
+    private:
         /**
          * @brief The type of the element.
          */
         Type type_;
 
-    private:
         /**
          * @brief The creation cost of the element.
          */

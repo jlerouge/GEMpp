@@ -46,6 +46,10 @@ GraphElement::Type GraphElement::getType() const {
     return type_;
 }
 
+void GraphElement::setType(Type type) {
+    type_ = type;
+}
+
 void GraphElement::addAttribute(const QString &name, QMetaType::Type type, QVariant value) {
     addAttribute(name, new Attribute(type, value));
 }

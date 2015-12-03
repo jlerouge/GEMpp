@@ -243,15 +243,21 @@ Graph *Graph::generateInducedSubgraph(const QSet<Vertex *> &vertices) {
 }
 
 void Graph::load(const QString &filename) {
-    //FileUtils::checkExtension()c
-    if(filename.endsWith(".gml", Qt::CaseInsensitive))
-        fromGML(filename);
-    else if(filename.endsWith(".gxl", Qt::CaseInsensitive))
-        fromGXL(filename);
-    else if(filename.endsWith(".xml", Qt::CaseInsensitive))
-        fromXML(filename);
-    else
-        Exception(QString("%1 is not a *.gml, *.gxl nor *.xml file.").arg(filename));
+    Format format = toFormat(FileUtils::getExtension(filename));
+    switch(format) {
+        case GML:
+            fromGML(filename);
+            break;
+        case GXL:
+            fromGXL(filename);
+            break;
+        case XML:
+            fromXML(filename);
+            break;
+        default:
+            Exception(QString("%1 is not a *.gml, *.gxl nor *.xml file.").arg(filename));
+            break;
+    }
     setID(QFileInfo(filename).completeBaseName());
 }
 

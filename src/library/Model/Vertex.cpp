@@ -7,17 +7,14 @@ const char* Vertex::directionName[Vertex::COUNT] = {
 };
 
 
-Vertex::Vertex() : GraphElement() {
-    type_ = GraphElement::VERTEX;
+Vertex::Vertex() : GraphElement(GraphElement::VERTEX) {
     inEdges_ = QSet<Edge *>();
     outEdges_ = QSet<Edge *>();
-    parentIndex_ = -1;
 }
 
 Vertex::Vertex(const Vertex &other) : Identified(other), Indexed(other), GraphElement(other) {
     outEdges_ = other.getEdges(EDGE_OUT);
     inEdges_ = other.getEdges(EDGE_IN);
-    parentIndex_ = other.getIndex();
 }
 
 Vertex::~Vertex() {}
@@ -93,15 +90,4 @@ QSet<Vertex *> Vertex::getNeighbours(Direction d) const {
             break;
     }
     return vertices;
-}
-
-void Vertex::setParentIndex(int parentIndex) {
-    parentIndex_ = parentIndex;
-}
-
-int Vertex::getParentIndex() const {
-    //if(parentIndex_ >= 0)
-    //    return parentIndex_;
-    //Exception(QString("The vertex %1 is not in a subgraph.").arg(id_));
-    return parentIndex_;
 }

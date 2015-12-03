@@ -81,9 +81,6 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
          */
         QSet<Vertex *> getNeighbours(Direction d) const;
 
-        void setParentIndex(int parentIndex);
-        int getParentIndex() const;
-
     private:
         /**
          * @brief The set of ::Edge incident from this Vertex
@@ -94,8 +91,6 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
          * @brief The set of ::Edge incident to this Vertex
          */
         QSet<Edge *> inEdges_;
-
-        int parentIndex_;
 };
 
 #endif /* GEMPP_VERTEX_H */
