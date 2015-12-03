@@ -1,0 +1,37 @@
+var class_solution =
+[
+    [ "Status", "class_solution.html#a082f54194f1756d111c379346741b424", [
+      [ "NOT_SOLVED", "class_solution.html#a082f54194f1756d111c379346741b424af7dbe902c9997fadb070b3e2d32d069b", null ],
+      [ "INFEASIBLE", "class_solution.html#a082f54194f1756d111c379346741b424ac95408d0b7c6bfeb1f575f90c19ed71a", null ],
+      [ "UNBOUNDED", "class_solution.html#a082f54194f1756d111c379346741b424ac1640248813b5f8a7c31dd008fe548c8", null ],
+      [ "SUBOPTIMAL", "class_solution.html#a082f54194f1756d111c379346741b424ada5265ec89c47fd35381a3e87d38bf70", null ],
+      [ "OPTIMAL", "class_solution.html#a082f54194f1756d111c379346741b424ac705abe91fe6f2d8846426df66497494", null ],
+      [ "COUNT", "class_solution.html#a082f54194f1756d111c379346741b424ad6416300433b12fe3e62bccec92e21f0", null ]
+    ] ],
+    [ "Solution", "class_solution.html#ae58c18c8e9790766fb0dd3305a0d1843", null ],
+    [ "~Solution", "class_solution.html#a5d245f7409aacf6ace5e965b7879a580", null ],
+    [ "activeIndex", "class_solution.html#a2bb5919f9f211433f1da0d319512f4e8", null ],
+    [ "addVariable", "class_solution.html#ae3686b9d24e24257511ab9efadcfaa5e", null ],
+    [ "clean", "class_solution.html#a494a1e25199690ef8e5fdbda4695827b", null ],
+    [ "fromName", "class_solution.html#a13168066d3504114aba98132b59f4dd6", null ],
+    [ "getObjective", "class_solution.html#a86a0d3967cb3d3e3bbe59547810e5fa0", null ],
+    [ "getStatus", "class_solution.html#a72e6fc0d39335f69eb9f9642c1dc4116", null ],
+    [ "getValue", "class_solution.html#ae346b681a5be3367a0e54f81a446d908", null ],
+    [ "getVariables", "class_solution.html#af90542653256293c9ee2fb46f0800dc6", null ],
+    [ "getXVariables", "class_solution.html#a09b0828ee97df989f880a063a68c7198", null ],
+    [ "getYVariables", "class_solution.html#a3524363210c2d8f605fe57f6a973f852", null ],
+    [ "isValid", "class_solution.html#a57054b86c58c23703b7e31e80ff41398", null ],
+    [ "print", "class_solution.html#afa14bd28c0267f1d85bfd2b7788a0dc0", null ],
+    [ "printSolution", "class_solution.html#a4e678e4d1536f966ad5336e95e391421", null ],
+    [ "save", "class_solution.html#a1226602c4f3413db500c0c36ebb19616", null ],
+    [ "setObjective", "class_solution.html#a174289e0c1034f3b0993258bc9314faa", null ],
+    [ "setStatus", "class_solution.html#a8a967f1d22936477d181a7966534191a", null ],
+    [ "toName", "class_solution.html#a9feae8a8a8777b6a5e7c17997a7d352d", null ],
+    [ "formulation_", "class_solution.html#a1000f2bfc75d8c4828c324adf5f7cfd2", null ],
+    [ "objective_", "class_solution.html#a3dc4fd69afe4a0398d353022e5dd6986", null ],
+    [ "status_", "class_solution.html#a620b36428b286df55450c440b2a58a08", null ],
+    [ "statusName", "class_solution.html#a3cce6cd2d6a38378b8cbea9eea5c7862", null ],
+    [ "variables_", "class_solution.html#a761057879d314b5c986db1105f0d5541", null ],
+    [ "x_variables_", "class_solution.html#a093c7e0e830c58483bc504f34c22fe6b", null ],
+    [ "y_variables_", "class_solution.html#abe62f851ccd0d0b0d3dcfec5fc95889a", null ]
+];

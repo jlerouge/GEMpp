@@ -1,0 +1,27 @@
+var class_configuration =
+[
+    [ "Configuration", "class_configuration.html#a779947337bf652f0e773cb29f37f14ba", null ],
+    [ "~Configuration", "class_configuration.html#a0dd0fa189e239f4c9a036303f641441e", null ],
+    [ "check", "class_configuration.html#a842c23010c56aea24f326ef5b354e1d5", null ],
+    [ "clean", "class_configuration.html#a8543e92b2e54e6d125b0c66e53b35583", null ],
+    [ "print", "class_configuration.html#a4625bce05da2e1a7964597a2276385ed", null ],
+    [ "creation", "class_configuration.html#aa99563deabcd5a7d4ebe8019cd6daf5d", null ],
+    [ "cutMethod", "class_configuration.html#afbcc0d2b58f312f585815150232f6d82", null ],
+    [ "ext", "class_configuration.html#a3b2e92d88adf9c4ada75551270155d78", null ],
+    [ "gedMethod", "class_configuration.html#a4fe1107f5e583ed3e75372ff1e809921", null ],
+    [ "induced", "class_configuration.html#a953edd5f082b2d2c1d2aa5532cff937f", null ],
+    [ "matchingType", "class_configuration.html#a24d93ebd7fd178e8a1168c9281c757c7", null ],
+    [ "matrix", "class_configuration.html#aaa78acfc45d650963fde0326c32d5dbb", null ],
+    [ "number", "class_configuration.html#a009595ae1448ec5f4db19f7f4c65ac1b", null ],
+    [ "outputDir", "class_configuration.html#a41a4304e900924a3a2599fa6f22c7b70", null ],
+    [ "parallelInstances", "class_configuration.html#a34262b200b38c1a3baf886e8a5ae76a8", null ],
+    [ "program", "class_configuration.html#a29417a5f094e80a86a5d1a059c0bd8f5", null ],
+    [ "solution", "class_configuration.html#ade61a9e51877ddd80f3fbd24446480ea", null ],
+    [ "solver", "class_configuration.html#afa37a3504b1dee3ef7fc9944d2e99e4c", null ],
+    [ "subMethod", "class_configuration.html#ac72a90f5f8fa0b7fa44c16199598506c", null ],
+    [ "substitution", "class_configuration.html#a35952e80e557c3b9cb0f8e95832148f9", null ],
+    [ "threadsPerInstance", "class_configuration.html#ae63c1a398ee0c98f1abfc80905f8c2db", null ],
+    [ "timeLimit", "class_configuration.html#adb739de8636f4521163ec4543e2f6149", null ],
+    [ "upperbound", "class_configuration.html#ac300fc25879904c147a3af6165f1b563", null ],
+    [ "verbose", "class_configuration.html#a7a15cddaf5ef20e6b5c8c0d072ebb211", null ]
+];

@@ -1,0 +1,46 @@
+\form#0:$ \mathbf{x} $
+\form#1:$ \mathbf{x} \in \mathbb{Z}^n $
+\form#2:$ f : \mathbb{Z}^n \rightarrow \mathbb{R} $
+\form#3:$ b \in \mathbb{R} $
+\form#4:$ f(\mathbf{x}) = b $
+\form#5:$ f(\mathbf{x}) \leq b $
+\form#6:$ f(\mathbf{x}) \geq b $
+\form#7:$ f(\mathbf{x}) $
+\form#8:$ b $
+\form#9:$ =, \geq $
+\form#10:$ \leq $
+\form#11:$ = $
+\form#12:$ \geq $
+\form#13:$ f(\mathbf{x}) = g(\mathbf{x}) + c$
+\form#14:$ c \in \mathbb{R} $
+\form#15:$ c $
+\form#16:$ g(\mathbf{x}) $
+\form#17:$ \mathbf{x} = \begin{bmatrix}x_1\\ x_2\\ \vdots\\ x_n \end{bmatrix} \in \mathbb{Z}^n $
+\form#18:$ \mathbf{a} = \begin{bmatrix}a_0\\ a_1\\ \vdots\\ a_n \end{bmatrix} \in \mathbb{R}^{n+1} $
+\form#19:$ f $
+\form#20:$ f(\mathbf{x}) = \mathbf{a}^T \cdot \begin{bmatrix}1\\ \mathbf{x} \end{bmatrix} = \begin{bmatrix} a_0\; a_1\; \dots\; a_n \end{bmatrix} \cdot \begin{bmatrix}1\\ x_1\\ \vdots\\ x_n \end{bmatrix} = a_0 + \sum_{k=1}^n (a_k \, x_k) $
+\form#21:$ a_0 \in \mathbb{R} $
+\form#22:$ \sum_{k=1}^n (a_k \, x_k) $
+\form#23:$ \sum_{k=0}^{vars.size()-1} vars[k] $
+\form#24:$ x = \begin{bmatrix}x_1\\ x_2\\ \vdots\\ x_n\end{bmatrix} \in \mathbb{Z}^n $
+\form#25:$ P $
+\form#26:$ \underset{\mathbf{x}}{\text{min}} f(\mathbf{x})\\ s.c. \left\{ \begin{array}{l} g_i(\mathbf{x}) \leq \mathbf{b} \quad \forall i \in [\![1; p]\!] \\ h_e(\mathbf{x}) = \mathbf{d} \quad \forall e \in [\![1; q]\!] \\ x_k \in \mathbb{Z} \quad \forall k \in [\![1; n]\!] \end{array} \right. $
+\form#27:$ A \in \mathcal{M}_{p,n}(\mathbb{R}), \mathbf{b} \in \mathbb{R}^{p}, C \in \mathcal{M}_{q,n}(\mathbb{R}), \mathbf{d} \in \mathbb{R}^{q} $
+\form#28:$ p \in \mathbb{N} $
+\form#29:$ q \in \mathbb{N} $
+\form#30:$ \underset{\mathbf{x}}{\text{min}} f(\mathbf{x}) $
+\form#31:$ \underset{\mathbf{x}}{\text{max}} f(\mathbf{x}) $
+\form#32:$ B = \begin{bmatrix}b_{1,1}\; \dots\; b_{1,n}\\ \vdots\quad \ddots\quad \vdots\\ b_{n,1}\; \dots\; b_{n,n}\end{bmatrix} \in \mathcal{M}_n(\mathbb{R}) $
+\form#33:$ f(\mathbf{x}) = \mathbf{a}^T \cdot \begin{bmatrix}1\\ \mathbf{x} \end{bmatrix} + \mathbf{x}^T \cdot B \cdot \mathbf{x} = a_0 + \sum_{k=1}^n (a_k \, x_k) + \sum_{i=1}^n \sum_{j=1}^n (b_{i,j} \, x_i \, x_j) $
+\form#34:$ a_0 + \sum_{k=1}^n (a_k \, x_k) $
+\form#35:$ \sum_{i=1}^n \sum_{j=1}^n (b_{i,j} \, x_i \, x_j) $
+\form#36:$ \sum_{k=0}^{quads.size()-1} quads[k] $
+\form#37:$ x $
+\form#38:$ x \in \mathbb{Z} $
+\form#39:$ x \in \mathbb{N} $
+\form#40:$ x \in [\![a, b]\!] $
+\form#41:$ (a,b) \in \mathbb{Z}^2, a \leq b $
+\form#42:$ x \in \mathbb{B} = \{0; 1\} $
+\form#43:$ {0;1} $
+\form#44:$ [\![\textrm{low};\textrm{up}]\!] $
+\form#45:$ x \in \mathbb{R} $
