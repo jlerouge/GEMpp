@@ -6,9 +6,11 @@
 #include "Core/IPrintable.h"
 #include "Core/Identified.h"
 #include "Core/Indexed.h"
+#include "Core/IXmlElementSerializable.h"
 
 /**
  * @brief The GraphElement class represents an abstract element of a ::Graph, i.e. a ::Vertex or an ::Edge.
+ * A ::Graph may also be a particular ::Vertex of a parent ::Graph, the latter being a hierarchical graph.
  * These elements have attributes, and it is possible to compute substitution costs between two ::GraphElement
  * of the same type as well as the creation cost of a single ::GraphElement, using the substitution and creation
  * ::Weights.
@@ -17,13 +19,14 @@
  * @see Graph
  * @see Weights
  */
-class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identified, virtual public Indexed {
+class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public IXmlElementSerializable, virtual public Identified, virtual public Indexed {
     public:
         /**
          * @brief Indicates the type of the GraphElement.
          */
         enum Type{
-            VERTEX = 0, /**< a ::Vertex */
+            GRAPH = 0,  /**< a ::Graph */
+            VERTEX,     /**< a ::Vertex */
             EDGE,       /**< an ::Edge */
             COUNT       /**< used to iterate on GraphElement::Type enum */
         };
@@ -127,7 +130,20 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public Identi
          * @brief Prints the element id to a printer.
          * @param p the printer
          */
-        void print(Printer *p);
+        virtual void print(Printer *p);
+
+        /**
+         * @brief Serializes the object to an XML element in the GXL format.
+         * @param document the root XML document
+         * @return the XML element
+         */
+        virtual QDomElement save(QDomDocument *document);
+
+        /**
+         * @brief Deserializes the object from an XML element in the GXL format.
+         * @param element the XML element
+         */
+        virtual void load(QDomElement element);
 
     private:
         /**

@@ -16,7 +16,7 @@
  * @see Edge
  * @see Vertex
  */
-class DLL_EXPORT Graph : virtual public IPrintable, virtual public ILoadable, virtual public ISaveable, virtual public Identified, virtual public Indexed {
+class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, virtual public GraphElement { //virtual public Identified, virtual public Indexed {
     public:
         /**
          * @brief Indicates the type of the ::Graph.
@@ -197,7 +197,18 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ILoadable, vi
          */
         Graph *randomSubgraph(int iSeed, int vCount);
 
-        void print(Printer *p);
+        /**
+         * @brief Prints the ::Graph to a ::Printer using the GML format.
+         * @param p the printer
+         */
+        virtual void print(Printer *p);
+
+        /**
+         * @brief Imports a graph from a graph file. Guesses which
+         * import method to use using the filename extension.
+         * @param filename the graph file
+         */
+        void load(const QString &filename);
 
         /**
          * @brief Exports a graph to a graph file. Guesses which
@@ -207,31 +218,56 @@ class DLL_EXPORT Graph : virtual public IPrintable, virtual public ILoadable, vi
         void save(const QString &filename);
 
         /**
-         * @brief Imports a graph from a graph file. Guesses which
-         * import method to use using the filename extension.
-         * @param filename the graph file
+         * @brief Serializes the graph to an XML element in the GXL format.
+         * @param document the root XML document
+         * @return the XML element
          */
-        void load(const QString &filename);
+        QDomElement save(QDomDocument *document);
+
+        /**
+         * @brief Deserializes the graph from an XML element in the GXL format.
+         * @param element the XML element
+         */
+        void load(QDomElement element);
 
     protected:
         /**
          * @brief Imports a graph from a GML graph file.
          * @param filename the graph file
          */
-        void fromGML (const QString &filename);
+        void fromGML(const QString &filename);
 
         /**
          * @brief Imports a graph from a GXL graph file.
-         * @param filename the graph file
+         * @see IXmlSerializable
          */
-        void fromGXL (const QString &filename);
+        void fromXML();
 
         /**
-         * @brief Imports a graph from a XML graph metadata file.
-         * This metadata file must likely contains an URL to the actual graph file.
+         * @brief Imports a graph, loading a XML graph metadata file first.
+         * This metadata file most likely contains an URL to the actual graph file.
          * @param filename the graph metadata file
          */
-        void fromXML (const QString &filename);
+        void fromXMLMetadata (const QString &filename);
+
+        /**
+         * @brief Exports a graph to a GML graph file.
+         * @param filename the graph file
+         */
+        void toGML(const QString &filename);
+
+        /**
+         * @brief Exports a graph to a GXL graph file.
+         * @see IXmlSerializable
+         */
+        void toXML();
+
+        /**
+         * @brief Exports a graph, saving a XML graph metadata file first.
+         * This metadata file most likely contains an URL to the actual graph file.
+         * @param filename the graph metadata file
+         */
+        void toXMLMetadata (const QString &filename);
 
     private:
         Graph *neighborhoodSubgraphRec(QSet<Vertex *> vertices, int nbhdSize);

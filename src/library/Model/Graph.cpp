@@ -35,7 +35,7 @@ QString Graph::toName(Format format) {
     return formatName[format];
 }
 
-Graph::Graph(Type type) : Identified(), Indexed() {
+Graph::Graph(Type type): GraphElement(GraphElement::GRAPH) {
     type_ = type;
     metadata_ = new Metadata();
 }
@@ -249,23 +249,110 @@ void Graph::load(const QString &filename) {
             fromGML(filename);
             break;
         case GXL:
-            fromGXL(filename);
+            IXmlSerializable::load(filename);
             break;
         case XML:
-            fromXML(filename);
+            fromXMLMetadata(filename);
             break;
         default:
             Exception(QString("%1 is not a *.gml, *.gxl nor *.xml file.").arg(filename));
             break;
     }
-    setID(QFileInfo(filename).completeBaseName());
+    if(getID().isEmpty())
+        setID(QFileInfo(filename).completeBaseName());
+}
+
+void Graph::save(const QString &filename) {
+    Format format = toFormat(FileUtils::getExtension(filename));
+    switch(format) {
+        case GML:
+            toGML(filename);
+            break;
+        case GXL:
+            IXmlSerializable::save(filename);
+            break;
+        case XML:
+            toXMLMetadata(filename);
+            break;
+        default:
+            Exception(QString("%1 is not a *.gml, *.gxl nor *.xml file.").arg(filename));
+            break;
+    }
+}
+
+void Graph::load(QDomElement element) {
+    GraphElement::load(element);
+    if(element.hasAttribute("id"))
+        setID(element.attribute("id"));
+
+    QString vertexTag = GraphElement::toName(GraphElement::VERTEX);
+    QString edgeTag = GraphElement::toName(GraphElement::EDGE);
+
+    type_ = toType(element.attribute("edgemode"));
+    bool edgeids = Attribute::toVariant(QMetaType::Bool, element.attribute("edgeids", "false")).toBool();
+
+    // Parse vertices
+    Vertex *v;
+    QDomElement elem = element.firstChildElement(vertexTag);
+    while (!elem.isNull()) {
+        v = new Vertex();
+        v->load(elem);
+        addVertex(v, elem.attribute("id"));
+        elem = elem.nextSiblingElement(vertexTag);
+    }
+
+    // Parse edges
+    Edge *e;
+    elem = element.firstChildElement(edgeTag);
+    while(!elem.isNull()) {
+        e = new Edge();
+        e->setOrigin(vertices_[verticesInsertionOrder_[elem.attribute("from")]]);
+        e->setTarget(vertices_[verticesInsertionOrder_[elem.attribute("to")]]);
+        e->load(elem);
+        if(edgeids)
+            e->setID(elem.attribute("id"));
+        addEdge(e);
+        // e may be deleted
+        e = edges_.last();
+        e->getOrigin()->addEdge(e, Vertex::EDGE_OUT);
+        e->getTarget()->addEdge(e, Vertex::EDGE_IN);
+
+        elem = elem.nextSiblingElement(edgeTag);
+    }
+}
+
+QDomElement Graph::save(QDomDocument *document) {
+    QDomElement graph = GraphElement::save(document);
+    if(!getID().isEmpty())
+        graph.setAttribute("id", getID());
+    graph.setAttribute("edgemode", toName(type_));
+    bool edgeids = (getEdgeCount() > 0) && !getEdge(0)->getID().isEmpty();
+    graph.setAttribute("edgeids", Attribute::toString(QMetaType::Bool, edgeids));
+
+    QDomElement element;
+    for(Vertex *v : vertices_) {
+        element = v->save(document);
+        element.setAttribute("id", v->getID());
+        // FIXME: hierarchical
+        // if(v->getGraph())
+        graph.appendChild(element);
+    }
+    for(Edge *e : edges_) {
+        element = e->save(document);
+        if(edgeids)
+            element.setAttribute("id", e->getID());
+        element.setAttribute("from", e->getOrigin()->getID());
+        element.setAttribute("to", e->getTarget()->getID());
+        graph.appendChild(element);
+    }
+    return graph;
 }
 
 void Graph::fromGML(const QString &filename) {
     QString buffer = FileUtils::load(filename);
     QRegExp directed = QRegExp("directed (0|1)");
-    QRegExp vertex_begin = QRegExp("node \\[");
-    QRegExp edge_begin = QRegExp("edge \\[");
+    QRegExp vertex_begin = QRegExp(GraphElement::toName(GraphElement::VERTEX) + " \\[");
+    QRegExp edge_begin = QRegExp(GraphElement::toName(GraphElement::EDGE) + " \\[");
     QRegExp group_end = QRegExp("\\]");
     QString id;
     QString label;
@@ -361,65 +448,13 @@ void Graph::fromGML(const QString &filename) {
     }
 }
 
-void Graph::fromGXL(const QString &filename) {
-    QFile file(filename);
-    if(!file.open(QFile::ReadOnly | QFile::Text))
-        Exception(QString("Error while loading %1 : %2").arg(filename, file.errorString()));
-
-    QDomDocument doc;
-    doc.setContent(&file, false);
-    QDomElement graph = doc.documentElement().firstChildElement("graph");
-
-    // Graph type
-    type_ = toType(graph.attribute("edgemode")); // (Type)(!graph.attribute("edgemode").compare("undirected", Qt::CaseInsensitive));
-
-    // Edges have id's
-    bool edgeids = !graph.attribute("edgeids", "false").compare("true", Qt::CaseInsensitive);
-
-    // Parse vertices
-    Vertex *v;
-    QMetaType::Type attrMetaType;
-    QDomElement elem = graph.firstChildElement("node");
-    QDomElement attr;
-    while (!elem.isNull())
-    {
-        v = new Vertex();
-        attr = elem.firstChildElement("attr");
-        while(!attr.isNull()) {
-            attrMetaType = Attribute::toType(attr.firstChildElement().tagName().toLower());
-            v->addAttribute(attr.attribute("name"), attrMetaType, Attribute::toVariant(attrMetaType, attr.firstChildElement().text()));
-            attr = attr.nextSiblingElement("attr");
-        }
-        addVertex(v, elem.attribute("id"));
-        elem = elem.nextSiblingElement("node");
-    }
-
-    // Parse edges
-    elem = graph.firstChildElement("edge");
-    Edge *e;
-    while(!elem.isNull()) {
-        e = new Edge();
-        if(edgeids)
-            e->setID(graph.attribute("id", QString("e%1").arg(e->getIndex())));
-        e->setOrigin(vertices_[verticesInsertionOrder_[elem.attribute("from")]]);
-        e->setTarget(vertices_[verticesInsertionOrder_[elem.attribute("to")]]);
-        attr = elem.firstChildElement("attr");
-        while(!attr.isNull()) {
-            attrMetaType = Attribute::toType(attr.firstChildElement().tagName().toLower());
-            e->addAttribute(attr.attribute("name"), attrMetaType, Attribute::toVariant(attrMetaType, attr.firstChildElement().text()));
-            attr = attr.nextSiblingElement("attr");
-        }
-        addEdge(e);
-        // e may be deleted
-        e = edges_.last();
-        e->getOrigin()->addEdge(e, Vertex::EDGE_OUT);
-        e->getTarget()->addEdge(e, Vertex::EDGE_IN);
-        elem = elem.nextSiblingElement("edge");
-    }
-    file.close();
+void Graph::fromXML() {
+    QString graphTag = GraphElement::toName(GraphElement::GRAPH);
+    QDomElement graph = document()->documentElement().firstChildElement(graphTag);
+    load(graph);
 }
 
-void Graph::fromXML(const QString &filename) {
+void Graph::fromXMLMetadata(const QString &filename) {
     metadata_->load(filename);
     QString graphFile = metadata_->getGraphAttribute("graphfile").toString();
     if(!FileUtils::isAbsolute(graphFile))
@@ -427,14 +462,32 @@ void Graph::fromXML(const QString &filename) {
     load(graphFile);
 }
 
+void Graph::toGML(const QString &filename) {
+    FileUtils::save(this, filename);
+}
+
+void Graph::toXML() {
+    QDomElement gxl = document()->createElement("gxl");
+    QDomElement graph = save(document());
+    gxl.appendChild(graph);
+    document()->appendChild(gxl);
+}
+
+void Graph::toXMLMetadata(const QString &filename) {
+    metadata_->save(filename);
+    QString graphFile = metadata_->getGraphAttribute("graphfile").toString();
+    if(!FileUtils::isAbsolute(graphFile))
+        graphFile = FileUtils::slashed(FileUtils::path(filename), graphFile);
+    save(graphFile);
+}
+
 void Graph::print(Printer *p) {
-    // FIXME : gxl ?
     p->dump("graph [");
     p->indent();
     p->dump(QString("directed %1").arg(type_ == DIRECTED));
     // Vertices
     for(auto v : vertices_) {
-        p->dump("node [");
+        p->dump(GraphElement::toName(GraphElement::VERTEX) + " [");
         p->indent();
         p->dump(QString("id %1").arg(v->getIndex()));
         p->dump(QString("label \"%1\"").arg(v->getID()));
@@ -448,7 +501,7 @@ void Graph::print(Printer *p) {
     }
     // Edges
     for(auto e : edges_) {
-        p->dump("edge [");
+        p->dump(GraphElement::toName(GraphElement::EDGE) + " [");
         p->indent();
         p->dump(QString("source %1").arg(e->getOrigin()->getIndex()));
         p->dump(QString("target %1").arg(e->getTarget()->getIndex()));
@@ -462,8 +515,4 @@ void Graph::print(Printer *p) {
     }
     p->unindent();
     p->dump("]");
-}
-
-void Graph::save(const QString &filename) {
-    FileUtils::save(this, filename);
 }

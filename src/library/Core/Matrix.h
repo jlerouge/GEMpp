@@ -5,6 +5,7 @@
 #include "ISaveable.h"
 #include "IPrintable.h"
 #include "Identified.h"
+#include "FileUtils.h"
 
 /**
  * @brief The PrintableMatrix class is a template class that represents a matrix whose elements can be displayed.

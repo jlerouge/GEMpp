@@ -1,4 +1,8 @@
 ROOT = ../..
 include($$ROOT/cli.pri)
-SOURCES += main.cpp
+HEADERS += \
+    Hierarchizer.h
+SOURCES += \
+    Hierarchizer.cpp \
+    main.cpp
 TARGET = GEM++molecule

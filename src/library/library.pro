@@ -23,13 +23,14 @@ HEADERS += \
     Core/ILoadable.h \
     Core/IPrintable.h \
     Core/ISaveable.h \
+    Core/IXmlElementSerializable.h \
+    Core/IXmlSerializable.h \
     Core/LocalStorage.h \
     Core/Math.h \
     Core/Matrix.h \
     Core/Portability.h \
     Core/Printer.h \
     Core/Random.h \
-    Core/IXmlSerializable.h \
     Extraction/BinaryPNG.h \
     Extraction/ExtractionConfiguration.h \
     Extraction/GenericExtractor.h \

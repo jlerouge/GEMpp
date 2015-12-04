@@ -1,7 +1,8 @@
 #include "GraphElement.h"
 
 const char* GraphElement::typeName[GraphElement::COUNT] = {
-    "vertex",
+    "graph",
+    "node",
     "edge"
 };
 
@@ -74,4 +75,31 @@ const QMap<QString, Attribute *> &GraphElement::getAttributes() const {
 
 void GraphElement::print(Printer *p) {
     p->dump(getID());
+}
+
+QDomElement GraphElement::save(QDomDocument *document) {
+    QDomElement element = document->createElement(toName(getType()));
+    QDomElement attr, attrType;
+    QDomText attrText;
+    for(QString key : attributes_.keys()) {
+        attr = document->createElement("attr");
+        attr.setAttribute("name", key);
+        attrType = document->createElement(Attribute::toName(attributes_[key]->getType()));
+        attrText = document->createTextNode(attributes_[key]->getValue().toString());
+        attrType.appendChild(attrText);
+        attr.appendChild(attrType);
+        element.appendChild(attr);
+    }
+    return element;
+}
+
+void GraphElement::load(QDomElement element) {
+    QDomElement attr;
+    QMetaType::Type attrMetaType;
+    attr = element.firstChildElement("attr");
+    while(!attr.isNull()) {
+        attrMetaType = Attribute::toType(attr.firstChildElement().tagName().toLower());
+        addAttribute(attr.attribute("name"), attrMetaType, Attribute::toVariant(attrMetaType, attr.firstChildElement().text()));
+        attr = attr.nextSiblingElement("attr");
+    }
 }

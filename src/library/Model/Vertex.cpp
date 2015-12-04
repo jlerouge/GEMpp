@@ -10,11 +10,13 @@ const char* Vertex::directionName[Vertex::COUNT] = {
 Vertex::Vertex() : GraphElement(GraphElement::VERTEX) {
     inEdges_ = QSet<Edge *>();
     outEdges_ = QSet<Edge *>();
+    graph_ = 0;
 }
 
 Vertex::Vertex(const Vertex &other) : Identified(other), Indexed(other), GraphElement(other) {
     outEdges_ = other.getEdges(EDGE_OUT);
     inEdges_ = other.getEdges(EDGE_IN);
+    graph_ = other.getGraph();
 }
 
 Vertex::~Vertex() {}
@@ -73,6 +75,14 @@ QSet<Edge *> Vertex::getEdges(Direction d) const {
     return QSet<Edge *>();
 }
 
+Vertex *Vertex::getNeighbour(Edge *e) const {
+    if(e->getOrigin() == const_cast<Vertex *>(this))
+        return e->getTarget();
+    if(e->getTarget() == const_cast<Vertex *>(this))
+        return e->getOrigin();
+    Exception(QString("The edge %1 is not a valid incident edge for vertex %2.").arg(e->getIndex()).arg(getIndex()));
+}
+
 QSet<Vertex *> Vertex::getNeighbours(Direction d) const {
     QSet<Vertex *> vertices;
     switch(d) {
@@ -90,4 +100,12 @@ QSet<Vertex *> Vertex::getNeighbours(Direction d) const {
             break;
     }
     return vertices;
+}
+
+Graph *Vertex::getGraph() const {
+    return graph_;
+}
+
+void Vertex::setGraph(Graph *graph) {
+    graph_ = graph;
 }

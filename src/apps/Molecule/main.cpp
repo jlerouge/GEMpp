@@ -1,4 +1,5 @@
 #include "Application/ApplicationFactory.h"
+#include "Hierarchizer.h"
 
 int main(int argc, char **argv) {
     ConsoleApplication coreApp(argc, argv);
@@ -23,7 +24,17 @@ int main(int argc, char **argv) {
             Exception("You must provide a graph file.");
         QString graphFilename = args[0];
         Graph *graph = new Graph(graphFilename);
-        graph->save(FileUtils::changeExtension(graphFilename, "gml"));
+
+        //graph->save(FileUtils::changeExtension(graphFilename, "copy.gml"));
+        Hierarchizer *hierarchizer = new Hierarchizer(graph);
+        hierarchizer->extract();
+        QList<QList<Vertex *>> cycles = hierarchizer->getCycles();
+
+        for(QList<Vertex *> cycle : cycles) {
+            qcout << "cycle  : " << endl;
+            for(Vertex *v : cycle)
+                qcout << "  " << v->getID() << endl;
+        }
 
     } catch (std::exception &e) {
         coreApp.error(e);

@@ -11,7 +11,6 @@
  * @brief The IXmlSerializable class is an interface for objects
  * that can be serialized to files in XML format.
  * @see QDomDocument
- * @see ISerializable
  * @warning This interface must be implemented to be used.
  * @author J.Lerouge <julien.lerouge@litislab.fr>
  */
@@ -44,14 +43,14 @@ class DLL_EXPORT IXmlSerializable : virtual public ILoadable, virtual public ISa
          * @param filename the XML file to be read
          * @see IXmlSerializable::fromXML()
          */
-        void load(const QString &filename = QString());
+        virtual void load(const QString &filename = QString());
 
         /**
          * @brief Serializes the object to an XML document.
          * @param filename the XML file to be written
          * @see IXmlSerializable::toXML()
          */
-        void save(const QString &filename = QString());
+        virtual void save(const QString &filename = QString());
 
         void clean();
 

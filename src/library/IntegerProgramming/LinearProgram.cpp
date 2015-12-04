@@ -29,10 +29,6 @@ void LinearProgram::addLinearConstraint(LinearConstraint *c) {
     }
 }
 
-//void LinearProgram::clearConstraints() {
-//    constraints_.clear();
-//}
-
 LinearExpression *LinearProgram::getObjective() {
     return objective_;
 }
