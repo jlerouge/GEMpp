@@ -10,9 +10,9 @@ MatchingApplication::MatchingApplication(int &argc, char **argv, Problem::Type t
     g2_ = 0;
     gl1_ = 0;
     gl2_ = 0;
-    isPopulating_ = false;
     finishedCount_ = 0;
     totalCount_ = 0;
+    mutex_ = new QMutex(QMutex::Recursive);
 }
 
 MatchingApplication::~MatchingApplication() {
@@ -31,6 +31,8 @@ MatchingApplication::~MatchingApplication() {
         delete gl2_;
     if(gl1_)
         delete gl1_;
+    if(mutex_)
+        delete mutex_;
 }
 
 void MatchingApplication::finished(Problem *pb, double objective) {
@@ -39,13 +41,11 @@ void MatchingApplication::finished(Problem *pb, double objective) {
     matrix_->setElement(pb->getQuery()->getIndex(), pb->getTarget()->getIndex(), objective);
     delete pb;
 
-    if(++finishedCount_ < totalCount_) {
-        // There are still waiting threads
-        populate();
-    } else {
-        // Make sure this is called only once
+    mutex_->lock();
+    // Make sure finalize is called only once
+    if(++finishedCount_ == totalCount_)
         finalize();
-    }
+    mutex_->unlock();
 }
 
 void MatchingApplication::finalize() {
@@ -116,21 +116,32 @@ int MatchingApplication::match() {
     return EXIT_FAILURE;
 }
 
+void MatchingApplication::solveSubProblem(Problem *subproblem, Weights *weights, GraphElement::Type type, int iQuery, int iTarget) {
+    connect(subproblem, SIGNAL(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)), this, SLOT(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)));
+    subproblem->computeCosts(weights);
+
+    Matcher *matcher = new Matcher(subproblem, cfg_);
+    matcher->run();
+
+    Problem *parent = dynamic_cast<Problem *>(sender());
+    parent->addCost(iQuery, iTarget, matcher->getObjective(), type);
+}
+
 void MatchingApplication::populate() {
-    // FIXME ! UTILISER UN MUTEX ET NE REMPLIR QUE SON PROPRE THREAD !!
-    if(!isPopulating_) {
-        isPopulating_ = true;
-        QThreadPool *tp = QThreadPool::globalInstance();
-        QPair<Graph*, Graph*> pair;
-        int max = tp->maxThreadCount();
-        for(int current = tp->activeThreadCount(); (current < max) && !(queue_.isEmpty()); ++current) {
-            pair = queue_.dequeue();
-            Matcher *matcher = new Matcher(new Problem(matchingType_, pair.first, pair.second, w_), cfg_);
-            matcher->setAutoDelete(true);
-            connect(matcher, SIGNAL(finished(Problem*,double)), this, SLOT(finished(Problem*,double)));
-            tp->start(matcher);
-        }
-        isPopulating_ = false;
+    QThreadPool *tp = QThreadPool::globalInstance();
+    QPair<Graph*, Graph*> pair;
+    while(!queue_.isEmpty()) {
+        pair = queue_.dequeue();
+
+        Problem *problem = new Problem(matchingType_, pair.first, pair.second);
+        connect(problem, SIGNAL(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)), this, SLOT(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)));
+        problem->computeCosts(w_);
+
+        Matcher *matcher = new Matcher(problem, cfg_);
+        matcher->setAutoDelete(true);
+        connect(matcher, SIGNAL(finished(Problem*,double)), this, SLOT(finished(Problem*,double)));
+
+        tp->start(matcher);
     }
 }
 

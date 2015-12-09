@@ -18,31 +18,15 @@ QString Problem::toName(Type type) {
     return typeName[type];
 }
 
-Problem::Problem(Type t, Graph *pattern, Graph *target, Weights *weights) : type_(t), pattern_(pattern), target_(target), deleteGraphs_(false) {
-    if(pattern_->getType() != target_->getType())
+Problem::Problem(Type t, Graph *query, Graph *target) : type_(t), query_(query), target_(target) {
+    if(query_->getType() != target_->getType())
         Exception("Both graphs must have the same type (directed or undirected).");
-    vCosts_ = Matrix<double>(pattern_->getVertexCount(), target_->getVertexCount());
-    eCosts_ = Matrix<double>(pattern_->getEdgeCount(), target_->getEdgeCount());
-    if(weights)
-        computeCosts(weights);
-}
-
-Problem::Problem(Type t, const QString &pattern, const QString &target, const QString &substitution, const QString &creation) : type_(t), deleteGraphs_(true) {
-    Weights weights(substitution, creation);
-    pattern_ = new Graph(pattern);
-    target_ = new Graph(target);
-    if(pattern_->getType() != target_->getType())
-        Exception("Both graphs must have the same type (directed or undirected).");
-    vCosts_ = Matrix<double>(pattern_->getVertexCount(), target_->getVertexCount());
-    eCosts_ = Matrix<double>(pattern_->getEdgeCount(), target_->getEdgeCount());
-    computeCosts(&weights);
+    vCosts_ = Matrix<double>(query_->getVertexCount(), target_->getVertexCount());
+    eCosts_ = Matrix<double>(query_->getEdgeCount(), target_->getEdgeCount());
 }
 
 Problem::~Problem() {
-    if(deleteGraphs_) {
-        delete pattern_;
-        delete target_;
-    }
+    qDeleteAll(subProblems_);
 }
 
 Problem::Type Problem::getType() const {
@@ -50,16 +34,16 @@ Problem::Type Problem::getType() const {
 }
 
 void Problem::print(Printer *p) {
-    p->dump("<problem edgemode=\""+Graph::toName(pattern_->getType())+"\" type=\""+toName(type_)+"\">");
+    p->dump("<problem edgemode=\""+Graph::toName(query_->getType())+"\" type=\""+toName(type_)+"\">");
     p->indent();
-    p->dump("<query id=\""+pattern_->getID()+"\"/>");
+    p->dump("<query id=\""+query_->getID()+"\"/>");
     p->dump("<target id=\""+target_->getID()+"\"/>");
     p->unindent();
     p->dump("</problem>");
 }
 
 Graph *Problem::getQuery() const {
-    return pattern_;
+    return query_;
 }
 
 Graph *Problem::getTarget() const {
@@ -97,23 +81,48 @@ void Problem::save(const QString &filename) {
 }
 
 void Problem::computeCosts(Weights *weights) {
-    // Vertices creation costs
-    for(auto v : pattern_->getVertices())
-        v->setCost(weights->creationCost(v));
-    for(auto v : target_->getVertices())
-        v->setCost(weights->creationCost(v));
-    // Vertices substitution costs
-    for(int i=0; i < pattern_->getVertexCount(); ++i)
-        for(int k=0; k < target_->getVertexCount(); ++k)
-            vCosts_.setElement(i, k, weights->substitutionCost(pattern_->getVertex(i), target_->getVertex(k)));
+    // Creation costs
+    query_->computeCosts(weights);
+    target_->computeCosts(weights);
 
-    // Edges creation costs
-    for(auto e : pattern_->getEdges())
-        e->setCost(weights->creationCost(e));
-    for(auto e : target_->getEdges())
-        e->setCost(weights->creationCost(e));
+    double cost;
+    Vertex *qv, *tv;
+    // Vertices substitution costs
+    for(int i=0; i < query_->getVertexCount(); ++i) {
+        for(int k=0; k < target_->getVertexCount(); ++k) {
+            qv = query_->getVertex(i);
+            tv = target_->getVertex(k);
+            if(qv->getGraph() && tv->getGraph()) {
+                computeGraphCost(qv->getGraph(), tv->getGraph(), weights, GraphElement::VERTEX, i, k);
+                continue;
+            }
+            if (qv->getGraph())
+                cost = computeCost(tv, qv->getGraph(), weights);
+            else if (tv->getGraph())
+                cost = computeCost(qv, tv->getGraph(), weights);
+            else
+                cost = weights->substitutionCost(qv, tv);
+            vCosts_.setElement(i, k, cost);
+        }
+    }
+
     // Edges substitution costs
-    for(int ij=0; ij < pattern_->getEdgeCount(); ++ij)
+    for(int ij=0; ij < query_->getEdgeCount(); ++ij)
         for(int kl=0; kl < target_->getEdgeCount(); ++kl)
-            eCosts_.setElement(ij, kl, weights->substitutionCost(pattern_->getEdge(ij), target_->getEdge(kl)));
+            eCosts_.setElement(ij, kl, weights->substitutionCost(query_->getEdge(ij), target_->getEdge(kl)));
+}
+
+double Problem::computeCost(Vertex *vertex, Graph *graph, Weights *weights) {
+    QList<double> costs;
+    QList<Vertex *> terminals = graph->getAllTerminalVertices();
+    for(Vertex *other : terminals)
+        costs.append(weights->substitutionCost(vertex, other));
+    int iMin = std::min_element(costs.begin(), costs.end()) - costs.begin();
+    return costs[iMin] + graph->getCost() - terminals[iMin]->getCost();
+}
+
+void Problem::computeGraphCost(Graph *g1, Graph *g2, Weights *weights, GraphElement::Type type, int iQuery, int iTarget) {
+    Problem *subProblem = new Problem(Problem::GED, g1, g2);
+    subProblems_.append(subProblem);
+    emit solveSubProblem(subProblem, weights, type, iQuery, iTarget);
 }

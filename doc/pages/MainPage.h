@@ -16,7 +16,7 @@
     GEM++ is a software implementing several graph matching approaches, using [binary linear programming](https://en.wikipedia.org/wiki/Integer_programming).
     It is composed of five main executables and one common library :
         - **GEM++dist** is a command-line executable, that computes an edit distance between two graphs;
-        - **GEM++sub** is a second command-line executable, that searches a subgraph matching between a pattern graph and a target graph;
+        - **GEM++sub** is a second command-line executable, that searches a subgraph matching between a query graph and a target graph;
         - **GEM++multidist** and **GEM++multisub** provides the same functionalities as the two former commands, but for sets of graphs (they compute a distance matrix);
         - **GEM++gui** is a graphical user interface that lets the user load graphs, select subgraphs, set the parameters of the matching algorithm and see its results.
         - **libGEM++.so / GEM++.dll** is the shared library that provides methods to extract graphs from various data, to load and save graph and weights files,

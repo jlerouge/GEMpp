@@ -5,15 +5,16 @@
 #include "Weights.h"
 #include "Core/Matrix.h"
 
-class DLL_EXPORT Problem : virtual public IPrintable, virtual public ISaveable {
+class DLL_EXPORT Problem : public QObject, virtual public IPrintable, virtual public ISaveable {
+        Q_OBJECT
     public:
         /**
          * @brief The Type enum indicates the type of matching involved.
          */
         enum Type{
-            NONE, /**< no matching performed */
+            NONE,     /**< no matching performed */
             SUBGRAPH, /**< subgraph matching */
-            GED, /**< graph edit distance */
+            GED,      /**< graph edit distance */
             COUNT
         };
 
@@ -21,8 +22,7 @@ class DLL_EXPORT Problem : virtual public IPrintable, virtual public ISaveable {
         static QString toName(Type type);
         static Type fromName(QString name);
 
-        Problem(Type t, const QString &pattern, const QString &target, const QString &substitution, const QString &creation);
-        Problem(Type t, Graph *pattern, Graph *target, Weights *weights = 0);
+        Problem(Type t, Graph *query, Graph *target);
         virtual ~Problem();
 
         Graph *getQuery() const;
@@ -35,13 +35,29 @@ class DLL_EXPORT Problem : virtual public IPrintable, virtual public ISaveable {
         void print(Printer *p);
         void save(const QString &filename);
 
+    signals:
+        /**
+         * @brief Solves a subproblem coming from a parent ::Problem dealing
+         * with hierarchical ::Graphs, using the same ::Configuration as for the
+         * original ::Problem.
+         * @param subproblem the subproblem to solve
+         * @param type the ::GraphElement::Type containing the hierarchical subgraphs
+         * @param iQuery the index of the query ::GraphElement
+         * @param iTarget the index of the target ::GraphElement
+         */
+        void solveSubProblem(Problem *subProblem, Weights *weights, GraphElement::Type type, int iQuery, int iTarget);
+
+    protected:
+        double computeCost(Vertex *vertex, Graph *graph, Weights *weights);
+        void computeGraphCost(Graph *g1, Graph *g2, Weights *weights, GraphElement::Type type, int iQuery, int iTarget);
+
     private:
         Type type_;
-        Graph *pattern_;
+        Graph *query_;
         Graph *target_;
         Matrix<double> vCosts_;
         Matrix<double> eCosts_;
-        bool deleteGraphs_;
+        QList<Problem *> subProblems_;
 };
 
 #endif /* GEMPP_PROBLEM_H */

@@ -55,6 +55,17 @@ const QList <Vertex *> &Graph::getVertices() const {
     return vertices_;
 }
 
+QList<Vertex *> Graph::getAllTerminalVertices() const {
+    QList<Vertex *> result;
+    for(auto v : vertices_) {
+        if(v->getGraph())
+            result.append(v->getGraph()->getAllTerminalVertices());
+        else
+            result.append(v);
+    }
+    return result;
+}
+
 Vertex *Graph::getVertex(int i) const {
     return vertices_[i];
 }
@@ -66,6 +77,14 @@ void Graph::addVertex(Vertex *v, QString id) {
         v->setID(sid);
     verticesInsertionOrder_.insert(sid,vertices_.size());
     vertices_.push_back(v);
+}
+
+void Graph::removeVertex(QString id) {
+    removeVertex(verticesInsertionOrder_[id]);
+}
+
+void Graph::removeVertex(int index) {
+    removeVertex(vertices_[index]);
 }
 
 void Graph::removeVertex(Vertex *v) {
@@ -84,10 +103,6 @@ void Graph::removeVertex(Vertex *v) {
         key = verticesInsertionOrder_.key(i+1);
         verticesInsertionOrder_[key] = i;
     }
-
-    // Remove the incident edges
-    for(auto e: v->getEdges(Vertex::EDGE_IN_OUT))
-        removeEdge(e);
 }
 
 const QList <Edge *> &Graph::getEdges() const {
@@ -103,13 +118,23 @@ void Graph::addEdge(Edge *e) {
     edges_.push_back(e);
 }
 
+void Graph::removeEdge(int index) {
+    removeEdge(edges_[index]);
+}
+
 void Graph::removeEdge(Edge *e) {
     int index = e->getIndex();
     if(edges_[index] != e)
         Exception(QString("Index mismatch in edges of the graph %1").arg(getID()));
+
+    // Remove the references
     edges_.removeAt(index);
     e->getOrigin()->removeEdge(e);
     e->getTarget()->removeEdge(e);
+
+    // Reindex the edges
+    for(int i=index; i < edges_.size(); ++i)
+        edges_[i]->setIndex(i);
 }
 
 Metadata *Graph::getMetadata() const {
@@ -132,22 +157,50 @@ void Graph::setType(Type type) {
     type_ = type;
 }
 
-Graph *Graph::neighborhoodSubgraph(int iSeed, int nbhdSize) {
+void Graph::computeCosts(Weights *weights) {
+    double total = 0;
+
+    // Vertices creations costs
+    for(auto v : vertices_) {
+        if(v->getGraph()) {
+            v->getGraph()->computeCosts(weights);
+            v->setCost(v->getGraph()->getCost());
+        } else {
+            v->setCost(weights->creationCost(v));
+        }
+        total += v->getCost();
+    }
+
+    // Edges creations costs
+    for(auto e : edges_) {
+        e->setCost(weights->creationCost(e));
+        total += e->getCost();
+    }
+
+    // Total cost
+    setCost(total);
+}
+
+Graph *Graph::copy() const {
+    return inducedSubgraph(vertices_.toSet());
+}
+
+Graph *Graph::neighborhoodSubgraph(int iSeed, int nbhdSize) const {
     QSet<Vertex *> seeds;
     seeds.insert(getVertex(iSeed));
     return neighborhoodSubgraphRec(seeds, nbhdSize);
 }
 
-Graph *Graph::neighborhoodSubgraph(QSet<int> iSeeds, int nbhdSize) {
+Graph *Graph::neighborhoodSubgraph(QSet<int> iSeeds, int nbhdSize) const {
     QSet<Vertex *> seeds;
     for(auto i: iSeeds)
         seeds.insert(getVertex(i));
     return neighborhoodSubgraphRec(seeds, nbhdSize);
 }
 
-Graph *Graph::neighborhoodSubgraphRec(QSet<Vertex *> vertices, int nbhdSize) {
+Graph *Graph::neighborhoodSubgraphRec(QSet<Vertex *> vertices, int nbhdSize) const {
     if(nbhdSize <= 0)
-        return generateInducedSubgraph(vertices);
+        return inducedSubgraph(vertices);
 
     QList<Vertex *> temp;
     for(auto v: vertices) {
@@ -161,7 +214,7 @@ Graph *Graph::neighborhoodSubgraphRec(QSet<Vertex *> vertices, int nbhdSize) {
     return neighborhoodSubgraphRec(vertices, nbhdSize - 1);
 }
 
-Graph *Graph::randomSubgraph(int iSeed, int vCount) {
+Graph *Graph::randomSubgraph(int iSeed, int vCount) const {
     QSet<Vertex *> vertices = QSet<Vertex *>();
     QSet<Vertex *> neighbours = QSet<Vertex *>();
     Vertex *v = 0;
@@ -182,11 +235,11 @@ Graph *Graph::randomSubgraph(int iSeed, int vCount) {
         for(auto v: vertices)
             neighbours.remove(v);
     }
-    return generateInducedSubgraph(vertices);
+    return inducedSubgraph(vertices);
 }
 
 
-Graph *Graph::generateInducedSubgraph(const QSet<Vertex *> &vertices) {
+Graph *Graph::inducedSubgraph(const QSet<Vertex *> &vertices) const {
     Graph *subgraph = new Graph(type_);
     QList<Vertex *> vList = vertices.toList();
     QList<Edge *> eList = QList<Edge *>();
@@ -228,15 +281,19 @@ Graph *Graph::generateInducedSubgraph(const QSet<Vertex *> &vertices) {
     // Copy vertex metadata
     for(int i=0; i < subgraph->getVertexCount(); ++i) {
         pIndex = vList[i]->getIndex();
-        for(auto key : metadata_->getAttributes(GraphElement::VERTEX, pIndex).keys())
-            subgraph->getMetadata()->setAttribute(GraphElement::VERTEX, i, key, metadata_->getAttribute(GraphElement::VERTEX, pIndex, key));
+        try {
+            for(auto key : metadata_->getAttributes(GraphElement::VERTEX, pIndex).keys())
+                subgraph->getMetadata()->setAttribute(GraphElement::VERTEX, i, key, metadata_->getAttribute(GraphElement::VERTEX, pIndex, key));
+        } catch (std::exception &e) {}
     }
 
     // Copy edge metadata
     for(int ij=0; ij < subgraph->getEdgeCount(); ++ij) {
         pIndex = eList[ij]->getIndex();
-        for(auto key : metadata_->getAttributes(GraphElement::EDGE, pIndex).keys())
-            subgraph->getMetadata()->setAttribute(GraphElement::EDGE, ij, key, metadata_->getAttribute(GraphElement::EDGE, pIndex, key));
+        try {
+            for(auto key : metadata_->getAttributes(GraphElement::EDGE, pIndex).keys())
+                subgraph->getMetadata()->setAttribute(GraphElement::EDGE, ij, key, metadata_->getAttribute(GraphElement::EDGE, pIndex, key));
+        } catch (std::exception &e) {}
     }
 
     return subgraph;
@@ -285,6 +342,7 @@ void Graph::load(QDomElement element) {
     if(element.hasAttribute("id"))
         setID(element.attribute("id"));
 
+    QString graphTag = GraphElement::toName(GraphElement::GRAPH);
     QString vertexTag = GraphElement::toName(GraphElement::VERTEX);
     QString edgeTag = GraphElement::toName(GraphElement::EDGE);
 
@@ -293,10 +351,17 @@ void Graph::load(QDomElement element) {
 
     // Parse vertices
     Vertex *v;
-    QDomElement elem = element.firstChildElement(vertexTag);
+    Graph *g;
+    QDomElement elem = element.firstChildElement(vertexTag), graphElem;
     while (!elem.isNull()) {
         v = new Vertex();
         v->load(elem);
+        graphElem = elem.firstChildElement(graphTag);
+        if(!graphElem.isNull()) {
+            g = new Graph();
+            g->load(graphElem);
+            v->setGraph(g);
+        }
         addVertex(v, elem.attribute("id"));
         elem = elem.nextSiblingElement(vertexTag);
     }
@@ -333,8 +398,8 @@ QDomElement Graph::save(QDomDocument *document) {
     for(Vertex *v : vertices_) {
         element = v->save(document);
         element.setAttribute("id", v->getID());
-        // FIXME: hierarchical
-        // if(v->getGraph())
+        if(v->getGraph())
+            element.appendChild(v->getGraph()->save(document));
         graph.appendChild(element);
     }
     for(Edge *e : edges_) {

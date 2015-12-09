@@ -23,7 +23,7 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
             EDGE_IN = 0, /**< the edge is incident to the vertex */
             EDGE_OUT, /**< the edge is incident from the vertex */
             EDGE_IN_OUT, /**< the edge is undirected */
-            COUNT /**< used to iterate on Vertex::Direction enum */
+            COUNT /**< used to iterate on ::Vertex::Direction enum */
         };
 
         /**
@@ -37,8 +37,8 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
         Vertex();
 
         /**
-         * @brief Constructs a copy of an existing Vertex object.
-         * @param other the Vertex to copy
+         * @brief Constructs a copy of an existing ::Vertex object.
+         * @param other the ::Vertex to copy
          */
         Vertex(const Vertex &other);
 
@@ -61,34 +61,34 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
         void removeEdge(Edge *e);
 
         /**
-         * @brief Returns an edge from the list of incident edges
+         * @brief Returns an ::Edge from the list of incident ::Edges
          * having a particular direction.
-         * @param e the index of the edge in the list
-         * @param d the direction of the edge
+         * @param e the index of the ::Edge in the list
+         * @param d the direction of the ::Edge
          */
         Edge *getEdge(int e, Direction d) const;
 
         /**
-         * @brief Returns all the incident edges having a
+         * @brief Returns all the incident ::Edges having a
          * particular direction.
-         * @param d the direction of the edges
+         * @param d the direction of the ::Edges
          */
         QSet<Edge *> getEdges(Direction d) const;
 
         /**
          * @brief Returns the neighbour ::Vertex corresponding
          * to one particular ::Edge.
-         * @param e the edge
-         * @return the neighbour
+         * @param e the ::Edge
+         * @return the neighbour ::Vertex
          * @warning throws an exception if e is not a valid
-         * incident edge.
+         * incident ::Edge.
          */
         Vertex *getNeighbour(Edge *e) const;
 
         /**
          * @brief Returns all the neighbour vertices (::Vertex),
-         * considering only edges having a particular direction.
-         * @param d the direction of the edges
+         * considering only ::Edges having a particular direction.
+         * @param d the direction of the ::Edges
          */
         QSet<Vertex *> getNeighbours(Direction d) const;
 
@@ -100,18 +100,18 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
 
         /**
          * @brief Sets the ::Graph represented by this ::Vertex.
-         * @param graph a graph
+         * @param graph a ::Graph
          */
         void setGraph(Graph *graph);
 
     private:
         /**
-         * @brief The set of ::Edge incident from this Vertex
+         * @brief The set of ::Edges incident from this ::Vertex
          */
         QSet<Edge *> outEdges_;
 
         /**
-         * @brief The set of ::Edge incident to this Vertex
+         * @brief The set of ::Edges incident to this ::Vertex
          */
         QSet<Edge *> inEdges_;
 

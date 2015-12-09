@@ -7,6 +7,7 @@
 #include "Metadata.h"
 #include "Vertex.h"
 #include "Edge.h"
+#include "Weights.h"
 #include "Core/Identified.h"
 #include "Core/Random.h"
 
@@ -16,40 +17,40 @@
  * @see Edge
  * @see Vertex
  */
-class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, virtual public GraphElement { //virtual public Identified, virtual public Indexed {
+class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, virtual public GraphElement {
     public:
         /**
          * @brief Indicates the type of the ::Graph.
          */
         enum Type {
-            DIRECTED = 0, /**< the edges have directions */
-            UNDIRECTED,   /**< the edges have no direction */
-            TYPE_COUNT    /**< used to iterate on Graph::Type */
+            DIRECTED = 0, /**< the ::Edges have directions */
+            UNDIRECTED,   /**< the ::Edges have no direction */
+            TYPE_COUNT    /**< used to iterate on ::Graph::Type */
         };
 
         enum Format {
             GML = 0,     /**< Graph Modeling Language */
             GXL,         /**< Graph eXchange Language */
             XML,         /**< XML metadata + a GML/GXL file */
-            FORMAT_COUNT /**< used to iterate on Graph::Format */
+            FORMAT_COUNT /**< used to iterate on ::Graph::Format */
         };
 
         /**
-         * @brief The names of the types.
+         * @brief The names of the ::Types.
          */
         static const char *typeName[TYPE_COUNT];
 
         /**
-         * @brief Returns the name of the type.
-         * @param type the type
+         * @brief Returns the name of the ::Type.
+         * @param type the ::Type
          * @return the name
          */
         static QString toName(Type type);
 
         /**
-         * @brief Retrieves the type from its name.
+         * @brief Retrieves the ::Type from its name.
          * @param name the name
-         * @return the type
+         * @return the ::Type
          */
         static Type toType(QString name);
 
@@ -59,27 +60,27 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         static const char *formatName[FORMAT_COUNT];
 
         /**
-         * @brief Returns the name of the format.
-         * @param format the format
+         * @brief Returns the name of the ::Format.
+         * @param format the ::Format
          * @return the name
          */
         static QString toName(Format format);
 
         /**
-         * @brief Retrieves the format from its name.
+         * @brief Retrieves the ::Format from its name.
          * @param name the name
-         * @return the format
+         * @return the ::Format
          */
         static Format toFormat(QString name);
 
         /**
-         * @brief Constructs a new Graph object with parameters.
+         * @brief Constructs a new ::Graph object with parameters.
          * @param type the graph type
          */
         Graph(Type type=DIRECTED);
 
         /**
-         * @brief Constructs a new Graph object by loading a graph file.
+         * @brief Constructs a new ::Graph object by loading a file.
          * @param filename the graph file
          */
         Graph(const QString &filename);
@@ -90,10 +91,18 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         virtual ~Graph();
 
         /**
-         * @brief Returns all the vertices of the graph.
+         * @brief Returns all the ::Vertices of the ::Graph.
          * @return a list of ::Vertex
          */
         const QList <Vertex *> &getVertices() const;
+
+        /**
+         * @brief Returns all the terminal ::Vertices of the ::Graph
+         * (the ones that contain no hierarchical subgraph), as well as
+         * the terminal ::Vertices contained in the hierarchical subgraphs.
+         * @return a list of ::Vertex
+         */
+        QList<Vertex *> getAllTerminalVertices() const;
 
         /**
          * @brief Returns a vertex of the graph.
@@ -110,13 +119,25 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         virtual void addVertex(Vertex *v, QString id = "");
 
         /**
-         * @brief Removes a vertex from the graph.
-         * @param v the vertex to remove
+         * @brief Removes a ::Vertex from the ::Graph.
+         * @param id the id of the ::Vertex to remove
+         */
+        virtual void removeVertex(QString id);
+
+        /**
+         * @brief Removes a ::Vertex from the ::Graph.
+         * @param index the index of the ::Vertex to remove
+         */
+        virtual void removeVertex(int index);
+
+        /**
+         * @brief Removes a ::Vertex from the ::Graph.
+         * @param v the ::Vertex to remove
          */
         virtual void removeVertex(Vertex *v);
 
         /**
-         * @brief Returns all the edges of the graph.
+         * @brief Returns all the ::Edges of the ::Graph.
          * @return a list of ::Edge
          */
         const QList <Edge *> &getEdges() const;
@@ -129,37 +150,43 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         Edge *getEdge(int i) const;
 
         /**
-         * @brief Adds an edge to the graph.
-         * @param e the edge to add
+         * @brief Adds an ::Edge to the ::Graph.
+         * @param e the ::Edge to add
          */
         virtual void addEdge(Edge *e);
 
         /**
-         * @brief Removes an edge from the graph.
-         * @param e the edge to remove
+         * @brief Removes an ::Edge from the ::Graph.
+         * @param index the index of the ::Edge to remove
+         */
+        virtual void removeEdge(int index);
+
+        /**
+         * @brief Removes an ::Edge from the ::Graph.
+         * @param e the ::Edge to remove
          */
         virtual void removeEdge(Edge *e);
 
         /**
-         * @brief Returns the metadata on the graph.
-         * @return the metadata
+         * @brief Returns the ::Metadata on the ::Graph.
+         * @return the ::Metadata
          */
         Metadata *getMetadata() const;
 
         /**
-         * @brief Returns the number of vertices of the graph.
-         * @return the number of vertices
+         * @brief Returns the number of ::Vertices of the ::Graph.
+         * @return the number of ::Vertices
          */
         int getVertexCount() const;
 
         /**
-         * @brief Returns the number of edges of the graph.
-         * @return the number of edges
+         * @brief Returns the number of ::Edges of the ::Graph.
+         * @return the number of ::Edges
          */
         int getEdgeCount() const;
 
         /**
-         * @brief Returns the type of the graph.
+         * @brief Returns the ::Graph::Type of the ::Graph.
          */
         Type getType() const;
 
@@ -170,6 +197,19 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         void setType(Type type);
 
         /**
+         * @brief Computes the creation costs of all elements of the ::Graph,
+         * and sets the overall cost as the sum of the elements costs.
+         * @param weights the weights used to compute the costs
+         */
+        void computeCosts(Weights *weights);
+
+        /**
+         * @brief Returns a deep copy of this ::Graph.
+         * @return the copied ::Graph
+         */
+        Graph *copy() const;
+
+        /**
          * @brief Computes a neighbourhood sugraph from this graph,
          * starting with a central seed vertex, adding recursively
          * neighbour vertices to a list and generating the induced subgraph.
@@ -177,7 +217,7 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
          * @param nbhdSize the size of the neighborhood (maximal number of edges
          * between two vertices of the subgraph)
          */
-        Graph *neighborhoodSubgraph(int iSeed, int nbhdSize);
+        Graph *neighborhoodSubgraph(int iSeed, int nbhdSize) const;
 
         /**
          * @brief Computes a neighbourhood sugraph from this graph,
@@ -186,7 +226,7 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
          * @param iSeeds the central vertices
          * @param nbhdSize the size of the neighborhood (maximal number of edges between two vertices of the subgraph)
          */
-        Graph *neighborhoodSubgraph(QSet<int> iSeeds, int nbhdSize);
+        Graph *neighborhoodSubgraph(QSet<int> iSeeds, int nbhdSize) const;
 
         /**
          * @brief Computes a random subgraph, by traversing the edges starting
@@ -195,7 +235,14 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
          * @param iSeed the central vertex
          * @param vCount the number of vertices to select randomly
          */
-        Graph *randomSubgraph(int iSeed, int vCount);
+        Graph *randomSubgraph(int iSeed, int vCount) const;
+
+        /**
+         * @brief Generates the subgraph induced by a set of ::Vertex
+         * @param vertices the set of ::Vertex
+         * @return the induced subgraph
+         */
+        Graph *inducedSubgraph(const QSet<Vertex *> &vertices) const;
 
         /**
          * @brief Prints the ::Graph to a ::Printer using the GML format.
@@ -270,8 +317,7 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         void toXMLMetadata (const QString &filename);
 
     private:
-        Graph *neighborhoodSubgraphRec(QSet<Vertex *> vertices, int nbhdSize);
-        Graph *generateInducedSubgraph(const QSet<Vertex *> &vertices);
+        Graph *neighborhoodSubgraphRec(QSet<Vertex *> vertices, int nbhdSize) const;
 
         Type type_;
         Metadata *metadata_;

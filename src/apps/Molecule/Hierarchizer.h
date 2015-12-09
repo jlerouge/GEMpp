@@ -12,6 +12,7 @@
  * @author J.Lerouge <julien.lerouge@litislab.fr>
  */
 // FIXME: use PIVAJ Extractor formalism (and apply it to other extractors too)
+
 class DLL_EXPORT Hierarchizer {
     public:
         /**
@@ -46,7 +47,7 @@ class DLL_EXPORT Hierarchizer {
          * @brief Returns the detected cycles.
          * @return the output
          */
-        QList<QList<Vertex *>> getCycles() const;
+        QList<QSet<Vertex *>> getCycles() const;
 
         /**
          * @brief Runs the extraction.
@@ -54,13 +55,16 @@ class DLL_EXPORT Hierarchizer {
         void extract();
 
     private:
-        void depthFirstSearch(Vertex *root = 0, QList<Vertex *> parents = QList<Vertex *>());
-        //QList<QList<Vertex *>> depthFirstSearch(Vertex *root = 0, Vertex *parent = 0);
+        void extractCycles();
+        void dfsCycles(Vertex *root = 0, QList<Vertex *> parents = QList<Vertex *>());
+        void fusionCycles();
+        void hierarchizeCycles();
+
+        void dfsChains(Vertex *root = 0, QList<Vertex *> parents = QList<Vertex *>());
 
         QSet<Vertex *> visitedVertices_;
         QSet<Edge *> visitedEdges_;
-
-        QList<QList<Vertex *>> cycles_;
+        QList<QSet<Vertex *>> cycles_;
 
         /**
          * @brief The input of the extraction.

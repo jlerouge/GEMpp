@@ -44,6 +44,17 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
          */
         void finished(Problem *pb, double objective);
 
+        /**
+         * @brief Solves a subproblem coming from a parent ::Problem dealing
+         * with hierarchical ::Graphs, using the same ::Configuration as for the
+         * original ::Problem.
+         * @param subproblem the subproblem to solve
+         * @param type the ::GraphElement::Type containing the hierarchical subgraphs
+         * @param iQuery the index of the query ::GraphElement
+         * @param iTarget the index of the target ::GraphElement
+         */
+        void solveSubProblem(Problem *subproblem, Weights *weights, GraphElement::Type type, int iQuery, int iTarget);
+
     protected:
         /**
          * @brief Add all default options, depending on the values of
@@ -170,12 +181,6 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
         GraphList *gl2_;
 
         /**
-         * @brief The populating status.
-         * @warning to be replaced with a mutex on the populate method
-         */
-        bool isPopulating_;
-
-        /**
          * @brief The number of already solved problems.
          */
         int finishedCount_;
@@ -184,6 +189,11 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
          * @brief The total number of problems to solve.
          */
         int totalCount_;
+
+        /**
+         * @brief A mutex to lock the counter incrementation.
+         */
+        QMutex *mutex_;
 };
 
 #endif /* GEMPP_MATCHINGAPPLICATION_H */

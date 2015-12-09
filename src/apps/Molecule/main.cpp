@@ -28,13 +28,8 @@ int main(int argc, char **argv) {
         //graph->save(FileUtils::changeExtension(graphFilename, "copy.gml"));
         Hierarchizer *hierarchizer = new Hierarchizer(graph);
         hierarchizer->extract();
-        QList<QList<Vertex *>> cycles = hierarchizer->getCycles();
 
-        for(QList<Vertex *> cycle : cycles) {
-            qcout << "cycle  : " << endl;
-            for(Vertex *v : cycle)
-                qcout << "  " << v->getID() << endl;
-        }
+        hierarchizer->getOutput()->save(FileUtils::changeExtension(graphFilename, "hierarchical.gxl"));
 
     } catch (std::exception &e) {
         coreApp.error(e);
