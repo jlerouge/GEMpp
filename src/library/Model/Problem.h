@@ -48,7 +48,7 @@ class DLL_EXPORT Problem : public QObject, virtual public IPrintable, virtual pu
         void solveSubProblem(Problem *subProblem, Weights *weights, GraphElement::Type type, int iQuery, int iTarget);
 
     protected:
-        double computeCost(Vertex *vertex, Graph *graph, Weights *weights);
+        double computeCost(GraphElement *element, Graph *graph, Weights *weights);
         void computeGraphCost(Graph *g1, Graph *g2, Weights *weights, GraphElement::Type type, int iQuery, int iTarget);
 
     private:

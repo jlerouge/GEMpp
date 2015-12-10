@@ -55,13 +55,23 @@ const QList <Vertex *> &Graph::getVertices() const {
     return vertices_;
 }
 
-QList<Vertex *> Graph::getAllTerminalVertices() const {
-    QList<Vertex *> result;
-    for(auto v : vertices_) {
-        if(v->getGraph())
-            result.append(v->getGraph()->getAllTerminalVertices());
-        else
-            result.append(v);
+QList<GraphElement *> Graph::getTerminals(GraphElement::Type type) const {
+    QList<GraphElement *> result;
+    if(type == GraphElement::VERTEX || type == GraphElement::COUNT) {
+        for(auto v : vertices_) {
+            if(v->getGraph())
+                result.append(v->getGraph()->getTerminals(type));
+            else
+                result.append(v);
+        }
+    }
+    if(type == GraphElement::EDGE || type == GraphElement::COUNT) {
+        for(auto e : edges_) {
+            if(e->getGraph())
+                result.append(e->getGraph()->getTerminals(type));
+            else
+                result.append(e);
+        }
     }
     return result;
 }
@@ -376,6 +386,12 @@ void Graph::load(QDomElement element) {
         e->load(elem);
         if(edgeids)
             e->setID(elem.attribute("id"));
+        graphElem = elem.firstChildElement(graphTag);
+        if(!graphElem.isNull()) {
+            g = new Graph();
+            g->load(graphElem);
+            e->setGraph(g);
+        }
         addEdge(e);
         // e may be deleted
         e = edges_.last();
@@ -408,6 +424,8 @@ QDomElement Graph::save(QDomDocument *document) {
             element.setAttribute("id", e->getID());
         element.setAttribute("from", e->getOrigin()->getID());
         element.setAttribute("to", e->getTarget()->getID());
+        if(e->getGraph())
+            element.appendChild(e->getGraph()->save(document));
         graph.appendChild(element);
     }
     return graph;

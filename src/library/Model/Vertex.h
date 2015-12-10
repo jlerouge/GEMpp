@@ -5,8 +5,6 @@
 #include "GraphElement.h"
 #include "Edge.h"
 
-class Graph;
-
 /**
  * @brief The Vertex class represents a vertex of a ::Graph. It may have attributes,
  * and any two vertices can be linked with an ::Edge.
@@ -92,18 +90,6 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
          */
         QSet<Vertex *> getNeighbours(Direction d) const;
 
-        /**
-         * @brief Returns the ::Graph represented by this ::Vertex.
-         * @return a graph
-         */
-        Graph *getGraph() const;
-
-        /**
-         * @brief Sets the ::Graph represented by this ::Vertex.
-         * @param graph a ::Graph
-         */
-        void setGraph(Graph *graph);
-
     private:
         /**
          * @brief The set of ::Edges incident from this ::Vertex
@@ -114,12 +100,6 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
          * @brief The set of ::Edges incident to this ::Vertex
          */
         QSet<Edge *> inEdges_;
-
-        /**
-         * @brief A subgraph represented by a ::Vertex of the parent ::Graph.
-         * This allows to construct hierarchical graphs.
-         */
-        Graph *graph_;
 };
 
 #endif /* GEMPP_VERTEX_H */

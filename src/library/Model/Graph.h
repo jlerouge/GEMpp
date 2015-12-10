@@ -97,12 +97,13 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         const QList <Vertex *> &getVertices() const;
 
         /**
-         * @brief Returns all the terminal ::Vertices of the ::Graph
+         * @brief Returns all the terminal ::GraphElement of the ::Graph
          * (the ones that contain no hierarchical subgraph), as well as
-         * the terminal ::Vertices contained in the hierarchical subgraphs.
-         * @return a list of ::Vertex
+         * the terminal ::GraphElements contained in the hierarchical subgraphs.
+         * @param the type of terminal elements
+         * @return a list of ::GraphElement
          */
-        QList<Vertex *> getAllTerminalVertices() const;
+        QList<GraphElement *> getTerminals(GraphElement::Type type) const;
 
         /**
          * @brief Returns a vertex of the graph.

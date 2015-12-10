@@ -106,17 +106,32 @@ void Problem::computeCosts(Weights *weights) {
         }
     }
 
+    Edge *qe, *te;
     // Edges substitution costs
-    for(int ij=0; ij < query_->getEdgeCount(); ++ij)
-        for(int kl=0; kl < target_->getEdgeCount(); ++kl)
-            eCosts_.setElement(ij, kl, weights->substitutionCost(query_->getEdge(ij), target_->getEdge(kl)));
+    for(int ij=0; ij < query_->getEdgeCount(); ++ij) {
+        for(int kl=0; kl < target_->getEdgeCount(); ++kl) {
+            qe = query_->getEdge(ij);
+            te = target_->getEdge(kl);
+            if(qe->getGraph() && te->getGraph()) {
+                computeGraphCost(qe->getGraph(), te->getGraph(), weights, GraphElement::EDGE, ij, kl);
+                continue;
+            }
+            if (qe->getGraph())
+                cost = computeCost(te, qe->getGraph(), weights);
+            else if (te->getGraph())
+                cost = computeCost(qe, te->getGraph(), weights);
+            else
+                cost = weights->substitutionCost(qe, te);
+            eCosts_.setElement(ij, kl, cost);
+        }
+    }
 }
 
-double Problem::computeCost(Vertex *vertex, Graph *graph, Weights *weights) {
+double Problem::computeCost(GraphElement *element, Graph *graph, Weights *weights) {
     QList<double> costs;
-    QList<Vertex *> terminals = graph->getAllTerminalVertices();
-    for(Vertex *other : terminals)
-        costs.append(weights->substitutionCost(vertex, other));
+    QList<GraphElement *> terminals = graph->getTerminals(element->getType());
+    for(GraphElement *other : terminals)
+        costs.append(weights->substitutionCost(element, other));
     int iMin = std::min_element(costs.begin(), costs.end()) - costs.begin();
     return costs[iMin] + graph->getCost() - terminals[iMin]->getCost();
 }

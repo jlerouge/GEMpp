@@ -50,6 +50,12 @@ class DLL_EXPORT Hierarchizer {
         QList<QSet<Vertex *>> getCycles() const;
 
         /**
+         * @brief Returns the detected chains.
+         * @return the output
+         */
+        QList<QSet<Edge *>> getChains() const;
+
+        /**
          * @brief Runs the extraction.
          */
         void extract();
@@ -57,14 +63,25 @@ class DLL_EXPORT Hierarchizer {
     private:
         void extractCycles();
         void dfsCycles(Vertex *root = 0, QList<Vertex *> parents = QList<Vertex *>());
+        void filterCycles();
         void fusionCycles();
         void hierarchizeCycles();
 
-        void dfsChains(Vertex *root = 0, QList<Vertex *> parents = QList<Vertex *>());
+        static bool isAdmissibleCycle(QSet<Vertex *> cycle);
+
+        void extractChains();
+        void filterChains();
+        void fusionChains();
+        void hierarchizeChains();
+
+        static bool areChainable(Edge *e1, Edge *e2);
+        static bool areMergeable(QSet<Edge *> chain1, QSet<Edge *> chain2);
+        static bool isAdmissibleChain(QSet<Edge *> chain);
 
         QSet<Vertex *> visitedVertices_;
         QSet<Edge *> visitedEdges_;
         QList<QSet<Vertex *>> cycles_;
+        QList<QSet<Edge *>> chains_;
 
         /**
          * @brief The input of the extraction.

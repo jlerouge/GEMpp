@@ -10,13 +10,11 @@ const char* Vertex::directionName[Vertex::COUNT] = {
 Vertex::Vertex() : GraphElement(GraphElement::VERTEX) {
     inEdges_ = QSet<Edge *>();
     outEdges_ = QSet<Edge *>();
-    graph_ = 0;
 }
 
 Vertex::Vertex(const Vertex &other) : Identified(other), Indexed(other), GraphElement(other) {
     outEdges_ = other.getEdges(EDGE_OUT);
     inEdges_ = other.getEdges(EDGE_IN);
-    graph_ = other.getGraph();
 }
 
 Vertex::~Vertex() {}
@@ -100,12 +98,4 @@ QSet<Vertex *> Vertex::getNeighbours(Direction d) const {
             break;
     }
     return vertices;
-}
-
-Graph *Vertex::getGraph() const {
-    return graph_;
-}
-
-void Vertex::setGraph(Graph *graph) {
-    graph_ = graph;
 }

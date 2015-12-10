@@ -8,6 +8,8 @@
 #include "Core/Indexed.h"
 #include "Core/IXmlElementSerializable.h"
 
+class Graph;
+
 /**
  * @brief The GraphElement class represents an abstract element of a ::Graph, i.e. a ::Vertex or an ::Edge.
  * A ::Graph may also be a particular ::Vertex of a parent ::Graph, the latter being a hierarchical graph.
@@ -127,6 +129,18 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public IXmlEl
         const QMap<QString, Attribute *> &getAttributes() const;
 
         /**
+         * @brief Returns the ::Graph represented by this ::GraphElement.
+         * @return a ::Graph
+         */
+        Graph *getGraph() const;
+
+        /**
+         * @brief Sets the ::Graph represented by this ::GraphElement.
+         * @param graph a ::Graph
+         */
+        void setGraph(Graph *graph);
+
+        /**
          * @brief Prints the element id to a printer.
          * @param p the printer
          */
@@ -160,6 +174,12 @@ class DLL_EXPORT GraphElement : virtual public IPrintable, virtual public IXmlEl
          * @brief The attributes of the element.
          */
         QMap<QString, Attribute *> attributes_;
+
+        /**
+         * @brief A subgraph represented by a ::Vertex of the parent ::Graph.
+         * This allows to construct hierarchical graphs.
+         */
+        Graph *graph_;
 };
 
 #endif /* GEMPP_GRAPHELEMENT_H */

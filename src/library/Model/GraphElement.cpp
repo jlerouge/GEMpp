@@ -21,6 +21,7 @@ QString GraphElement::toName(Type type) {
 GraphElement::GraphElement(Type type) : Identified(), Indexed() {
     type_ = type;
     cost_ = 0;
+    graph_ = 0;
 }
 
 GraphElement::GraphElement(const GraphElement &other) : Identified(other), Indexed(other) {
@@ -28,6 +29,7 @@ GraphElement::GraphElement(const GraphElement &other) : Identified(other), Index
     cost_ = other.getCost();
     for(QString name : other.getAttributes().keys())
         addAttribute(name, new Attribute(*(other.getAttribute(name))));
+    graph_ = other.getGraph();
 }
 
 GraphElement::~GraphElement() {
@@ -102,4 +104,12 @@ void GraphElement::load(QDomElement element) {
         addAttribute(attr.attribute("name"), attrMetaType, Attribute::toVariant(attrMetaType, attr.firstChildElement().text()));
         attr = attr.nextSiblingElement("attr");
     }
+}
+
+Graph *GraphElement::getGraph() const {
+    return graph_;
+}
+
+void GraphElement::setGraph(Graph *graph) {
+    graph_ = graph;
 }
