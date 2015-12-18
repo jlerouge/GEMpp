@@ -6,7 +6,8 @@ int main(int argc, char **argv) {
     coreApp.setApplicationDescription("GEM++molecule [coming description]");
     coreApp.addHelpOption();
     coreApp.addVersionOption();
-    coreApp.addPositionalArgument("graph.[gml|gxl|xml]", "A molecule graph", "graph");
+    coreApp.addPositionalArgument("graph.[gml|gxl|xml]", "A molecule graph filename", "graph");
+    coreApp.addPositionalArgument("output.gxl", "An output graph filename", "output");
 
     try {
         // Retrieve arguments
@@ -29,7 +30,10 @@ int main(int argc, char **argv) {
         Hierarchizer *hierarchizer = new Hierarchizer(graph);
         hierarchizer->extract();
 
-        hierarchizer->getOutput()->save(FileUtils::changeExtension(graphFilename, "hierarchical.gxl"));
+        QString output = FileUtils::changeExtension(graphFilename, "hierarchical.gxl");
+        if(args.size() > 1)
+            output = args[1];
+        hierarchizer->getOutput()->save(output);
 
     } catch (std::exception &e) {
         coreApp.error(e);

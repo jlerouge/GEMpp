@@ -27,12 +27,6 @@ void Gurobi::init(Configuration *cfg) {
 }
 
 void Gurobi::prepare() {
-    // Parameters
-    env_->set(GRB_DoubleParam_MIPGap, pow(10, -GEMPP_PRECISION));
-    env_->set(GRB_IntParam_OutputFlag, cfg_->verbose);
-    env_->set(GRB_DoubleParam_TimeLimit, cfg_->timeLimit);
-    env_->set(GRB_IntParam_Threads, cfg_->threadsPerInstance);
-
     if(cfg_->verbose) {
         qcout << "Parallel : " << cfg_->parallelInstances << " instance(s) in parallel." << endl;
         qcout << "Gurobi : " << cfg_->threadsPerInstance << " thread(s)." << endl;
@@ -40,6 +34,12 @@ void Gurobi::prepare() {
 
     // Model creation
     model_ = new GRBModel(*env_);
+
+    // Parameters
+    model_->getEnv().set(GRB_DoubleParam_MIPGap, pow(10, -GEMPP_PRECISION));
+    model_->getEnv().set(GRB_IntParam_OutputFlag, cfg_->verbose);
+    model_->getEnv().set(GRB_DoubleParam_TimeLimit, cfg_->timeLimit);
+    model_->getEnv().set(GRB_IntParam_Threads, cfg_->threadsPerInstance);
 }
 
 void Gurobi::update(bool newBounds) {

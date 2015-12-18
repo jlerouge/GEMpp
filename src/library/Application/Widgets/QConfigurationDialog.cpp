@@ -181,7 +181,7 @@ void QConfigurationDialog::initTables() {
         QList<QString> attrKeys = v->getAttributes().keys();
         attrKeys.insert(0, GEMPP_CONST_LABEL);
         for(auto att : attrKeys) {
-            QString typeIcon = v->getAttribute(att)->isTextBased()? ":/images/symbolic.png" : ":/images/numeric.png";
+            QString typeIcon = (att.compare(GEMPP_CONST_LABEL) && v->getAttribute(att)->isTextBased())? ":/images/symbolic.png" : ":/images/numeric.png";
 
             // Substitution
             subsTable->setItem(row, 0, new QTableWidgetItem(QIcon(":/images/vertex.png"), "Vertex"));
@@ -214,7 +214,7 @@ void QConfigurationDialog::initTables() {
         QList<QString> attrKeys = e->getAttributes().keys();
         attrKeys.insert(0, GEMPP_CONST_LABEL);
         for(auto att : attrKeys) {
-            QString typeIcon = v->getAttribute(att)->isTextBased()? ":/images/symbolic.png" : ":/images/numeric.png";
+            QString typeIcon = (att.compare(GEMPP_CONST_LABEL) && e->getAttribute(att)->isTextBased())? ":/images/symbolic.png" : ":/images/numeric.png";
 
             // Substitution
             subsTable->setItem(row, 0, new QTableWidgetItem(QIcon(":/images/edge.png"), "Edge"));

@@ -74,6 +74,12 @@ class DLL_EXPORT Vertex : virtual public GraphElement {
         QSet<Edge *> getEdges(Direction d) const;
 
         /**
+         * @brief Returns the number of all the incident ::Edges
+         * @return the degree of the ::Vertex
+         */
+        int getDegree() const;
+
+        /**
          * @brief Returns the neighbour ::Vertex corresponding
          * to one particular ::Edge.
          * @param e the ::Edge

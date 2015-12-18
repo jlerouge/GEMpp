@@ -86,9 +86,10 @@ class DLL_EXPORT QuadExpression : virtual public LinearExpression {
 
     private:
         /**
-         * @brief The quadratic terms of the QuadExpression, stored as key-value pairs : the Quad
-         * is the key whereas the coefficient is the value.
-         * Hence, a Quad may be present at most one time in the terms, but its coefficient may be updated.
+         * @brief The quadratic terms of the QuadExpression, stored as
+         * key-value pairs : the Quad is the key whereas the coefficient
+         * is the value. Hence, a Quad may be present at most one time in
+         * the terms, but its coefficient may be updated.
          */
         QHash<Quad, double> quadTerms_;
 };

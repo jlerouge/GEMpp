@@ -190,6 +190,7 @@ void MatchingApplication::addOptions() {
             break;
     }
     addExplorationOption();
+    addTimeLimitOption();
     addSolverOption();
     addVerboseOption();
     addVersionOption();
@@ -259,6 +260,8 @@ void MatchingApplication::initConfiguration() {
 
     if(isOptionSet("explore"))
         cfg_->upperbound = optionValue("explore").toDouble()/100;
+    if(isOptionSet("time"))
+        cfg_->timeLimit = optionValue("time").toDouble();
 
     if(isOptionSet("solver"))
         cfg_->solver = optionValue("solver");
@@ -338,7 +341,11 @@ void MatchingApplication::addInducedOption() {
 }
 
 void MatchingApplication::addExplorationOption() {
-    addOption("e", "explore", "Upper bound approx (cols selection).", "0 - 100%");
+    addOption("e", "explore", "Upper bound approx (cols selection).", "0%-100%");
+}
+
+void MatchingApplication::addTimeLimitOption() {
+    addOption("", "time", "Maximum solving time for on instance.", "number in seconds");
 }
 
 void MatchingApplication::addSolverOption() {

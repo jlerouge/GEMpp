@@ -165,8 +165,10 @@ bool Hierarchizer::isAdmissibleCycle(QSet<Vertex *> cycle) {
 
 void Hierarchizer::extractChains() {
     for(Edge *edge : output_->getEdges()) {
-        chains_.append(QSet<Edge *>());
-        chains_.last().insert(edge);
+        if(isSimpleEdge(edge)) {
+            chains_.append(QSet<Edge *>());
+            chains_.last().insert(edge);
+        }
     }
     fusionChains();
     filterChains();
@@ -175,9 +177,8 @@ void Hierarchizer::extractChains() {
 
 void Hierarchizer::filterChains() {
     // Filter the chains that are not admissible
-    // or too short (single-edge chains)
     for(int i = 0; i < chains_.size();) {
-        if(!isAdmissibleChain(chains_[i]) || (chains_[i].size() < 2))
+        if(!isAdmissibleChain(chains_[i]))
             chains_.removeAt(i);
         else
             ++i;
@@ -215,13 +216,6 @@ void Hierarchizer::hierarchizeChains() {
             vertices.insert(edge->getOrigin());
             vertices.insert(edge->getTarget());
         }
-        qcout << "chain : " << endl;
-        for(Vertex *vertex : vertices) {
-            qcout << "vertex : " << vertex->getID() << endl;
-            for(Edge * edge : vertex->getEdges(Vertex::EDGE_IN_OUT)) {
-                qcout << " has edge from " << edge->getOrigin()->getID() << " to " << edge->getTarget()->getID() << endl;
-            }
-        }
 
         subgraph = output_->inducedSubgraph(vertices);
 
@@ -258,12 +252,6 @@ void Hierarchizer::hierarchizeChains() {
 }
 
 bool Hierarchizer::areChainable(Edge *e1, Edge *e2) {
-    if(e1->getOrigin()->getEdges(Vertex::EDGE_IN_OUT).size() > 2
-            || e1->getTarget()->getEdges(Vertex::EDGE_IN_OUT).size() > 2
-            || e2->getOrigin()->getEdges(Vertex::EDGE_IN_OUT).size() > 2
-            || e2->getTarget()->getEdges(Vertex::EDGE_IN_OUT).size() > 2)
-        return false;
-
     return (e1->getOrigin() == e2->getOrigin()
             || e1->getOrigin() == e2->getTarget()
             || e1->getTarget() == e2->getOrigin()
@@ -273,8 +261,9 @@ bool Hierarchizer::areChainable(Edge *e1, Edge *e2) {
 bool Hierarchizer::areMergeable(QSet<Edge *> chain1, QSet<Edge *> chain2) {
     for(Edge *edge1 : chain1) {
         for(Edge *edge2 : chain2) {
-            if(areChainable(edge1, edge2))
+            if(areChainable(edge1, edge2)) {
                 return true;
+            }
         }
     }
     return false;
@@ -288,4 +277,9 @@ bool Hierarchizer::isAdmissibleChain(QSet<Edge *> chain) {
         vertices.insert(edge->getTarget());
     }
     return (vertices.size() == (chain.size() + 1));
+}
+
+bool Hierarchizer::isSimpleEdge(Edge *edge) {
+    return ((edge->getOrigin()->getDegree() <= 2)
+            && (edge->getTarget()->getDegree() <= 2));
 }

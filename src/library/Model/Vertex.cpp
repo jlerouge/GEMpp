@@ -73,12 +73,19 @@ QSet<Edge *> Vertex::getEdges(Direction d) const {
     return QSet<Edge *>();
 }
 
+int Vertex::getDegree() const {
+    return getEdges(EDGE_IN_OUT).size();
+}
+
 Vertex *Vertex::getNeighbour(Edge *e) const {
+    Vertex *neighbour = 0;
     if(e->getOrigin() == const_cast<Vertex *>(this))
-        return e->getTarget();
-    if(e->getTarget() == const_cast<Vertex *>(this))
-        return e->getOrigin();
-    Exception(QString("The edge %1 is not a valid incident edge for vertex %2.").arg(e->getIndex()).arg(getIndex()));
+        neighbour = e->getTarget();
+    else if(e->getTarget() == const_cast<Vertex *>(this))
+        neighbour = e->getOrigin();
+    if(!neighbour)
+        Exception(QString("The edge %1 is not a valid incident edge for vertex %2.").arg(e->getIndex()).arg(getIndex()));
+    return neighbour;
 }
 
 QSet<Vertex *> Vertex::getNeighbours(Direction d) const {

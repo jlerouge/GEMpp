@@ -2,7 +2,6 @@
 
 #include <limits>
 
-//#define GEMPP_QSPINBOX_QSBDEBUG
 #ifdef QSPINBOX_QSBDEBUG
 #  define QSBDEBUG qDebug
 #else

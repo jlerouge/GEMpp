@@ -77,6 +77,7 @@ class DLL_EXPORT Hierarchizer {
         static bool areChainable(Edge *e1, Edge *e2);
         static bool areMergeable(QSet<Edge *> chain1, QSet<Edge *> chain2);
         static bool isAdmissibleChain(QSet<Edge *> chain);
+        static bool isSimpleEdge(Edge *edge);
 
         QSet<Vertex *> visitedVertices_;
         QSet<Edge *> visitedEdges_;

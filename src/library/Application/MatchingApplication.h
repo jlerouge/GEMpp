@@ -124,6 +124,7 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
 
         // Approximation
         void addExplorationOption();
+        void addTimeLimitOption();
 
         // Solver
         void addSolverOption();
