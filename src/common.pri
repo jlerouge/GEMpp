@@ -27,7 +27,7 @@ CONFIG(debug,debug|release) {
 }
 
 linux {
-    PREFIX = /usr
+    PREFIX = /usr/local
     OUTBIN = $$ROOT/$$OS$$ARCH/$$COMPMODE/bin
     OUTLIB = $$ROOT/$$OS$$ARCH/$$COMPMODE/lib
 }

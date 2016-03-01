@@ -51,11 +51,11 @@ void SubgraphMatching::initCosts() {
     x_costs = Matrix<double>(nVP, nVT);
     for(i=0; i < nVP; ++i)
         for(k=0; k < nVT; ++k)
-            x_costs.setElement(i, k, pb_->getCost(i, k, GraphElement::VERTEX));
+            x_costs.setElement(i, k, pb_->getCost(GraphElement::VERTEX, i, k));
     y_costs = Matrix<double>(nEP, nET);
     for(ij=0; ij < nEP; ++ij)
         for(kl=0; kl < nET; ++kl)
-            y_costs.setElement(ij, kl, pb_->getCost(ij, kl, GraphElement::EDGE));
+            y_costs.setElement(ij, kl, pb_->getCost(GraphElement::EDGE, ij, kl));
 }
 
 void SubgraphMatching::initObjective() {

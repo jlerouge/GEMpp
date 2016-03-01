@@ -5,8 +5,8 @@ QEdgeItem::QEdgeItem(QVertexItem *origin, QVertexItem *target) : QGraphicsLineIt
     origin_ = origin;
     target_ = target;
     setPen(QPen(QColor(Qt::blue)));
-    select(false);
     view(true);
+    select(false);
 }
 
 QColor QEdgeItem::getColor() {
@@ -31,12 +31,15 @@ void QEdgeItem::setWidth(int width) {
 
 void QEdgeItem::select(bool selected) {
     setWidth(selected ? 8 : 4);
+    QColor c = getColor();
+    c.setAlpha((c.alpha() > 0)*(selected ? 255 : 128));
+    setColor(c);
 }
 
 void QEdgeItem::view(bool visible) {
     QPen mypen = pen();
     QColor c = mypen.color();
-    c.setAlphaF(visible);
+    c.setAlpha(visible ? 128 : 0);
     mypen.setColor(c);
     setPen(mypen);
 }

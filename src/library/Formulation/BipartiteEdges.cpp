@@ -55,7 +55,7 @@ void BipartiteEdges::initObjective() {
 
     for(ij=0; ij < nEi; ++ij)
         for(kl=0; kl < nEk; ++kl)
-            *exp += *y_variables.getElement(ij,kl)*(pb_->getCost(vi_->getEdge(ij, Vertex::EDGE_IN_OUT)->getIndex(), vk_->getEdge(kl, Vertex::EDGE_IN_OUT)->getIndex(), GraphElement::EDGE)
+            *exp += *y_variables.getElement(ij,kl)*(pb_->getCost(GraphElement::EDGE, vi_->getEdge(ij, Vertex::EDGE_IN_OUT)->getIndex(), vk_->getEdge(kl, Vertex::EDGE_IN_OUT)->getIndex())
                                                     - vi_->getEdge(ij, Vertex::EDGE_IN_OUT)->getCost() - vk_->getEdge(kl, Vertex::EDGE_IN_OUT)->getCost());
 
     // Constant part of the objective

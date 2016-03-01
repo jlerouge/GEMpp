@@ -45,20 +45,22 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
         void finished(Problem *pb, double objective);
 
         /**
-         * @brief Solves a subproblem coming from a parent ::Problem dealing
-         * with hierarchical ::Graphs, using the same ::Configuration as for the
-         * original ::Problem.
-         * @param subproblem the subproblem to solve
-         * @param type the ::GraphElement::Type containing the hierarchical subgraphs
-         * @param iQuery the index of the query ::GraphElement
-         * @param iTarget the index of the target ::GraphElement
+         * @brief Prepares a problem using the given ::Configuration.
+         * @param problem the problem to prepare
+         * @param weights the cost weights to apply
          */
-        void solveSubProblem(Problem *subproblem, Weights *weights, GraphElement::Type type, int iQuery, int iTarget);
+        void prepare(Problem *problem, Weights *weights);
+
+        /**
+         * @brief Solves a problem using the given ::Configuration.
+         * @param problem the problem to solve
+         */
+        void solve(Problem *problem);
 
     protected:
         /**
          * @brief Add all default options, depending on the values of
-         * isMultiMatching_ and matchingType_.
+         * ::isMultiMatching_ and ::matchingType_.
          */
         void addOptions();
 
@@ -182,19 +184,14 @@ class DLL_EXPORT MatchingApplication : public ConsoleApplication {
         GraphList *gl2_;
 
         /**
-         * @brief The number of already solved problems.
+         * @brief The population of active ::Problem.
          */
-        int finishedCount_;
+        QSet<Problem *> population_;
 
         /**
-         * @brief The total number of problems to solve.
+         * @brief A mutex to lock population update.
          */
-        int totalCount_;
-
-        /**
-         * @brief A mutex to lock the counter incrementation.
-         */
-        QMutex *mutex_;
+        QMutex mutex_;
 };
 
 #endif /* GEMPP_MATCHINGAPPLICATION_H */

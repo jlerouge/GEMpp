@@ -119,7 +119,7 @@ void Solution::printSolution(Printer *p) {
         p->indent();
         if(!x_variables_.isEmpty())
             for(auto it = x_variables_.begin(); it != x_variables_.end(); ++it) {
-                p->dump(QString("<substitution cost=\"%1\">").arg(pb->getCost(it.key(), it.value(), GraphElement::VERTEX)));
+                p->dump(QString("<substitution cost=\"%1\">").arg(pb->getCost(GraphElement::VERTEX, it.key(), it.value())));
                 p->indent();
                 p->dump(QString("<node type=\"query\" index=\"%1\"/>").arg(it.key()));
                 p->dump(QString("<node type=\"target\" index=\"%1\"/>").arg(it.value()));
@@ -153,7 +153,7 @@ void Solution::printSolution(Printer *p) {
         p->indent();
         if(!y_variables_.isEmpty())
             for(auto it = y_variables_.begin(); it != y_variables_.end(); ++it) {
-                p->dump(QString("<substitution cost=\"%1\">").arg(pb->getCost(it.key(), it.value(), GraphElement::EDGE)));
+                p->dump(QString("<substitution cost=\"%1\">").arg(pb->getCost(GraphElement::EDGE, it.key(), it.value())));
                 p->indent();
                 p->dump(QString("<edge type=\"query\" from=\"%1\" to=\"%2\"/>")
                         .arg(pb->getQuery()->getEdge(it.key())->getOrigin()->getIndex())

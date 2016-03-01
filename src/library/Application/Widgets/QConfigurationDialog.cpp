@@ -184,7 +184,7 @@ void QConfigurationDialog::initTables() {
             QString typeIcon = (att.compare(GEMPP_CONST_LABEL) && v->getAttribute(att)->isTextBased())? ":/images/symbolic.png" : ":/images/numeric.png";
 
             // Substitution
-            subsTable->setItem(row, 0, new QTableWidgetItem(QIcon(":/images/vertex.png"), "Vertex"));
+            subsTable->setItem(row, 0, new QTableWidgetItem(QIcon(":/images/vertex.png"), Printer::capitalize(GraphElement::toName(GraphElement::VERTEX))));
             subsTable->item(row, 0)->setFlags(subsTable->item(row, 0)->flags() & ~Qt::ItemIsEditable);
 
             subsTable->setItem(row, 1, new QTableWidgetItem(QIcon(typeIcon), att));
@@ -197,7 +197,7 @@ void QConfigurationDialog::initTables() {
             subsTable->setCellWidget(row, 2, weight);
 
             // Creation
-            creaTable->setItem(row, 0, new QTableWidgetItem(QIcon(":/images/vertex.png"), "Vertex"));
+            creaTable->setItem(row, 0, new QTableWidgetItem(QIcon(":/images/vertex.png"), Printer::capitalize(GraphElement::toName(GraphElement::VERTEX))));
             creaTable->item(row, 0)->setFlags(creaTable->item(row, 0)->flags() & ~Qt::ItemIsEditable);
 
             creaTable->setItem(row, 1, new QTableWidgetItem(QIcon(typeIcon), att));

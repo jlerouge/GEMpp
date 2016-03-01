@@ -92,6 +92,18 @@ class DLL_EXPORT Printer {
          */
         void reset();
 
+        /**
+         * @brief Capitalizes a string, by making each word's first
+         * character upper case and the other characters lower case.
+         */
+        static QString capitalize(QString s);
+
+        /**
+         * @brief Capitalizes a word, by making its first
+         * character upper case and the other characters lower case.
+         */
+        static QString capitalizeWord(QString w);
+
     private:
         /**
          * @brief The content of the Printer.

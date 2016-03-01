@@ -38,14 +38,6 @@ void QVertexItem::setColor(QColor color) {
     setPen(mypen);
 }
 
-//void QVertexItem::invertColor() {
-//    QPen mypen = pen();
-//    QColor c = mypen.color();
-//    c.setRgb(255-c.red(), 255-c.green(), 255-c.blue());
-//    mypen.setColor(c);
-//    setPen(mypen);
-//}
-
 void QVertexItem::view(bool visible) {
     QPen mypen = pen();
     QColor c = mypen.color();
@@ -55,7 +47,7 @@ void QVertexItem::view(bool visible) {
 }
 
 void QVertexItem::select(bool selected) {
-    QColor c = pen().color();
+    QColor c = getColor();
     c.setAlpha(selected ? 128 : 0);
     setBrush(QBrush(c));
 }

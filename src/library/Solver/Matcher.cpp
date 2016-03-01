@@ -197,7 +197,7 @@ void Matcher::initBipartiteCosts() {
         for(k=0; k < nVT; ++k) {
             bipe = new BipartiteEdges(pb_, i, k);
             s_->init(bipe->getLinearProgram());
-            pb_->addCost(i, k, s_->solve(), GraphElement::VERTEX);
+            pb_->addCost(GraphElement::VERTEX, i, k, s_->solve());
             delete bipe;
         }
     }

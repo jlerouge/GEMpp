@@ -18,7 +18,6 @@ void LinearGraphEditDistance::initVariables() {
     y_variables = Matrix<Variable*>(nEP, nET);
     for(ij=0; ij < nEP; ++ij) {
         for(kl=0; kl < nET; ++kl) {
-            //id = QString("y_%1,%2").arg(pb_->getQuery()->getEdge(ij)->getIndex()).arg(pb_->getTarget()->getEdge(kl)->getIndex());
             id = QString("y_%1,%2").arg(ij).arg(kl);
             y_variables.setElement(ij, kl, new Variable(id));
         }
@@ -30,7 +29,7 @@ void LinearGraphEditDistance::initCosts() {
     y_costs = Matrix<double>(nEP, nET);
     for(ij=0; ij < nEP; ++ij)
         for(kl=0; kl < nET; ++kl)
-            y_costs.setElement(ij, kl, pb_->getCost(ij, kl, GraphElement::EDGE) - pb_->getQuery()->getEdge(ij)->getCost() - pb_->getTarget()->getEdge(kl)->getCost());
+            y_costs.setElement(ij, kl, pb_->getCost(GraphElement::EDGE, ij, kl) - pb_->getQuery()->getEdge(ij)->getCost() - pb_->getTarget()->getEdge(kl)->getCost());
 }
 
 void LinearGraphEditDistance::restrictProblem(double up) {

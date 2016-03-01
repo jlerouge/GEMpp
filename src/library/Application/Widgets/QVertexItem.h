@@ -49,7 +49,6 @@ class DLL_EXPORT QVertexItem : public QGraphicsRectItem {
     protected:
         void setColor(QColor color);
         QColor getColor();
-        //void invertColor();
 
     private:
         MatchStatus status_;

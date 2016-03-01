@@ -80,6 +80,12 @@ Vertex *Graph::getVertex(int i) const {
     return vertices_[i];
 }
 
+Vertex *Graph::getVertex(QString id) const {
+    if(verticesInsertionOrder_.contains(id))
+        return getVertex(verticesInsertionOrder_[id]);
+    return 0;
+}
+
 void Graph::addVertex(Vertex *v, QString id) {
     v->setIndex(vertices_.size());
     QString sid = !id.isEmpty()? id : QString::number(vertices_.size());

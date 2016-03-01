@@ -13,21 +13,18 @@
 #include "LayoutVertex.h"
 #include "LayoutEdge.h"
 
-typedef struct
-{
+typedef struct {
         QVector2D pos_;
         LayoutVertex *vertex_;
 } LayoutVertex_t;
 
-typedef struct
-{
+typedef struct {
         QVector2D origin_;
         QVector2D target_;
         LayoutEdge *edge_;
 } LayoutEdge_t;
 
-class DLL_EXPORT ForceDirectedLayout : public QWidget
-{
+class DLL_EXPORT ForceDirectedLayout : public QWidget {
     public :
         enum MouseMode{
             NONE,

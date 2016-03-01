@@ -1,6 +1,6 @@
 #!/bin/bash
 
-QT_VERSION="5.4.1"
+QT_VERSION="5.4.2"
 
 # Changes to GEM++ root directory
 here=$PWD/`dirname "$0"`

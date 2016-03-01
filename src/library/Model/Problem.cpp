@@ -18,7 +18,7 @@ QString Problem::toName(Type type) {
     return typeName[type];
 }
 
-Problem::Problem(Type t, Graph *query, Graph *target) : type_(t), query_(query), target_(target) {
+Problem::Problem(Type type, Graph *query, Graph *target, Problem *parent) : type_(type), query_(query), target_(target), parent_(parent), mutex_(QMutex::Recursive) {
     if(query_->getType() != target_->getType())
         Exception("Both graphs must have the same type (directed or undirected).");
     vCosts_ = Matrix<double>(query_->getVertexCount(), target_->getVertexCount());
@@ -26,11 +26,115 @@ Problem::Problem(Type t, Graph *query, Graph *target) : type_(t), query_(query),
 }
 
 Problem::~Problem() {
-    qDeleteAll(subProblems_);
+    //qDeleteAll(subproblems_);
 }
 
 Problem::Type Problem::getType() const {
     return type_;
+}
+
+Graph *Problem::getQuery() const {
+    return query_;
+}
+
+Graph *Problem::getTarget() const {
+    return target_;
+}
+
+Problem *Problem::getParent() const {
+    return parent_;
+}
+
+double Problem::getCost(GraphElement::Type type, int queryIndex, int targetIndex) const {
+    switch(type) {
+        case GraphElement::VERTEX:
+            return vCosts_.getElement(queryIndex, targetIndex);
+        case GraphElement::EDGE:
+            return eCosts_.getElement(queryIndex, targetIndex);
+        default:
+            break;
+    }
+    return 0;
+}
+
+double Problem::getCost(CostIndex costIndex) const {
+    return getCost(costIndex.type, costIndex.queryIndex, costIndex.targetIndex);
+}
+
+void Problem::addCost(GraphElement::Type type, int queryIndex, int targetIndex, double value) {
+    switch(type) {
+        case GraphElement::VERTEX:
+            vCosts_.addElement(queryIndex, targetIndex, value);
+            break;
+        case GraphElement::EDGE:
+            eCosts_.addElement(queryIndex, targetIndex, value);
+            break;
+        default:
+            break;
+    }
+}
+
+void Problem::addCost(CostIndex costIndex, double value) {
+    addCost(costIndex.type, costIndex.queryIndex, costIndex.targetIndex, value);
+}
+
+void Problem::computeCosts(Weights *weights) {
+    // Creation costs
+    query_->computeCosts(weights);
+    target_->computeCosts(weights);
+
+    // Substitution costs
+    double cost;
+
+    // Prevent from emitting ready signal too early
+    mutex_.lock();
+
+    // Vertices
+    Vertex *qv, *tv;
+    for(int i=0; i < query_->getVertexCount(); ++i) {
+        for(int k=0; k < target_->getVertexCount(); ++k) {
+            qv = query_->getVertex(i);
+            tv = target_->getVertex(k);
+            if(qv->getGraph() && tv->getGraph()) {
+                computeGraphCost(qv->getGraph(), tv->getGraph(), weights, GraphElement::VERTEX, i, k);
+                continue;
+            }
+
+            if(qv->getGraph())
+                cost = computeCost(tv, qv->getGraph(), weights);
+            else if (tv->getGraph())
+                cost = computeCost(qv, tv->getGraph(), weights);
+            else
+                cost = weights->substitutionCost(qv, tv);
+            vCosts_.setElement(i, k, cost);
+        }
+    }
+
+    // Edges
+    Edge *qe, *te;
+    for(int ij=0; ij < query_->getEdgeCount(); ++ij) {
+        for(int kl=0; kl < target_->getEdgeCount(); ++kl) {
+            qe = query_->getEdge(ij);
+            te = target_->getEdge(kl);
+            if(qe->getGraph() && te->getGraph()) {
+                computeGraphCost(qe->getGraph(), te->getGraph(), weights, GraphElement::EDGE, ij, kl);
+                continue;
+            }
+
+            if(qe->getGraph())
+                cost = computeCost(te, qe->getGraph(), weights);
+            else if (te->getGraph())
+                cost = computeCost(qe, te->getGraph(), weights);
+            else
+                cost = weights->substitutionCost(qe, te);
+            eCosts_.setElement(ij, kl, cost);
+        }
+    }
+
+    if(subproblems_.isEmpty())
+        emit ready(const_cast<Problem *>(this));
+
+    mutex_.unlock();
 }
 
 void Problem::print(Printer *p) {
@@ -42,89 +146,8 @@ void Problem::print(Printer *p) {
     p->dump("</problem>");
 }
 
-Graph *Problem::getQuery() const {
-    return query_;
-}
-
-Graph *Problem::getTarget() const {
-    return target_;
-}
-
-double Problem::getCost(int iQuery, int iTarget, GraphElement::Type type) const {
-    switch(type) {
-        case GraphElement::VERTEX:
-            return vCosts_.getElement(iQuery, iTarget);
-        case GraphElement::EDGE:
-            return eCosts_.getElement(iQuery, iTarget);
-        default:
-            return 0;
-    }
-    // This should never happen
-    return 0;
-}
-
-void Problem::addCost(int iQuery, int iTarget, double value, GraphElement::Type type) {
-    switch(type) {
-        case GraphElement::VERTEX:
-            vCosts_.addElement(iQuery, iTarget, value);
-            break;
-        case GraphElement::EDGE:
-            eCosts_.addElement(iQuery, iTarget, value);
-            break;
-        default:
-            break;
-    }
-}
-
 void Problem::save(const QString &filename) {
     FileUtils::save(this, filename);
-}
-
-void Problem::computeCosts(Weights *weights) {
-    // Creation costs
-    query_->computeCosts(weights);
-    target_->computeCosts(weights);
-
-    double cost;
-    Vertex *qv, *tv;
-    // Vertices substitution costs
-    for(int i=0; i < query_->getVertexCount(); ++i) {
-        for(int k=0; k < target_->getVertexCount(); ++k) {
-            qv = query_->getVertex(i);
-            tv = target_->getVertex(k);
-            if(qv->getGraph() && tv->getGraph()) {
-                computeGraphCost(qv->getGraph(), tv->getGraph(), weights, GraphElement::VERTEX, i, k);
-                continue;
-            }
-            if (qv->getGraph())
-                cost = computeCost(tv, qv->getGraph(), weights);
-            else if (tv->getGraph())
-                cost = computeCost(qv, tv->getGraph(), weights);
-            else
-                cost = weights->substitutionCost(qv, tv);
-            vCosts_.setElement(i, k, cost);
-        }
-    }
-
-    Edge *qe, *te;
-    // Edges substitution costs
-    for(int ij=0; ij < query_->getEdgeCount(); ++ij) {
-        for(int kl=0; kl < target_->getEdgeCount(); ++kl) {
-            qe = query_->getEdge(ij);
-            te = target_->getEdge(kl);
-            if(qe->getGraph() && te->getGraph()) {
-                computeGraphCost(qe->getGraph(), te->getGraph(), weights, GraphElement::EDGE, ij, kl);
-                continue;
-            }
-            if (qe->getGraph())
-                cost = computeCost(te, qe->getGraph(), weights);
-            else if (te->getGraph())
-                cost = computeCost(qe, te->getGraph(), weights);
-            else
-                cost = weights->substitutionCost(qe, te);
-            eCosts_.setElement(ij, kl, cost);
-        }
-    }
 }
 
 double Problem::computeCost(GraphElement *element, Graph *graph, Weights *weights) {
@@ -136,8 +159,21 @@ double Problem::computeCost(GraphElement *element, Graph *graph, Weights *weight
     return costs[iMin] + graph->getCost() - terminals[iMin]->getCost();
 }
 
-void Problem::computeGraphCost(Graph *g1, Graph *g2, Weights *weights, GraphElement::Type type, int iQuery, int iTarget) {
-    Problem *subProblem = new Problem(Problem::GED, g1, g2);
-    subProblems_.append(subProblem);
-    emit solveSubProblem(subProblem, weights, type, iQuery, iTarget);
+void Problem::computeGraphCost(Graph *g1, Graph *g2, Weights *weights, GraphElement::Type type, int queryIndex, int targetIndex) {
+    Problem *problem = new Problem(Problem::GED, g1, g2);
+    CostIndex costIndex = {type, queryIndex, targetIndex};
+    subproblems_.insert(problem, costIndex);
+    emit prepare(problem, weights);
+}
+
+void Problem::updateCost(Problem *subproblem, double value) {
+    mutex_.lock();
+    if(subproblems_.contains(subproblem)) {
+        addCost(subproblems_.value(subproblem), value);
+        subproblems_.remove(subproblem);
+        if(subproblems_.isEmpty())
+            emit ready(const_cast<Problem *>(this));
+        delete subproblem;
+    }
+    mutex_.unlock();
 }

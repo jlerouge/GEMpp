@@ -47,3 +47,15 @@ void Printer::newLine() {
 void Printer::reset() {
     content_.clear();
 }
+
+QString Printer::capitalize(QString s) {
+    QStringList sl = s.split(" ");
+    QStringList slc;
+    for(QString w : sl)
+        slc.append(capitalizeWord(w));
+    return slc.join(" ");
+}
+
+QString Printer::capitalizeWord(QString w) {
+    return w.left(1).toUpper() + w.mid(1).toLower();
+}

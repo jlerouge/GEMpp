@@ -113,6 +113,13 @@ class DLL_EXPORT Graph : virtual IXmlSerializable, virtual public IPrintable, vi
         Vertex *getVertex(int i) const;
 
         /**
+         * @brief Returns a vertex of the graph.
+         * @param id the identifier of the vertex
+         * @return the ::Vertex
+         */
+        Vertex *getVertex(QString id) const;
+
+        /**
          * @brief Adds a vertex to the graph.
          * @param v the vertex to add
          * @param id the identifier of the vertex (if omitted, one is automatically generated)

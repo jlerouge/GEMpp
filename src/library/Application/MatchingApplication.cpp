@@ -1,6 +1,6 @@
 #include "MatchingApplication.h"
 
-MatchingApplication::MatchingApplication(int &argc, char **argv, Problem::Type type, bool isMultiMatching) : ConsoleApplication(argc, argv) {
+MatchingApplication::MatchingApplication(int &argc, char **argv, Problem::Type type, bool isMultiMatching) : ConsoleApplication(argc, argv), mutex_(QMutex::Recursive) {
     cfg_ = 0;
     matchingType_ = type;
     isMultiMatching_ = isMultiMatching;
@@ -10,9 +10,6 @@ MatchingApplication::MatchingApplication(int &argc, char **argv, Problem::Type t
     g2_ = 0;
     gl1_ = 0;
     gl2_ = 0;
-    finishedCount_ = 0;
-    totalCount_ = 0;
-    mutex_ = new QMutex(QMutex::Recursive);
 }
 
 MatchingApplication::~MatchingApplication() {
@@ -31,21 +28,22 @@ MatchingApplication::~MatchingApplication() {
         delete gl2_;
     if(gl1_)
         delete gl1_;
-    if(mutex_)
-        delete mutex_;
+    //    if(mutex_)
+    //        delete mutex_;
 }
 
-void MatchingApplication::finished(Problem *pb, double objective) {
+void MatchingApplication::finished(Problem *problem, double objective) {
     if(!matrix_)
         Exception("The objective matrix must be initialized before updating.");
-    matrix_->setElement(pb->getQuery()->getIndex(), pb->getTarget()->getIndex(), objective);
-    delete pb;
+    matrix_->setElement(problem->getQuery()->getIndex(), problem->getTarget()->getIndex(), objective);
 
-    mutex_->lock();
+    mutex_.lock();
+    population_.remove(problem);
+    delete problem;
     // Make sure finalize is called only once
-    if(++finishedCount_ == totalCount_)
+    if(population_.empty())
         finalize();
-    mutex_->unlock();
+    mutex_.unlock();
 }
 
 void MatchingApplication::finalize() {
@@ -105,8 +103,6 @@ int MatchingApplication::match() {
         } else {
             queue_.enqueue(qMakePair(g1_, g2_));
         }
-        finishedCount_ = 0;
-        totalCount_ = queue_.size();
         populate();
 
         return exec();
@@ -116,32 +112,30 @@ int MatchingApplication::match() {
     return EXIT_FAILURE;
 }
 
-void MatchingApplication::solveSubProblem(Problem *subproblem, Weights *weights, GraphElement::Type type, int iQuery, int iTarget) {
-    connect(subproblem, SIGNAL(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)), this, SLOT(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)));
-    subproblem->computeCosts(weights);
+void MatchingApplication::prepare(Problem *problem, Weights *weights) {
+    connect(problem, SIGNAL(prepare(Problem*,Weights*)), this, SLOT(prepare(Problem*,Weights*)));
+    connect(problem, SIGNAL(ready(Problem*)), this, SLOT(solve(Problem*)));
+    problem->computeCosts(weights);
+}
 
-    Matcher *matcher = new Matcher(subproblem, cfg_);
-    matcher->run();
-
-    Problem *parent = dynamic_cast<Problem *>(sender());
-    parent->addCost(iQuery, iTarget, matcher->getObjective(), type);
+void MatchingApplication::solve(Problem *problem) {
+    Matcher *matcher = new Matcher(problem, cfg_);
+    matcher->setAutoDelete(true);
+    if(population_.contains(problem))
+        connect(matcher, SIGNAL(finished(Problem*,double)), this, SLOT(finished(Problem*,double)));
+    else if(problem->getParent())
+        connect(matcher, SIGNAL(finished(Problem*,double)), problem->getParent(), SLOT(updateCost(Problem*,double)));
+    QThreadPool *tp = QThreadPool::globalInstance();
+    tp->start(matcher);
 }
 
 void MatchingApplication::populate() {
-    QThreadPool *tp = QThreadPool::globalInstance();
     QPair<Graph*, Graph*> pair;
     while(!queue_.isEmpty()) {
         pair = queue_.dequeue();
-
         Problem *problem = new Problem(matchingType_, pair.first, pair.second);
-        connect(problem, SIGNAL(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)), this, SLOT(solveSubProblem(Problem*,Weights*,GraphElement::Type,int,int)));
-        problem->computeCosts(w_);
-
-        Matcher *matcher = new Matcher(problem, cfg_);
-        matcher->setAutoDelete(true);
-        connect(matcher, SIGNAL(finished(Problem*,double)), this, SLOT(finished(Problem*,double)));
-
-        tp->start(matcher);
+        population_.insert(problem);
+        prepare(problem, w_);
     }
 }
 
