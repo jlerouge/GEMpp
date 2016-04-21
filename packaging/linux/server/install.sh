@@ -1,6 +1,6 @@
 #!/bin/bash
 # GEM++ Installation Script
-if [ -f $HOME/bin/GEM++dist ]; then
+if [ -f $HOME/bin/GEM++ ]; then
     echo "> GEM++ is already installed.";
 	read -p "> Do you really want to overwrite it ? [y/N] : " -r
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -11,15 +11,9 @@ if [ -f $HOME/bin/GEM++dist ]; then
     fi;
 fi;
 echo "GEM++ installation in progress..."
-if [ ! -d $HOME/bin ]; then
-	mkdir $HOME/bin;
-fi;
-if [ ! -d $HOME/lib ]; then
-	mkdir $HOME/lib;
-fi;
 mkdir $HOME/bin/GEM++
-cp -R bin/ $HOME/bin/
-cp -R lib/ $HOME/lib/
+cp -R bin/ $HOME
+cp -R lib/ $HOME
 
 echo " ###########################"
 echo " # End of the installation #"
