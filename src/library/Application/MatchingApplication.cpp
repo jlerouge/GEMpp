@@ -28,8 +28,6 @@ MatchingApplication::~MatchingApplication() {
         delete gl2_;
     if(gl1_)
         delete gl1_;
-    //    if(mutex_)
-    //        delete mutex_;
 }
 
 void MatchingApplication::finished(Problem *problem, double objective) {

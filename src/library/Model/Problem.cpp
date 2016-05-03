@@ -160,7 +160,7 @@ double Problem::computeCost(GraphElement *element, Graph *graph, Weights *weight
 }
 
 void Problem::computeGraphCost(Graph *g1, Graph *g2, Weights *weights, GraphElement::Type type, int queryIndex, int targetIndex) {
-    Problem *problem = new Problem(Problem::GED, g1, g2);
+    Problem *problem = new Problem(Problem::GED, g1, g2, const_cast<Problem *>(this));
     CostIndex costIndex = {type, queryIndex, targetIndex};
     subproblems_.insert(problem, costIndex);
     emit prepare(problem, weights);

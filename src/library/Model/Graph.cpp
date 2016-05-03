@@ -317,6 +317,7 @@ Graph *Graph::inducedSubgraph(const QSet<Vertex *> &vertices) const {
 
 void Graph::load(const QString &filename) {
     Format format = toFormat(FileUtils::getExtension(filename));
+    setID(QFileInfo(filename).completeBaseName());
     switch(format) {
         case GML:
             fromGML(filename);
@@ -331,8 +332,6 @@ void Graph::load(const QString &filename) {
             Exception(QString("%1 is not a *.gml, *.gxl nor *.xml file.").arg(filename));
             break;
     }
-    if(getID().isEmpty())
-        setID(QFileInfo(filename).completeBaseName());
 }
 
 void Graph::save(const QString &filename) {
@@ -379,6 +378,8 @@ void Graph::load(QDomElement element) {
             v->setGraph(g);
         }
         addVertex(v, elem.attribute("id"));
+        if(v->getGraph())
+            v->getGraph()->setID(QString("%1_v%2").arg(getID(), v->getID()));
         elem = elem.nextSiblingElement(vertexTag);
     }
 
@@ -403,7 +404,8 @@ void Graph::load(QDomElement element) {
         e = edges_.last();
         e->getOrigin()->addEdge(e, Vertex::EDGE_OUT);
         e->getTarget()->addEdge(e, Vertex::EDGE_IN);
-
+        if(e->getGraph())
+            e->getGraph()->setID(QString("%1_e%2").arg(getID(), e->getID()));
         elem = elem.nextSiblingElement(edgeTag);
     }
 }
